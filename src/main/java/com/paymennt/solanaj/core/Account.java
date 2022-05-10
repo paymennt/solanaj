@@ -26,10 +26,11 @@ public class Account {
 			int addressIndex) {
 		char[] mnemonicPhrase = words.toCharArray();
 		MnemonicSeed mnemonicSeed = new MnemonicSeed(mnemonicPhrase, passphrase.toCharArray());
-		ExtendedPrivateKey xPrv = mnemonicSeed.getMasterPrivateKey("");
-		ExtendedPrivateKey addressEPK = xPrv.getExtendedPrivateKey(derivationPath)
+		ExtendedPrivateKey xPrv = mnemonicSeed.getMasterPrivateKey("")//
+				.getExtendedPrivateKey(derivationPath)//
 				.childKeyDerivation(new BigInteger(Integer.toString(addressIndex)), false);
-		TweetNaclFast.Signature.KeyPair keyPair = TweetNaclFast.Signature.keyPair_fromSeed(addressEPK.getKey());
+
+		TweetNaclFast.Signature.KeyPair keyPair = TweetNaclFast.Signature.keyPair_fromSeed(xPrv.getKey());
 		return new Account(keyPair);
 	}
 
