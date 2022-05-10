@@ -1,44 +1,56 @@
 # solanaj
 
+Updated version of [p2p-org/solanaj](https://github.com/p2p-org/solanaj)
 Solana blockchain client, written in pure Java.
 Solanaj is an API for integrating with Solana blockchain using the [Solana RPC API](https://docs.solana.com/apps/jsonrpc-api)
 
-
-## Dependencies
-- OkHttp
-- Moshi
-
-### Example
-
-##### Transfer lamports
+### Full example
 
 ```java
-RpcClient client = new RpcClient(Cluster.TESTNET);
+public static void main(String[] args) throws RpcException {
 
-PublicKey fromPublicKey = new PublicKey("QqCCvshxtqMAL2CVALqiJB7uEeE5mjSPsseQdDzsRUo");
-PublicKey toPublickKey = new PublicKey("GrDMoeqMLFjeXQ24H56S1RLgT4R76jsuWCd6SvXyGPQ5");
-int lamports = 3000;
+	Security.addProvider(new BouncyCastleProvider());
 
-Account signer = new Account(secret_key);
+	String words = "swing brown camera enter burden awful rent shock mobile wisdom increase scissors";
+	String passphrase = "carry";
 
-Transaction transaction = new Transaction();
-transaction.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, lamports));
+	/**
+	 * create account using mnemonic phrase
+	*/
+	Account account = Account.fromMnemonic(words, passphrase);
+	System.out.println("address 1: " + account.getAddress());
 
-String signature = client.getApi().sendTransaction(transaction, signer);
+	/**
+	 * create account using mnemonic phrase, derivation path and address index
+	*/
+	DerivationPath derivationPath = new DerivationPathBuilder() //
+			.withPurpose(Purpose.BIP84)//
+			.withCoin(Coin.TSOL)//
+			.withAccount(Long.valueOf(10L).hashCode())//
+			.withChain(Chain.EXTERNAL)//
+			.build();
+
+	account = Account.fromMnemonic(words, passphrase, derivationPath, 1);
+	System.out.println("address 2: " + account.getAddress());
+
+	/**
+	 * send a transaction
+	 */
+	RpcClient client = new RpcClient(Cluster.TESTNET);
+
+	PublicKey fromPublicKey = new PublicKey("79M3HrgELA5Dnibjgir8UTkk8u9RkV3WhbkaqSjzVY3");
+	PublicKey toPublickKey = new PublicKey("2Ym21uN3GqvFwkrvoWKwcTwqRjk1pFVSS6RFguNgmYdV");
+	int lamports = Coin.TSOL.coinToFractions(BigDecimal.valueOf(1)).intValue();
+
+	Transaction transaction = new Transaction();
+	transaction.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, lamports));
+
+	String hash = client.getApi().sendTransaction(transaction, account);
+	System.out.println("transaction hash: " + hash);
+	System.out.println("view on browser: " + String.format("https://solanabeach.io/transaction/%s?cluster=testnet", hash));
+
+}
 ```
-
-##### Get balance
-
-```java
-RpcClient client = new RpcClient(Cluster.TESTNET);
-
-long balance = client.getApi().getBalance(new PublicKey("QqCCvshxtqMAL2CVALqiJB7uEeE5mjSPsseQdDzsRUo"));
-```
-
-## Contribution
-
-Welcome to contribute, feel free to change and open a PR.
-
 
 ## License
 

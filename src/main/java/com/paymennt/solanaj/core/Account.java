@@ -34,6 +34,16 @@ public class Account {
 		return new Account(keyPair);
 	}
 
+	public static Account fromMnemonic(String words, String passphrase) {
+
+		char[] mnemonicPhrase = words.toCharArray();
+		MnemonicSeed mnemonicSeed = new MnemonicSeed(mnemonicPhrase, passphrase.toCharArray());
+		TweetNaclFast.Signature.KeyPair keyPair = TweetNaclFast.Signature
+				.keyPair_fromSeed(mnemonicSeed.getMasterPrivateKey("").getKey());
+
+		return new Account(keyPair);
+	}
+
 	public PublicKey getPublicKey() {
 		return new PublicKey(keyPair.getPublicKey());
 	}
