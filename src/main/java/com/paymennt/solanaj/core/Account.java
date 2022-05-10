@@ -11,9 +11,14 @@ public class Account {
 	private TweetNaclFast.Signature.KeyPair keyPair;
 
 	public Account() {
+		this.keyPair = TweetNaclFast.Signature.keyPair();
 	}
 
-	private Account(TweetNaclFast.Signature.KeyPair keyPair, ExtendedPrivateKey xPrv) {
+	public Account(byte[] secretKey) {
+		this.keyPair = TweetNaclFast.Signature.keyPair_fromSecretKey(secretKey);
+	}
+
+	private Account(TweetNaclFast.Signature.KeyPair keyPair) {
 		this.keyPair = keyPair;
 	}
 
@@ -25,7 +30,7 @@ public class Account {
 		ExtendedPrivateKey addressEPK = xPrv.getExtendedPrivateKey(derivationPath)
 				.childKeyDerivation(new BigInteger(Integer.toString(addressIndex)), false);
 		TweetNaclFast.Signature.KeyPair keyPair = TweetNaclFast.Signature.keyPair_fromSeed(addressEPK.getKey());
-		return new Account(keyPair, xPrv);
+		return new Account(keyPair);
 	}
 
 	public PublicKey getPublicKey() {
