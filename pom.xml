@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.paymennt</groupId>
 	<artifactId>solanaj</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<name>cryptoj</name>
 	<description>Solana client for java</description>
 	<url>https://www.paymennt.com/</url>
@@ -82,7 +82,7 @@
 		<dependency>
 			<groupId>com.paymennt</groupId>
 			<artifactId>cryptoj</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</dependency>
 
 	</dependencies>
