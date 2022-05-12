@@ -1,27 +1,31 @@
 package com.paymennt.solanaj.rpc;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import com.paymennt.solanaj.rpc.types.RpcRequest;
+import com.paymennt.solanaj.rpc.types.RpcResponse;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.List;
-
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
-import com.squareup.moshi.Types;
-
-import com.paymennt.solanaj.rpc.types.RpcRequest;
-import com.paymennt.solanaj.rpc.types.RpcResponse;
-
 public class RpcClient {
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private String endpoint;
-    private OkHttpClient httpClient = new OkHttpClient();
+    private OkHttpClient httpClient = new OkHttpClient.Builder()
+    	    .connectTimeout(60, TimeUnit.SECONDS)
+    	    .writeTimeout(60, TimeUnit.SECONDS)
+    	    .readTimeout(60, TimeUnit.SECONDS)
+    	    .build();
     private RpcApi rpcApi;
 
     public RpcClient(Cluster endpoint) {

@@ -11,81 +11,85 @@ import com.paymennt.solanaj.utils.TweetNaclFast;
 
 public class Transaction {
 
-    public static final int SIGNATURE_LENGTH = 64;
+	public static final int SIGNATURE_LENGTH = 64;
 
-    private Message messgae;
-    private List<String> signatures;
-    private byte[] serializedMessage;
-    private PublicKey feePayer;
+	private Message messgae;
+	private List<String> signatures;
+	private byte[] serializedMessage;
+	private PublicKey feePayer;
 
-    public Transaction() {
-        this.messgae = new Message();
-        this.signatures = new ArrayList<String>();
-    }
+	public Transaction() {
+		this.messgae = new Message();
+		this.signatures = new ArrayList<String>();
+	}
 
-    public Transaction addInstruction(TransactionInstruction instruction) {
-        messgae.addInstruction(instruction);
+	public Transaction addInstruction(TransactionInstruction instruction) {
+		messgae.addInstruction(instruction);
 
-        return this;
-    }
+		return this;
+	}
 
-    public void setRecentBlockHash(String recentBlockhash) {
-        messgae.setRecentBlockHash(recentBlockhash);
-    }
+	public void setRecentBlockHash(String recentBlockhash) {
+		messgae.setRecentBlockHash(recentBlockhash);
+	}
 
-    public void setFeePayer(PublicKey feePayer) {
-        this.feePayer = feePayer;
-    }
+	public void setFeePayer(PublicKey feePayer) {
+		this.feePayer = feePayer;
+	}
 
-    public void sign(Account signer) {
-        sign(Arrays.asList(signer));
-    }
+	public void sign(SolanaAccount signer) {
+		sign(Arrays.asList(signer));
+	}
 
-    public void sign(List<Account> signers) {
+	public void sign(List<SolanaAccount> signers) {
 
-        if (signers.size() == 0) {
-            throw new IllegalArgumentException("No signers");
-        }
+		if (signers.size() == 0) {
+			throw new IllegalArgumentException("No signers");
+		}
 
-        if (feePayer == null) {
-            feePayer = signers.get(0).getPublicKey();
-        }
-        messgae.setFeePayer(feePayer);
+		if (feePayer == null) {
+			feePayer = signers.get(0).getPublicKey();
+		}
+		messgae.setFeePayer(feePayer);
 
-        serializedMessage = messgae.serialize();
+		serializedMessage = messgae.serialize();
 
-        for (Account signer : signers) {
-            TweetNaclFast.Signature signatureProvider = new TweetNaclFast.Signature(new byte[0], signer.getSecretKey());
-            byte[] signature = signatureProvider.detached(serializedMessage);
+		for (SolanaAccount signer : signers) {
+			TweetNaclFast.Signature signatureProvider = new TweetNaclFast.Signature(new byte[0], signer.getSecretKey());
+			byte[] signature = signatureProvider.detached(serializedMessage);
 
-            signatures.add(Base58.encode(signature));
-        }
-    }
+			signatures.add(Base58.encode(signature));
+		}
+	}
 
-    public byte[] serialize() {
-        int signaturesSize = signatures.size();
-        byte[] signaturesLength = ShortvecEncoding.encodeLength(signaturesSize);
+	public Message getMessage() {
+		return this.messgae;
+	}
 
-        ByteBuffer out = ByteBuffer
-                .allocate(signaturesLength.length + signaturesSize * SIGNATURE_LENGTH + serializedMessage.length);
+	public byte[] serialize() {
+		int signaturesSize = signatures.size();
+		byte[] signaturesLength = ShortvecEncoding.encodeLength(signaturesSize);
 
-        out.put(signaturesLength);
+		ByteBuffer out = ByteBuffer
+				.allocate(signaturesLength.length + signaturesSize * SIGNATURE_LENGTH + serializedMessage.length);
 
-        for (String signature : signatures) {
-            byte[] rawSignature = Base58.decode(signature);
-            out.put(rawSignature);
-        }
+		out.put(signaturesLength);
 
-        out.put(serializedMessage);
+		for (String signature : signatures) {
+			byte[] rawSignature = Base58.decode(signature);
+			out.put(rawSignature);
+		}
 
-        return out.array();
-    }
+		out.put(serializedMessage);
 
-    public String getSignature() {
-        if (signatures.size() > 0) {
-            return signatures.get(0);
-        }
+		return out.array();
+	}
 
-        return null;
-    }
+	public String getSignature() {
+		if (signatures.size() > 0) {
+			return signatures.get(0);
+		}
+
+		return null;
+	}
 }

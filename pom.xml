@@ -3,7 +3,7 @@
 	<groupId>com.paymennt</groupId>
 	<artifactId>solanaj</artifactId>
 	<version>0.0.2</version>
-	<name>cryptoj</name>
+	<name>solanaj</name>
 	<description>Solana client for java</description>
 	<url>https://www.paymennt.com/</url>
 
@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15to18</artifactId>
-			<version>1.65</version>
+			<version>1.71</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -82,7 +82,7 @@
 		<dependency>
 			<groupId>com.paymennt</groupId>
 			<artifactId>cryptoj</artifactId>
-			<version>0.0.2</version>
+			<version>0.0.3</version>
 		</dependency>
 
 	</dependencies>
