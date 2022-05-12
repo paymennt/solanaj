@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.paymennt</groupId>
 	<artifactId>solanaj</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<name>solanaj</name>
 	<description>Solana client for java</description>
 	<url>https://www.paymennt.com/</url>
