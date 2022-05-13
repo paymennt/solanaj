@@ -1,10 +1,15 @@
 package com.paymennt.solanaj.rpc.types;
 
-import com.squareup.moshi.Json;
-
 public class RpcFeesConfig {
 
-	@Json(name = "commitment")
-	private String commitment = "finalized";
+    private String commitment = "finalized";
+
+    public String getCommitment() {
+        return commitment;
+    }
+
+    public void setCommitment(String commitment) {
+        this.commitment = commitment;
+    }
 
 }

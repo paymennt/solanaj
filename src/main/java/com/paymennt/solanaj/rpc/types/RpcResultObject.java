@@ -1,23 +1,27 @@
 package com.paymennt.solanaj.rpc.types;
 
-import com.squareup.moshi.Json;
-
 public class RpcResultObject {
+
+    protected Context context;
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     public static class Context {
-        @Json(name = "slot")
         private long slot;
 
         public long getSlot() {
             return slot;
         }
 
+        public void setSlot(long slot) {
+            this.slot = slot;
+        }
+
     }
-
-    @Json(name = "context")
-    protected Context context;
-
-    public Context gContext() {
-        return context;
-    }
-
 }

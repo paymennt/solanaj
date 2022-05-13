@@ -1,28 +1,49 @@
 package com.paymennt.solanaj.rpc.types;
 
 import java.util.AbstractMap;
-import java.util.Base64;
 import java.util.List;
-
-import com.paymennt.crypto.lib.Base58;
-import com.paymennt.solanaj.rpc.types.RpcSendTransactionConfig.Encoding;
-import com.squareup.moshi.Json;
 
 public class ProgramAccount {
 
-    public final class Account {
-        @Json(name = "data")
-        private String data;
-        @Json(name = "executable")
-        private boolean executable;
-        @Json(name = "lamports")
-        private double lamports;
-        @Json(name = "owner")
-        private String owner;
-        @Json(name = "rentEpoch")
-        private double rentEpoch;
+    private Account account;
+    private String pubkey;
 
+    public ProgramAccount() {
+    }
+
+    @SuppressWarnings({ "rawtypes" })
+    public ProgramAccount(AbstractMap pa) {
+        this.account = (Account) new Account(pa.get("account"));
+        this.pubkey = (String) pa.get("pubkey");
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public String getPubkey() {
+        return pubkey;
+    }
+
+    public void setPubkey(String pubkey) {
+        this.pubkey = pubkey;
+    }
+
+    public final class Account {
+        private String data;
+        private boolean executable;
+        private double lamports;
+        private String owner;
+        private double rentEpoch;
         private String encoding;
+
+        public Account() {
+
+        }
 
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public Account(Object acc) {
@@ -48,51 +69,49 @@ public class ProgramAccount {
             return data;
         }
 
-        public byte[] getDecodedData() {
-            if (encoding.equals(Encoding.base64.toString())) {
-                return Base64.getDecoder().decode(data);
-            }
-
-            return Base58.decode(data);
+        public void setData(String data) {
+            this.data = data;
         }
 
         public boolean isExecutable() {
             return executable;
         }
 
+        public void setExecutable(boolean executable) {
+            this.executable = executable;
+        }
+
         public double getLamports() {
             return lamports;
+        }
+
+        public void setLamports(double lamports) {
+            this.lamports = lamports;
         }
 
         public String getOwner() {
             return owner;
         }
 
+        public void setOwner(String owner) {
+            this.owner = owner;
+        }
+
         public double getRentEpoch() {
             return rentEpoch;
         }
 
-    }
+        public void setRentEpoch(double rentEpoch) {
+            this.rentEpoch = rentEpoch;
+        }
 
-    @Json(name = "account")
-    private Account account;
-    @Json(name = "pubkey")
-    private String pubkey;
+        public String getEncoding() {
+            return encoding;
+        }
 
-    public Account getAccount() {
-        return account;
-    }
+        public void setEncoding(String encoding) {
+            this.encoding = encoding;
+        }
 
-    public String getPubkey() {
-        return pubkey;
-    }
-
-    public ProgramAccount() {
-    }
-
-    @SuppressWarnings({ "rawtypes" })
-    public ProgramAccount(AbstractMap pa) {
-        this.account = (Account) new Account(pa.get("account"));
-        this.pubkey = (String) pa.get("pubkey");
     }
 }

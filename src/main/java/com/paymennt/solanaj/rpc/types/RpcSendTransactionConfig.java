@@ -1,8 +1,16 @@
 package com.paymennt.solanaj.rpc.types;
 
-import com.squareup.moshi.Json;
-
 public class RpcSendTransactionConfig {
+
+    private Encoding encoding = Encoding.base64;
+
+    public Encoding getEncoding() {
+        return encoding;
+    }
+
+    public void setEncoding(Encoding encoding) {
+        this.encoding = encoding;
+    }
 
     public static enum Encoding {
         base64("base64");
@@ -18,8 +26,5 @@ public class RpcSendTransactionConfig {
         }
 
     }
-
-    @Json(name = "encoding")
-    private Encoding encoding = Encoding.base64;
 
 }

@@ -1,36 +1,18 @@
 package com.paymennt.solanaj.rpc.types;
 
-import com.squareup.moshi.Json;
-
 public class RpcResponse<T> {
 
-    public static class Error {
-        @Json(name = "code")
-        private long code;
-        @Json(name = "message")
-        private String message;
-
-        public long getCode() {
-            return code;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-    }
-
-    @Json(name = "jsonrpc")
     private String jsonrpc;
-    @Json(name = "result")
     private T result;
-    @Json(name = "error")
     private Error error;
-    @Json(name = "id")
     private String id;
 
-    public Error getError() {
-        return error;
+    public String getJsonrpc() {
+        return jsonrpc;
+    }
+
+    public void setJsonrpc(String jsonrpc) {
+        this.jsonrpc = jsonrpc;
     }
 
     public T getResult() {
@@ -41,8 +23,43 @@ public class RpcResponse<T> {
         this.result = result;
     }
 
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
+
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public static class Error {
+
+        private long code;
+        private String message;
+
+        public long getCode() {
+            return code;
+        }
+
+        public void setCode(long code) {
+            this.code = code;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
     }
 
 }

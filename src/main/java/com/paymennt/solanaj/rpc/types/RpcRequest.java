@@ -3,16 +3,10 @@ package com.paymennt.solanaj.rpc.types;
 import java.util.List;
 import java.util.UUID;
 
-import com.squareup.moshi.Json;
-
 public class RpcRequest {
-    @Json(name = "jsonrpc")
     private String jsonrpc = "2.0";
-    @Json(name = "method")
     private String method;
-    @Json(name = "params")
     private List<Object> params = null;
-    @Json(name = "id")
     private String id = UUID.randomUUID().toString();
 
     public RpcRequest(String method) {
@@ -24,16 +18,36 @@ public class RpcRequest {
         this.params = params;
     }
 
+    public String getJsonrpc() {
+        return jsonrpc;
+    }
+
+    public void setJsonrpc(String jsonrpc) {
+        this.jsonrpc = jsonrpc;
+    }
+
     public String getMethod() {
         return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     public List<Object> getParams() {
         return params;
     }
 
+    public void setParams(List<Object> params) {
+        this.params = params;
+    }
+
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

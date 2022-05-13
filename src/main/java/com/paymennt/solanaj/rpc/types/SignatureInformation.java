@@ -2,16 +2,10 @@ package com.paymennt.solanaj.rpc.types;
 
 import java.util.AbstractMap;
 
-import com.squareup.moshi.Json;
-
 public class SignatureInformation {
-    @Json(name = "err")
     private Object err;
-    @Json(name = "memo")
     private Object memo;
-    @Json(name = "signature")
     private String signature;
-    @Json(name = "slot")
     private long slot;
 
     public SignatureInformation() {
@@ -29,16 +23,32 @@ public class SignatureInformation {
         return err;
     }
 
+    public void setErr(Object err) {
+        this.err = err;
+    }
+
     public Object getMemo() {
         return memo;
+    }
+
+    public void setMemo(Object memo) {
+        this.memo = memo;
     }
 
     public String getSignature() {
         return signature;
     }
 
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
     public long getSlot() {
         return slot;
+    }
+
+    public void setSlot(long slot) {
+        this.slot = slot;
     }
 
 }
