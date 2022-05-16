@@ -5,15 +5,16 @@ package com.paymennt.solanaj;
 
 import java.util.List;
 
-import com.paymennt.solanaj.core.PublicKey;
-import com.paymennt.solanaj.core.SolanaAccount;
-import com.paymennt.solanaj.core.Transaction;
-import com.paymennt.solanaj.programs.SystemProgram;
-import com.paymennt.solanaj.rpc.Cluster;
-import com.paymennt.solanaj.rpc.RpcClient;
-import com.paymennt.solanaj.rpc.RpcException;
-import com.paymennt.solanaj.rpc.types.SignatureInformation;
-import com.paymennt.solanaj.ws.SubscriptionWebSocketClient;
+import com.paymennt.crypto.bip32.wallet.key.HdPrivateKey;
+import com.paymennt.solanaj.api.data.Account;
+import com.paymennt.solanaj.api.data.PublicKey;
+import com.paymennt.solanaj.api.data.Transaction;
+import com.paymennt.solanaj.api.program.SystemProgram;
+import com.paymennt.solanaj.api.rpc.Cluster;
+import com.paymennt.solanaj.api.rpc.RpcClient;
+import com.paymennt.solanaj.api.rpc.RpcException;
+import com.paymennt.solanaj.api.rpc.types.SignatureInformation;
+import com.paymennt.solanaj.api.ws.SubscriptionWebSocketClient;
 
 /**
  * @author asendar
@@ -21,72 +22,76 @@ import com.paymennt.solanaj.ws.SubscriptionWebSocketClient;
  */
 public class SolanaClient {
 
-	private Cluster cluster;
-	private RpcClient client;
+    private Cluster cluster;
+    private RpcClient client;
 
-	public SolanaClient(Cluster cluster) {
-		this.cluster = cluster;
-		this.client = new RpcClient(cluster);
-	}
+    public SolanaClient(Cluster cluster) {
+        this.cluster = cluster;
+        this.client = new RpcClient(cluster);
+    }
 
-	public SubscriptionWebSocketClient getWebsocket() {
-		return SubscriptionWebSocketClient.getInstance(cluster.getEndpoint());
-	}
+    public SubscriptionWebSocketClient getWebsocket() {
+        return SubscriptionWebSocketClient.getInstance(cluster.getEndpoint());
+    }
 
-	public void subscribeAccountUpdates(SolanaAccount account, SolanaEventListener listener) {
-		getWebsocket().accountSubscribe(account.getAddress(), data -> listener.onEvent());
-	}
+    public void subscribeUpdates(String walletAddress, SolanaEventListener listener) {
+        getWebsocket().accountSubscribe(walletAddress, data -> listener.onEvent());
+    }
 
-	public void subscribeAccountUpdates(String address, SolanaEventListener listener) {
-		getWebsocket().accountSubscribe(address, data -> listener.onEvent());
-	}
+    public void subscribeAccountUpdates(String address, SolanaEventListener listener) {
+        getWebsocket().accountSubscribe(address, data -> listener.onEvent());
+    }
 
-	public void unsubscribeAccountUpdates(SolanaAccount account) {
-		getWebsocket().accountUnsubscribe(account.getAddress());
-	}
+    public void unsubscribeAccountUpdates(String walletAddress) {
+        getWebsocket().accountUnsubscribe(walletAddress);
+    }
 
-	public void programSubscribe(SolanaAccount account, SolanaEventListener listener) {
-		getWebsocket().programSubscribe(account.getAddress(), data -> listener.onEvent());
-	}
+    public void programSubscribe(String walletAddress, SolanaEventListener listener) {
+        getWebsocket().programSubscribe(walletAddress, data -> listener.onEvent());
+    }
 
-	public String transfer(SolanaAccount account, String recipient, long amount) throws RpcException {
+    public String transfer(HdPrivateKey privateKey, String recipient, long amount) throws RpcException {
 
-		PublicKey fromPublicKey = new PublicKey(account.getAddress());
-		PublicKey toPublickKey = new PublicKey(recipient);
+        Account account = new Account(privateKey);
 
-		long fees = getTransferFees(account, recipient, amount);
+        PublicKey fromPublicKey = account.getPublicKey();
+        PublicKey toPublickKey = new PublicKey(recipient);
 
-		Transaction transaction = new Transaction();
-		transaction.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, amount - fees));
+        long fees = getTransferFees(privateKey, recipient, amount);
 
-		return client.getApi().sendTransaction(transaction, account);
-	}
+        Transaction transaction = new Transaction();
+        transaction.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, amount - fees));
 
-	public String transferAllFunds(SolanaAccount account, String recipient) throws RpcException {
-		long amount = getBalance(account);
-		return this.transfer(account, recipient, amount);
-	}
+        return client.getApi().sendTransaction(transaction, account);
+    }
 
-	public long getTransferFees(SolanaAccount account, String recipient, long amount) throws RpcException {
-		PublicKey fromPublicKey = new PublicKey(account.getAddress());
-		PublicKey toPublickKey = new PublicKey(recipient);
+    public String transferAllFunds(HdPrivateKey privateKey, String recipient) throws RpcException {
+        Account account = new Account(privateKey);
+        long amount = getBalance(account.getPublicKey().toBase58());
+        return this.transfer(privateKey, recipient, amount);
+    }
 
-		Transaction transaction = new Transaction();
-		transaction.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, amount));
+    public long getTransferFees(HdPrivateKey privateKey, String recipient, long amount) throws RpcException {
+        Account account = new Account(privateKey);
+        PublicKey fromPublicKey = account.getPublicKey();
+        PublicKey toPublickKey = new PublicKey(recipient);
 
-		return client.getApi().getFees(transaction, account).getValue();
-	}
+        Transaction transaction = new Transaction();
+        transaction.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, amount));
 
-	public long getBalance(SolanaAccount account) throws RpcException {
-		return client.getApi().getBalance(account.getPublicKey());
-	}
+        return client.getApi().getFees(transaction, account).getValue();
+    }
 
-	public List<SignatureInformation> getAccountTransactions(SolanaAccount account) throws RpcException {
-		return client.getApi().getSignaturesForAddress(account.getAddress(), 10);
-	}
+    public long getBalance(String walletAddress) throws RpcException {
+        return client.getApi().getBalance(walletAddress);
+    }
 
-	public static interface SolanaEventListener {
-		public void onEvent();
-	}
+    public List<SignatureInformation> getTransactions(String walletAddress) throws RpcException {
+        return client.getApi().getSignaturesForAddress(walletAddress, 10);
+    }
+
+    public static interface SolanaEventListener {
+        public void onEvent();
+    }
 
 }
