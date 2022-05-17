@@ -6,9 +6,6 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
-import com.paymennt.solanaj.api.data.Account;
-import com.paymennt.solanaj.api.data.PublicKey;
-import com.paymennt.solanaj.api.data.Transaction;
 import com.paymennt.solanaj.api.rpc.types.AccountInfo;
 import com.paymennt.solanaj.api.rpc.types.ConfigObjects.ConfirmedSignFAddr2;
 import com.paymennt.solanaj.api.rpc.types.ConfigObjects.Filter;
@@ -25,6 +22,9 @@ import com.paymennt.solanaj.api.rpc.types.RpcSendTransactionConfig.Encoding;
 import com.paymennt.solanaj.api.rpc.types.SignatureInformation;
 import com.paymennt.solanaj.api.ws.SubscriptionWebSocketClient;
 import com.paymennt.solanaj.api.ws.listener.NotificationEventListener;
+import com.paymennt.solanaj.data.Account;
+import com.paymennt.solanaj.data.AccountPublicKey;
+import com.paymennt.solanaj.data.SolanaTransaction;
 
 public class RpcApi {
     private RpcClient client;
@@ -37,11 +37,11 @@ public class RpcApi {
         return client.call("getRecentBlockhash", null, RecentBlockhash.class).getRecentBlockhash();
     }
 
-    public String sendTransaction(Transaction transaction, Account signer) throws RpcException {
+    public String sendTransaction(SolanaTransaction transaction, Account signer) throws RpcException {
         return sendTransaction(transaction, Arrays.asList(signer));
     }
 
-    public String sendTransaction(Transaction transaction, List<Account> signers) throws RpcException {
+    public String sendTransaction(SolanaTransaction transaction, List<Account> signers) throws RpcException {
         String recentBlockhash = getRecentBlockhash();
         transaction.setRecentBlockHash(recentBlockhash);
         transaction.sign(signers);
@@ -58,7 +58,7 @@ public class RpcApi {
     }
 
     public void sendAndConfirmTransaction(
-            Transaction transaction,
+            SolanaTransaction transaction,
             List<Account> signers,
             NotificationEventListener listener)
             throws RpcException {
@@ -102,7 +102,7 @@ public class RpcApi {
         return result;
     }
 
-    public List<ProgramAccount> getProgramAccounts(PublicKey account, long offset, String bytes) throws RpcException {
+    public List<ProgramAccount> getProgramAccounts(AccountPublicKey account, long offset, String bytes) throws RpcException {
         List<Object> filters = new ArrayList<>();
         filters.add(new Filter(new Memcmp(offset, bytes)));
 
@@ -110,12 +110,12 @@ public class RpcApi {
         return getProgramAccounts(account, programAccountConfig);
     }
 
-    public List<ProgramAccount> getProgramAccounts(PublicKey account) throws RpcException {
+    public List<ProgramAccount> getProgramAccounts(AccountPublicKey account) throws RpcException {
         return getProgramAccounts(account, new ProgramAccountConfig(Encoding.base64));
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public List<ProgramAccount> getProgramAccounts(PublicKey account, ProgramAccountConfig programAccountConfig)
+    public List<ProgramAccount> getProgramAccounts(AccountPublicKey account, ProgramAccountConfig programAccountConfig)
             throws RpcException {
         List<Object> params = new ArrayList<>();
 
@@ -135,7 +135,7 @@ public class RpcApi {
         return result;
     }
 
-    public AccountInfo getAccountInfo(PublicKey account) throws RpcException {
+    public AccountInfo getAccountInfo(AccountPublicKey account) throws RpcException {
         List<Object> params = new ArrayList<>();
 
         params.add(account.toString());
@@ -160,7 +160,7 @@ public class RpcApi {
         return client.call("getBlockTime", params, Long.class);
     }
 
-    public String requestAirdrop(PublicKey address, long lamports) throws RpcException {
+    public String requestAirdrop(AccountPublicKey address, long lamports) throws RpcException {
         List<Object> params = new ArrayList<>();
 
         params.add(address.toString());
@@ -169,11 +169,11 @@ public class RpcApi {
         return client.call("requestAirdrop", params, String.class);
     }
 
-    public RpcFeesResult getFees(Transaction transaction, Account signer) throws RpcException {
+    public RpcFeesResult getFees(SolanaTransaction transaction, Account signer) throws RpcException {
         return getFees(transaction, Arrays.asList(signer));
     }
 
-    public RpcFeesResult getFees(Transaction transaction, List<Account> signers) throws RpcException {
+    public RpcFeesResult getFees(SolanaTransaction transaction, List<Account> signers) throws RpcException {
         String recentBlockhash = getRecentBlockhash();
         transaction.setRecentBlockHash(recentBlockhash);
         transaction.sign(signers);

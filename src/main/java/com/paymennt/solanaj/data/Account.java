@@ -1,4 +1,4 @@
-package com.paymennt.solanaj.api.data;
+package com.paymennt.solanaj.data;
 
 import com.paymennt.crypto.bip32.wallet.key.HdPrivateKey;
 import com.paymennt.solanaj.utils.TweetNaclFast;
@@ -28,8 +28,8 @@ public class Account {
         return new Account(keyPair);
     }
 
-    public PublicKey getPublicKey() {
-        return new PublicKey(keyPair.getPublicKey());
+    public AccountPublicKey getPublicKey() {
+        return new AccountPublicKey(keyPair.getPublicKey());
     }
 
     public byte[] getSecretKey() {

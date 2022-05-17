@@ -1,4 +1,4 @@
-package com.paymennt.solanaj.api.data;
+package com.paymennt.solanaj.data;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -38,17 +38,17 @@ public class Message {
     private MessageHeader messageHeader;
     private String recentBlockhash;
     private AccountKeysList accountKeys;
-    private List<TransactionInstruction> instructions;
-    private PublicKey feePayer;
+    private List<SolanaTransactionInstruction> instructions;
+    private AccountPublicKey feePayer;
     private List<String> programIds;
 
     public Message() {
         this.programIds = new ArrayList<String>();
         this.accountKeys = new AccountKeysList();
-        this.instructions = new ArrayList<TransactionInstruction>();
+        this.instructions = new ArrayList<SolanaTransactionInstruction>();
     }
 
-    public Message addInstruction(TransactionInstruction instruction) {
+    public Message addInstruction(SolanaTransactionInstruction instruction) {
         accountKeys.addAll(instruction.getKeys());
         instructions.add(instruction);
 
@@ -76,7 +76,7 @@ public class Message {
         messageHeader = new MessageHeader();
 
         for (String programId : programIds) {
-            accountKeys.add(new AccountMeta(new PublicKey(programId), false, false));
+            accountKeys.add(new AccountMeta(new AccountPublicKey(programId), false, false));
         }
         List<AccountMeta> keysList = getAccountKeys();
         int accountKeysSize = keysList.size();
@@ -86,7 +86,7 @@ public class Message {
         int compiledInstructionsLength = 0;
         List<CompiledInstruction> compiledInstructions = new ArrayList<CompiledInstruction>();
 
-        for (TransactionInstruction instruction : instructions) {
+        for (SolanaTransactionInstruction instruction : instructions) {
             int keysSize = instruction.getKeys().size();
 
             byte[] keyIndices = new byte[keysSize];
@@ -111,12 +111,12 @@ public class Message {
         byte[] instructionsLength = ShortvecEncoding.encodeLength(compiledInstructions.size());
 
         int bufferSize = MessageHeader.HEADER_LENGTH + RECENT_BLOCK_HASH_LENGTH + accountAddressesLength.length
-                + (accountKeysSize * PublicKey.PUBLIC_KEY_LENGTH) + instructionsLength.length
+                + (accountKeysSize * AccountPublicKey.PUBLIC_KEY_LENGTH) + instructionsLength.length
                 + compiledInstructionsLength;
 
         ByteBuffer out = ByteBuffer.allocate(bufferSize);
 
-        ByteBuffer accountKeysBuff = ByteBuffer.allocate(accountKeysSize * PublicKey.PUBLIC_KEY_LENGTH);
+        ByteBuffer accountKeysBuff = ByteBuffer.allocate(accountKeysSize * AccountPublicKey.PUBLIC_KEY_LENGTH);
         for (AccountMeta accountMeta : keysList) {
             accountKeysBuff.put(accountMeta.getPublicKey().toByteArray());
 
@@ -151,7 +151,7 @@ public class Message {
         return out.array();
     }
 
-    protected void setFeePayer(PublicKey feePayer) {
+    protected void setFeePayer(AccountPublicKey feePayer) {
         this.feePayer = feePayer;
     }
 

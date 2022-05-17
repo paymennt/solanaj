@@ -1,4 +1,4 @@
-package com.paymennt.solanaj.api.data;
+package com.paymennt.solanaj.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +24,7 @@ public class AccountKeysList {
         ArrayList<AccountMeta> uniqueMetas = new ArrayList<AccountMeta>();
 
         for (AccountMeta accountMeta : accountsList) {
-            PublicKey pubKey = accountMeta.getPublicKey();
+            AccountPublicKey pubKey = accountMeta.getPublicKey();
 
             int index = AccountMeta.findAccountIndex(uniqueMetas, pubKey);
             if (index > -1) {

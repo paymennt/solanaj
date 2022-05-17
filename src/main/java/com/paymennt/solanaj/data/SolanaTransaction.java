@@ -1,4 +1,4 @@
-package com.paymennt.solanaj.api.data;
+package com.paymennt.solanaj.data;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -9,21 +9,21 @@ import com.paymennt.crypto.lib.Base58;
 import com.paymennt.crypto.lib.ShortvecEncoding;
 import com.paymennt.solanaj.utils.TweetNaclFast;
 
-public class Transaction {
+public class SolanaTransaction {
 
 	public static final int SIGNATURE_LENGTH = 64;
 
 	private Message messgae;
 	private List<String> signatures;
 	private byte[] serializedMessage;
-	private PublicKey feePayer;
+	private AccountPublicKey feePayer;
 
-	public Transaction() {
+	public SolanaTransaction() {
 		this.messgae = new Message();
 		this.signatures = new ArrayList<String>();
 	}
 
-	public Transaction addInstruction(TransactionInstruction instruction) {
+	public SolanaTransaction addInstruction(SolanaTransactionInstruction instruction) {
 		messgae.addInstruction(instruction);
 
 		return this;
@@ -33,7 +33,7 @@ public class Transaction {
 		messgae.setRecentBlockHash(recentBlockhash);
 	}
 
-	public void setFeePayer(PublicKey feePayer) {
+	public void setFeePayer(AccountPublicKey feePayer) {
 		this.feePayer = feePayer;
 	}
 

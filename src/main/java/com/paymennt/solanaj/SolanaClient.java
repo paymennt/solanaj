@@ -6,15 +6,15 @@ package com.paymennt.solanaj;
 import java.util.List;
 
 import com.paymennt.crypto.bip32.wallet.key.HdPrivateKey;
-import com.paymennt.solanaj.api.data.Account;
-import com.paymennt.solanaj.api.data.PublicKey;
-import com.paymennt.solanaj.api.data.Transaction;
-import com.paymennt.solanaj.api.program.SystemProgram;
 import com.paymennt.solanaj.api.rpc.Cluster;
 import com.paymennt.solanaj.api.rpc.RpcClient;
 import com.paymennt.solanaj.api.rpc.RpcException;
 import com.paymennt.solanaj.api.rpc.types.SignatureInformation;
 import com.paymennt.solanaj.api.ws.SubscriptionWebSocketClient;
+import com.paymennt.solanaj.data.Account;
+import com.paymennt.solanaj.data.AccountPublicKey;
+import com.paymennt.solanaj.data.SolanaTransaction;
+import com.paymennt.solanaj.program.SystemProgram;
 
 /**
  * @author asendar
@@ -54,12 +54,12 @@ public class SolanaClient {
 
         Account account = new Account(privateKey);
 
-        PublicKey fromPublicKey = account.getPublicKey();
-        PublicKey toPublickKey = new PublicKey(recipient);
+        AccountPublicKey fromPublicKey = account.getPublicKey();
+        AccountPublicKey toPublickKey = new AccountPublicKey(recipient);
 
         long fees = getTransferFees(privateKey, recipient, amount);
 
-        Transaction transaction = new Transaction();
+        SolanaTransaction transaction = new SolanaTransaction();
         transaction.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, amount - fees));
 
         return client.getApi().sendTransaction(transaction, account);
@@ -73,10 +73,10 @@ public class SolanaClient {
 
     public long getTransferFees(HdPrivateKey privateKey, String recipient, long amount) throws RpcException {
         Account account = new Account(privateKey);
-        PublicKey fromPublicKey = account.getPublicKey();
-        PublicKey toPublickKey = new PublicKey(recipient);
+        AccountPublicKey fromPublicKey = account.getPublicKey();
+        AccountPublicKey toPublickKey = new AccountPublicKey(recipient);
 
-        Transaction transaction = new Transaction();
+        SolanaTransaction transaction = new SolanaTransaction();
         transaction.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, amount));
 
         return client.getApi().getFees(transaction, account).getValue();

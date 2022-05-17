@@ -1,19 +1,19 @@
-package com.paymennt.solanaj.api.program;
+package com.paymennt.solanaj.program;
 
 import java.util.ArrayList;
 
 import com.paymennt.crypto.lib.ByteUtils;
-import com.paymennt.solanaj.api.data.AccountMeta;
-import com.paymennt.solanaj.api.data.PublicKey;
-import com.paymennt.solanaj.api.data.TransactionInstruction;
+import com.paymennt.solanaj.data.AccountMeta;
+import com.paymennt.solanaj.data.AccountPublicKey;
+import com.paymennt.solanaj.data.SolanaTransactionInstruction;
 
 public class SystemProgram {
-    public static final PublicKey PROGRAM_ID = new PublicKey("11111111111111111111111111111111");
+    public static final AccountPublicKey PROGRAM_ID = new AccountPublicKey("11111111111111111111111111111111");
 
     public static final int PROGRAM_INDEX_CREATE_ACCOUNT = 0;
     public static final int PROGRAM_INDEX_TRANSFER = 2;
 
-    public static TransactionInstruction transfer(PublicKey fromPublicKey, PublicKey toPublickKey, long lamports) {
+    public static SolanaTransactionInstruction transfer(AccountPublicKey fromPublicKey, AccountPublicKey toPublickKey, long lamports) {
         ArrayList<AccountMeta> keys = new ArrayList<AccountMeta>();
         keys.add(new AccountMeta(fromPublicKey, true, true));
         keys.add(new AccountMeta(toPublickKey, false, true));
@@ -23,15 +23,15 @@ public class SystemProgram {
         ByteUtils.uint32ToByteArrayLE((long) PROGRAM_INDEX_TRANSFER, data, 0);
         ByteUtils.int64ToByteArrayLE(lamports, data, 4);
 
-        return new TransactionInstruction(PROGRAM_ID, keys, data);
+        return new SolanaTransactionInstruction(PROGRAM_ID, keys, data);
     }
 
-    public static TransactionInstruction createAccount(
-            PublicKey fromPublicKey,
-            PublicKey newAccountPublikkey,
+    public static SolanaTransactionInstruction createAccount(
+            AccountPublicKey fromPublicKey,
+            AccountPublicKey newAccountPublikkey,
             long lamports,
             long space,
-            PublicKey programId) {
+            AccountPublicKey programId) {
         ArrayList<AccountMeta> keys = new ArrayList<AccountMeta>();
         keys.add(new AccountMeta(fromPublicKey, true, true));
         keys.add(new AccountMeta(newAccountPublikkey, true, true));
@@ -42,6 +42,6 @@ public class SystemProgram {
         ByteUtils.int64ToByteArrayLE(space, data, 12);
         System.arraycopy(programId.toByteArray(), 0, data, 20, 32);
 
-        return new TransactionInstruction(PROGRAM_ID, keys, data);
+        return new SolanaTransactionInstruction(PROGRAM_ID, keys, data);
     }
 }

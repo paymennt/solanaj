@@ -17,10 +17,6 @@ import com.paymennt.solanaj.api.rpc.types.RpcResponse;
 import com.paymennt.solanaj.api.ws.listener.NotificationEventListener;
 import com.paymennt.solanaj.utils.JsonUtils;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 public class SubscriptionWebSocketClient extends WebSocketClient {
 
     private class SubscriptionParams {
@@ -123,11 +119,22 @@ public class SubscriptionWebSocketClient extends WebSocketClient {
         updateSubscriptions();
     }
 
-    @Setter
-    @Getter
-    @AllArgsConstructor
     public static class BlockSubscribe {
         private String[] mentions;
+
+        public BlockSubscribe(String[] mentions) {
+            super();
+            this.mentions = mentions;
+        }
+
+        public String[] getMentions() {
+            return mentions;
+        }
+
+        public void setMentions(String[] mentions) {
+            this.mentions = mentions;
+        }
+
     }
 
     public void programSubscribe(String key, NotificationEventListener listener) {

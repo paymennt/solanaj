@@ -19,8 +19,12 @@ public class RpcClient {
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private String endpoint;
-    private OkHttpClient httpClient = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).build();
+    private OkHttpClient httpClient = new OkHttpClient.Builder()//
+            .connectTimeout(60, TimeUnit.SECONDS)//
+            .writeTimeout(60, TimeUnit.SECONDS)//
+            .readTimeout(60, TimeUnit.SECONDS)//
+            .build();
+
     private RpcApi rpcApi;
 
     public RpcClient(Cluster endpoint) {
@@ -34,8 +38,10 @@ public class RpcClient {
 
     public <T> T call(String method, List<Object> params, Class<T> clazz) throws RpcException {
         RpcRequest rpcRequest = new RpcRequest(method, params);
-        Request request = new Request.Builder().url(endpoint)
-                .post(RequestBody.create(JsonUtils.encode(rpcRequest), JSON)).build();
+        Request request = new Request.Builder()//
+                .url(endpoint)//
+                .post(RequestBody.create(JsonUtils.encode(rpcRequest), JSON))//
+                .build();
 
         try {
             Response response = httpClient.newCall(request).execute();

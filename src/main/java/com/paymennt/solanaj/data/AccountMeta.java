@@ -1,19 +1,19 @@
-package com.paymennt.solanaj.api.data;
+package com.paymennt.solanaj.data;
 
 import java.util.List;
 
 public class AccountMeta {
-    private PublicKey publicKey;
+    private AccountPublicKey publicKey;
     private boolean isSigner;
     private boolean isWritable;
 
-    public AccountMeta(PublicKey publicKey, boolean isSigner, boolean isWritable) {
+    public AccountMeta(AccountPublicKey publicKey, boolean isSigner, boolean isWritable) {
         this.publicKey = publicKey;
         this.isSigner = isSigner;
         this.isWritable = isWritable;
     }
 
-    public PublicKey getPublicKey() {
+    public AccountPublicKey getPublicKey() {
         return publicKey;
     }
 
@@ -25,7 +25,7 @@ public class AccountMeta {
         return isWritable;
     }
 
-    public static int findAccountIndex(List<AccountMeta> accountMetaList, PublicKey key) {
+    public static int findAccountIndex(List<AccountMeta> accountMetaList, AccountPublicKey key) {
         for (int i = 0; i < accountMetaList.size(); i++) {
             if (accountMetaList.get(i).getPublicKey().equals(key)) {
                 return i;

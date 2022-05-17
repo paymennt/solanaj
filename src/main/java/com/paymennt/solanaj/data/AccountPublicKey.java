@@ -1,4 +1,4 @@
-package com.paymennt.solanaj.api.data;
+package com.paymennt.solanaj.data;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -11,13 +11,13 @@ import com.paymennt.crypto.lib.ByteUtils;
 import com.paymennt.crypto.lib.Sha256;
 import com.paymennt.solanaj.utils.TweetNaclFast;
 
-public class PublicKey extends HdPublicKey {
+public class AccountPublicKey extends HdPublicKey {
 
     public static final int PUBLIC_KEY_LENGTH = 32;
 
     private byte[] pubkey;
 
-    public PublicKey(String pubkey) {
+    public AccountPublicKey(String pubkey) {
         if (pubkey.length() < PUBLIC_KEY_LENGTH) {
             throw new IllegalArgumentException("Invalid public key input");
         }
@@ -25,7 +25,7 @@ public class PublicKey extends HdPublicKey {
         this.pubkey = Base58.decode(pubkey);
     }
 
-    public PublicKey(byte[] pubkey) {
+    public AccountPublicKey(byte[] pubkey) {
 
         if (pubkey.length > PUBLIC_KEY_LENGTH) {
             throw new IllegalArgumentException("Invalid public key input");
@@ -34,9 +34,9 @@ public class PublicKey extends HdPublicKey {
         this.pubkey = pubkey;
     }
 
-    public static PublicKey readPubkey(byte[] bytes, int offset) {
+    public static AccountPublicKey readPubkey(byte[] bytes, int offset) {
         byte[] buf = ByteUtils.readBytes(bytes, offset, PUBLIC_KEY_LENGTH);
-        return new PublicKey(buf);
+        return new AccountPublicKey(buf);
     }
 
     public byte[] toByteArray() {
@@ -47,7 +47,7 @@ public class PublicKey extends HdPublicKey {
         return Base58.encode(pubkey);
     }
 
-    public boolean equals(PublicKey pubkey) {
+    public boolean equals(AccountPublicKey pubkey) {
         return Arrays.equals(this.pubkey, pubkey.toByteArray());
     }
 
@@ -55,7 +55,7 @@ public class PublicKey extends HdPublicKey {
         return toBase58();
     }
 
-    public static PublicKey createProgramAddress(List<byte[]> seeds, PublicKey programId) throws Exception {
+    public static AccountPublicKey createProgramAddress(List<byte[]> seeds, AccountPublicKey programId) throws Exception {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         for (byte[] seed : seeds) {
@@ -75,19 +75,19 @@ public class PublicKey extends HdPublicKey {
             throw new Exception("Invalid seeds, address must fall off the curve");
         }
 
-        return new PublicKey(hash);
+        return new AccountPublicKey(hash);
     }
 
     public static class ProgramDerivedAddress {
-        private PublicKey address;
+        private AccountPublicKey address;
         private int nonce;
 
-        public ProgramDerivedAddress(PublicKey address, int nonce) {
+        public ProgramDerivedAddress(AccountPublicKey address, int nonce) {
             this.address = address;
             this.nonce = nonce;
         }
 
-        public PublicKey getAddress() {
+        public AccountPublicKey getAddress() {
             return address;
         }
 
@@ -97,9 +97,9 @@ public class PublicKey extends HdPublicKey {
 
     }
 
-    public static ProgramDerivedAddress findProgramAddress(List<byte[]> seeds, PublicKey programId) throws Exception {
+    public static ProgramDerivedAddress findProgramAddress(List<byte[]> seeds, AccountPublicKey programId) throws Exception {
         int nonce = 255;
-        PublicKey address;
+        AccountPublicKey address;
 
         List<byte[]> seedsWithNonce = new ArrayList<byte[]>();
         seedsWithNonce.addAll(seeds);

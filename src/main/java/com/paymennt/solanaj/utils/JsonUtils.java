@@ -19,13 +19,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.paymennt.solanaj.exception.SolanajException;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 /**
  * @author bashar
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonUtils {
 
     private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder() //
@@ -37,6 +33,10 @@ public class JsonUtils {
 
     private static final Map<Class<?>, Boolean> ENCODE_MAP = new ConcurrentHashMap<>();
     private static final Map<Class<?>, Boolean> DECODE_MAP = new ConcurrentHashMap<>();
+
+    private JsonUtils() {
+
+    }
 
     /**
      * @return the mapper

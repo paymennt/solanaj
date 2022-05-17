@@ -1,14 +1,14 @@
-package com.paymennt.solanaj.api.data;
+package com.paymennt.solanaj.data;
 
 import java.util.List;
 
-public class TransactionInstruction {
+public class SolanaTransactionInstruction {
 
 	private List<AccountMeta> keys;
-	private PublicKey programId;
+	private AccountPublicKey programId;
 	private byte[] data;
 
-	public TransactionInstruction(PublicKey programId, List<AccountMeta> keys, byte[] data) {
+	public SolanaTransactionInstruction(AccountPublicKey programId, List<AccountMeta> keys, byte[] data) {
 		this.programId = programId;
 		this.keys = keys;
 		this.data = data;
@@ -18,7 +18,7 @@ public class TransactionInstruction {
 		return keys;
 	}
 
-	public PublicKey getProgramId() {
+	public AccountPublicKey getProgramId() {
 		return programId;
 	}
 
