@@ -20,11 +20,15 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.paymennt.solanaj.exception.SolanajException;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class JsonUtils.
+ *
  * @author bashar
  */
 public class JsonUtils {
 
+    /** The Constant OBJECT_MAPPER. */
     private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder() //
             .addModule(new ParameterNamesModule())//
             .addModule(new Jdk8Module())//
@@ -33,14 +37,22 @@ public class JsonUtils {
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .build();
 
+    /** The Constant ENCODE_MAP. */
     private static final Map<Class<?>, Boolean> ENCODE_MAP = new ConcurrentHashMap<>();
+    
+    /** The Constant DECODE_MAP. */
     private static final Map<Class<?>, Boolean> DECODE_MAP = new ConcurrentHashMap<>();
 
+    /**
+     * Instantiates a new json utils.
+     */
     private JsonUtils() {
 
     }
 
     /**
+     * Gets the object mapper.
+     *
      * @return the mapper
      */
     public static ObjectMapper getObjectMapper() {
@@ -48,16 +60,20 @@ public class JsonUtils {
     }
 
     /**
-     * @param object
-     * @return
+     * Can encode.
+     *
+     * @param object the object
+     * @return true, if successful
      */
     public static boolean canEncode(Object object) {
         return canEncodeType(object.getClass());
     }
 
     /**
-     * @param objectClass
-     * @return
+     * Can encode type.
+     *
+     * @param objectClass the object class
+     * @return true, if successful
      */
     public static boolean canEncodeType(Class<?> objectClass) {
         if (JsonUtils.ENCODE_MAP.containsKey(objectClass))
@@ -68,16 +84,20 @@ public class JsonUtils {
     }
 
     /**
-     * @param object
-     * @return
+     * Can decode.
+     *
+     * @param object the object
+     * @return true, if successful
      */
     public static boolean canDecode(Object object) {
         return canDecodeType(object.getClass());
     }
 
     /**
-     * @param object
-     * @return
+     * Can decode type.
+     *
+     * @param objectClass the object class
+     * @return true, if successful
      */
     public static boolean canDecodeType(Class<?> objectClass) {
         if (JsonUtils.DECODE_MAP.containsKey(objectClass))
@@ -89,16 +109,20 @@ public class JsonUtils {
     }
 
     /**
-     * @param object
-     * @return
+     * Can encode decode.
+     *
+     * @param object the object
+     * @return true, if successful
      */
     public static boolean canEncodeDecode(Object object) {
         return canEncode(object) && canDecode(object);
     }
 
     /**
-     * @param object
-     * @return
+     * Encode.
+     *
+     * @param object the object
+     * @return the string
      */
     public static String encode(Object object) {
         try {
@@ -109,8 +133,10 @@ public class JsonUtils {
     }
 
     /**
-     * @param object
-     * @return
+     * Encode pretty.
+     *
+     * @param object the object
+     * @return the string
      */
     public static String encodePretty(Object object) {
         try {
@@ -123,6 +149,12 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * Decode.
+     *
+     * @param inputStream the input stream
+     * @return the map
+     */
     public static Map<String, Object> decode(InputStream inputStream) {
         try {
             TypeReference<HashMap<String, Object>> typeReference = new TypeReference<HashMap<String, Object>>() {};
@@ -132,6 +164,14 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * Decode.
+     *
+     * @param <T> the generic type
+     * @param inputStream the input stream
+     * @param castAs the cast as
+     * @return the t
+     */
     public static <T> T decode(InputStream inputStream, Class<T> castAs) {
         try {
             return JsonUtils.OBJECT_MAPPER.readValue(inputStream, castAs);
@@ -140,6 +180,12 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * Decode.
+     *
+     * @param jsonString the json string
+     * @return the map
+     */
     public static Map<String, Object> decode(String jsonString) {
         try {
             TypeReference<HashMap<String, Object>> typeReference = new TypeReference<HashMap<String, Object>>() {};
@@ -149,6 +195,14 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * Decode.
+     *
+     * @param <T> the generic type
+     * @param jsonString the json string
+     * @param castAs the cast as
+     * @return the t
+     */
     public static <T> T decode(String jsonString, Class<T> castAs) {
         try {
             return JsonUtils.OBJECT_MAPPER.readValue(jsonString, castAs);

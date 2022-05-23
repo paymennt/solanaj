@@ -1,3 +1,7 @@
+/************************************************************************ 
+ * Copyright PointCheckout, Ltd.
+ * 
+ */
 package com.paymennt.solanaj.program;
 
 import java.util.ArrayList;
@@ -7,12 +11,29 @@ import com.paymennt.solanaj.data.AccountMeta;
 import com.paymennt.solanaj.data.AccountPublicKey;
 import com.paymennt.solanaj.data.SolanaTransactionInstruction;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SystemProgram.
+ */
 public class SystemProgram {
+    
+    /** The Constant PROGRAM_ID. */
     public static final AccountPublicKey PROGRAM_ID = new AccountPublicKey("11111111111111111111111111111111");
 
+    /** The Constant PROGRAM_INDEX_CREATE_ACCOUNT. */
     public static final int PROGRAM_INDEX_CREATE_ACCOUNT = 0;
+    
+    /** The Constant PROGRAM_INDEX_TRANSFER. */
     public static final int PROGRAM_INDEX_TRANSFER = 2;
 
+    /**
+     * Transfer.
+     *
+     * @param fromPublicKey the from public key
+     * @param toPublickKey the to publick key
+     * @param lamports the lamports
+     * @return the solana transaction instruction
+     */
     public static SolanaTransactionInstruction transfer(
             AccountPublicKey fromPublicKey,
             AccountPublicKey toPublickKey,
@@ -21,6 +42,15 @@ public class SystemProgram {
         return transfer(fromPublicKey, toPublickKey, null, lamports);
     }
 
+    /**
+     * Transfer.
+     *
+     * @param fromPublicKey the from public key
+     * @param toPublickKey the to publick key
+     * @param reference the reference
+     * @param lamports the lamports
+     * @return the solana transaction instruction
+     */
     public static SolanaTransactionInstruction transfer(
             AccountPublicKey fromPublicKey,
             AccountPublicKey toPublickKey,
@@ -40,6 +70,16 @@ public class SystemProgram {
         return new SolanaTransactionInstruction(PROGRAM_ID, keys, data);
     }
 
+    /**
+     * Creates the account.
+     *
+     * @param fromPublicKey the from public key
+     * @param newAccountPublikkey the new account publikkey
+     * @param lamports the lamports
+     * @param space the space
+     * @param programId the program id
+     * @return the solana transaction instruction
+     */
     public static SolanaTransactionInstruction createAccount(
             AccountPublicKey fromPublicKey,
             AccountPublicKey newAccountPublikkey,

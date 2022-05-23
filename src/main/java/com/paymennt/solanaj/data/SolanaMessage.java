@@ -1,3 +1,7 @@
+/************************************************************************ 
+ * Copyright PointCheckout, Ltd.
+ * 
+ */
 package com.paymennt.solanaj.data;
 
 import java.nio.ByteBuffer;
@@ -8,23 +12,48 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.paymennt.crypto.lib.Base58;
 import com.paymennt.crypto.lib.ShortvecEncoding;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SolanaMessage.
+ */
 public class SolanaMessage {
 
+    /** The Constant RECENT_BLOCK_HASH_LENGTH. */
     private static final int RECENT_BLOCK_HASH_LENGTH = 32;
 
+    /** The message header. */
     private MessageHeader messageHeader;
+    
+    /** The recent blockhash. */
     private String recentBlockhash;
+    
+    /** The account keys. */
     private AccountKeysList accountKeys;
+    
+    /** The instructions. */
     private List<SolanaTransactionInstruction> instructions;
+    
+    /** The fee payer. */
     private AccountPublicKey feePayer;
+    
+    /** The program ids. */
     private List<String> programIds;
 
+    /**
+     * Instantiates a new solana message.
+     */
     public SolanaMessage() {
         this.programIds = new ArrayList<>();
         this.accountKeys = new AccountKeysList();
         this.instructions = new ArrayList<>();
     }
 
+    /**
+     * Adds the instruction.
+     *
+     * @param instruction the instruction
+     * @return the solana message
+     */
     public SolanaMessage addInstruction(SolanaTransactionInstruction instruction) {
         accountKeys.addAll(instruction.getKeys());
         instructions.add(instruction);
@@ -36,6 +65,11 @@ public class SolanaMessage {
         return this;
     }
 
+    /**
+     * Serialize.
+     *
+     * @return the byte[]
+     */
     public byte[] serialize() {
 
         if (recentBlockhash == null) {
@@ -124,10 +158,20 @@ public class SolanaMessage {
         return out.array();
     }
 
+    /**
+     * Sets the fee payer.
+     *
+     * @param feePayer the new fee payer
+     */
     public void setFeePayer(AccountPublicKey feePayer) {
         this.feePayer = feePayer;
     }
 
+    /**
+     * Gets the account keys with fee payer.
+     *
+     * @return the account keys with fee payer
+     */
     private List<AccountMeta> getAccountKeysWithFeePayer() {
         List<AccountMeta> keysList = accountKeys.getList();
 
@@ -147,112 +191,229 @@ public class SolanaMessage {
         return newList;
     }
 
-    /*******************************************************************************************************************
-     * setters and getters
+    /**
+     * *****************************************************************************************************************
+     * setters and getters.
+     *
+     * @return the message header
      */
 
     public MessageHeader getMessageHeader() {
         return messageHeader;
     }
 
+    /**
+     * Sets the message header.
+     *
+     * @param messageHeader the new message header
+     */
     public void setMessageHeader(MessageHeader messageHeader) {
         this.messageHeader = messageHeader;
     }
 
+    /**
+     * Gets the recent blockhash.
+     *
+     * @return the recent blockhash
+     */
     public String getRecentBlockhash() {
         return recentBlockhash;
     }
 
+    /**
+     * Sets the recent blockhash.
+     *
+     * @param recentBlockhash the new recent blockhash
+     */
     public void setRecentBlockhash(String recentBlockhash) {
         this.recentBlockhash = recentBlockhash;
     }
 
+    /**
+     * Gets the instructions.
+     *
+     * @return the instructions
+     */
     public List<SolanaTransactionInstruction> getInstructions() {
         return instructions;
     }
 
+    /**
+     * Sets the instructions.
+     *
+     * @param instructions the new instructions
+     */
     public void setInstructions(List<SolanaTransactionInstruction> instructions) {
         this.instructions = instructions;
     }
 
+    /**
+     * Gets the program ids.
+     *
+     * @return the program ids
+     */
     public List<String> getProgramIds() {
         return programIds;
     }
 
+    /**
+     * Sets the program ids.
+     *
+     * @param programIds the new program ids
+     */
     public void setProgramIds(List<String> programIds) {
         this.programIds = programIds;
     }
 
+    /**
+     * Gets the fee payer.
+     *
+     * @return the fee payer
+     */
     public AccountPublicKey getFeePayer() {
         return feePayer;
     }
 
+    /**
+     * Sets the account keys.
+     *
+     * @param accountKeys the new account keys
+     */
     public void setAccountKeys(AccountKeysList accountKeys) {
         this.accountKeys = accountKeys;
     }
 
+    /**
+     * Sets the account keys.
+     *
+     * @param accountMetas the new account keys
+     */
     @JsonSetter
     public void setAccountKeys(List<AccountMeta> accountMetas) {
         this.accountKeys = new AccountKeysList();
         this.accountKeys.addAll(accountMetas);
     }
 
+    /**
+     * Gets the account keys.
+     *
+     * @return the account keys
+     */
     public List<AccountMeta> getAccountKeys() {
         return this.accountKeys.getList();
     }
 
-    /*******************************************************************************************************************
-     * classes
+    /**
+     * *****************************************************************************************************************
+     * classes.
      */
 
     public static class MessageHeader {
+        
+        /** The Constant HEADER_LENGTH. */
         static final int HEADER_LENGTH = 3;
 
+        /** The num required signatures. */
         byte numRequiredSignatures = 0;
+        
+        /** The num readonly signed accounts. */
         byte numReadonlySignedAccounts = 0;
+        
+        /** The num readonly unsigned accounts. */
         byte numReadonlyUnsignedAccounts = 0;
 
+        /**
+         * To byte array.
+         *
+         * @return the byte[]
+         */
         byte[] toByteArray() {
             return new byte[] { numRequiredSignatures, numReadonlySignedAccounts, numReadonlyUnsignedAccounts };
         }
 
-        /*******************************************************************************************************************
-         * setters and getters
+        /**
+         * *****************************************************************************************************************
+         * setters and getters.
+         *
+         * @return the num required signatures
          */
 
         public byte getNumRequiredSignatures() {
             return numRequiredSignatures;
         }
 
+        /**
+         * Sets the num required signatures.
+         *
+         * @param numRequiredSignatures the new num required signatures
+         */
         public void setNumRequiredSignatures(byte numRequiredSignatures) {
             this.numRequiredSignatures = numRequiredSignatures;
         }
 
+        /**
+         * Gets the num readonly signed accounts.
+         *
+         * @return the num readonly signed accounts
+         */
         public byte getNumReadonlySignedAccounts() {
             return numReadonlySignedAccounts;
         }
 
+        /**
+         * Sets the num readonly signed accounts.
+         *
+         * @param numReadonlySignedAccounts the new num readonly signed accounts
+         */
         public void setNumReadonlySignedAccounts(byte numReadonlySignedAccounts) {
             this.numReadonlySignedAccounts = numReadonlySignedAccounts;
         }
 
+        /**
+         * Gets the num readonly unsigned accounts.
+         *
+         * @return the num readonly unsigned accounts
+         */
         public byte getNumReadonlyUnsignedAccounts() {
             return numReadonlyUnsignedAccounts;
         }
 
+        /**
+         * Sets the num readonly unsigned accounts.
+         *
+         * @param numReadonlyUnsignedAccounts the new num readonly unsigned accounts
+         */
         public void setNumReadonlyUnsignedAccounts(byte numReadonlyUnsignedAccounts) {
             this.numReadonlyUnsignedAccounts = numReadonlyUnsignedAccounts;
         }
 
     }
 
+    /**
+     * The Class CompiledInstruction.
+     */
     private class CompiledInstruction {
+        
+        /** The program id index. */
         byte programIdIndex;
+        
+        /** The key indices count. */
         byte[] keyIndicesCount;
+        
+        /** The key indices. */
         byte[] keyIndices;
+        
+        /** The data length. */
         byte[] dataLength;
+        
+        /** The data. */
         byte[] data;
 
+        /**
+         * Gets the length.
+         *
+         * @return the length
+         */
         int getLength() {
             // 1 = programIdIndex length
             return 1 + keyIndicesCount.length + keyIndices.length + dataLength.length + data.length;

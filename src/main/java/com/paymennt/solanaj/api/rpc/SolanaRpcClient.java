@@ -1,3 +1,7 @@
+/************************************************************************ 
+ * Copyright PointCheckout, Ltd.
+ * 
+ */
 package com.paymennt.solanaj.api.rpc;
 
 import java.io.IOException;
@@ -18,27 +22,56 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SolanaRpcClient.
+ */
 public class SolanaRpcClient {
+    
+    /** The Constant JSON. */
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    /** The endpoint. */
     private String endpoint;
+    
+    /** The http client. */
     private OkHttpClient httpClient = new OkHttpClient.Builder()//
             .connectTimeout(60, TimeUnit.SECONDS)//
             .writeTimeout(60, TimeUnit.SECONDS)//
             .readTimeout(60, TimeUnit.SECONDS)//
             .build();
 
+    /** The rpc api. */
     private SolanaRpcApi rpcApi;
 
+    /**
+     * Instantiates a new solana rpc client.
+     *
+     * @param endpoint the endpoint
+     */
     public SolanaRpcClient(Cluster endpoint) {
         this(endpoint.getEndpoint());
     }
 
+    /**
+     * Instantiates a new solana rpc client.
+     *
+     * @param endpoint the endpoint
+     */
     public SolanaRpcClient(String endpoint) {
         this.endpoint = endpoint;
         rpcApi = new SolanaRpcApi(this);
     }
 
+    /**
+     * Call.
+     *
+     * @param <T> the generic type
+     * @param method the method
+     * @param params the params
+     * @param clazz the clazz
+     * @return the t
+     */
     @SuppressWarnings("deprecation")
     public <T> T call(String method, List<Object> params, Class<T> clazz) {
         RpcRequest rpcRequest = new RpcRequest(method, params);
@@ -66,6 +99,15 @@ public class SolanaRpcClient {
         }
     }
 
+    /**
+     * Call batch.
+     *
+     * @param <T> the generic type
+     * @param method the method
+     * @param paramList the param list
+     * @param clazz the clazz
+     * @return the list
+     */
     @SuppressWarnings("deprecation")
     public <T> List<T> callBatch(String method, List<List<Object>> paramList, Class<T> clazz) {
 
@@ -106,10 +148,20 @@ public class SolanaRpcClient {
         }
     }
 
+    /**
+     * Gets the api.
+     *
+     * @return the api
+     */
     public SolanaRpcApi getApi() {
         return rpcApi;
     }
 
+    /**
+     * Gets the endpoint.
+     *
+     * @return the endpoint
+     */
     public String getEndpoint() {
         return endpoint;
     }
