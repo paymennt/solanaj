@@ -1,19 +1,17 @@
 package com.paymennt.solanaj;
 
-import static org.junit.Assert.assertEquals;
-
 import java.security.Security;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import com.paymennt.crypto.bip32.Network;
-import com.paymennt.crypto.bip32.wallet.AbstractWallet.Chain;
-import com.paymennt.crypto.bip32.wallet.key.HdPrivateKey;
 import com.paymennt.solanaj.api.rpc.Cluster;
-import com.paymennt.solanaj.api.rpc.RpcException;
-import com.paymennt.solanaj.wallet.SolanaWallet;
+import com.paymennt.solanaj.api.rpc.SolanaRpcClient;
+import com.paymennt.solanaj.api.ws.SolanaWebSocketClient;
 
 /**
  * @author asendar
@@ -21,56 +19,58 @@ import com.paymennt.solanaj.wallet.SolanaWallet;
  */
 public class SolanaRpcTestSuite {
 
-    private static final String mnemonic =
-            "swing brown giraffe enter common awful rent shock mobile wisdom increase scissors";
-    private static SolanaClient client;
-    private static SolanaWallet randomWallet;
+    //    private static final String mnemonic =
+    //            "swing brown giraffe enter common awful rent shock mobile wisdom increase scissors";
+    private static SolanaRpcClient client;
+    private static SolanaWebSocketClient websocket;
+    //    private static SolanaWallet randomWallet;
 
     @BeforeClass
     public static void init() {
         Security.addProvider(new BouncyCastleProvider());
-        client = new SolanaClient(Cluster.TESTNET);
-        randomWallet = new SolanaWallet(mnemonic, "", Network.TESTNET);
+        websocket = SolanaWebSocketClient.getInstance(Cluster.TESTNET.getEndpoint());
+        client = new SolanaRpcClient(Cluster.TESTNET);
+        //        randomWallet = new SolanaWallet(mnemonic, "", Network.TESTNET);
+    }
+    
+    @Test
+    public void testAccountTransactions() {
+        long rent = client.getApi().getMinimumBalanceForRentExemption(0);
+        System.out.println(rent);
+    }
+    
+    @Test
+    @Ignore
+    public void testStatus() {
+        List<String> sigs = new ArrayList<>();
+        sigs.add("xi6aCymB8jbafMpnAmZBeVgRYQn5tH7nZzqmCfNYbJf3UhS1D2W2i6xs5bdm81YgqLRHaBXzq2Npo1o9VczbjFt");
+        sigs.add("2cjqyTySWkfDffPXy9Aid3qtibspbArMbMDweATSUAiaJ8RjPqTrttkjcwugF8XBksFux7q7TS8nNTbRzft7n7z6");
+        client.getApi().getTransactions(sigs);
     }
 
     @Test
-    public void testWalletAddress1() {
-        assertEquals("2Ym21uN3GqvFwkrvoWKwcTwqRjk1pFVSS6RFguNgmYdV", randomWallet.getAddress(0, Chain.EXTERNAL, null));
-    }
-
-    @Test
-    public void testWalletAddress2() {
-        assertEquals("A2K2xaXbEUuCCiBU2s6zev8ougGtk3S7t1fCPG3Rgad7", randomWallet.getAddress(1, Chain.EXTERNAL, null));
-
-    }
-
-    @Test(expected = Test.None.class)
     public void testWebsocket() throws InterruptedException {
-        String address = randomWallet.getAddress(0, Chain.EXTERNAL, null);
-        client.subscribeAccountUpdates(address, () -> {
+        websocket.accountSubscribe("2Ym21uN3GqvFwkrvoWKwcTwqRjk1pFVSS6RFguNgmYdV", data -> {
+//            client.getApi().getSignaturesForAddress("2Ym21uN3GqvFwkrvoWKwcTwqRjk1pFVSS6RFguNgmYdV", 100)
+//                    .forEach(info -> {
+//                        System.out.println(client.getApi().getTransaction(info.getSignature()).getTransaction());
+//                    });
+
         });
 
-        Thread.sleep(3000);
+//        websocket.logsSubscribe("H35HxumQvRb1ood2J7irgiovnLTseH2jjWH6TuVKCvf2", signature -> {
+//            System.out.println(signature);
+//            System.out.println(JsonUtils.encode(client.getApi().getTransaction(signature)));
+//
+//        });
 
-        client.unsubscribeAccountUpdates(address);
-    }
+        websocket.logsSubscribe("2Ym21uN3GqvFwkrvoWKwcTwqRjk1pFVSS6RFguNgmYdV", signature -> {
+            System.out.println(signature);
+//            System.out.println(JsonUtils.encode(client.getApi().getTransaction(signature)));
 
-    @Test(expected = Test.None.class)
-    public void testAccountTransactions() throws RpcException {
-        String address = randomWallet.getAddress(0, Chain.EXTERNAL, null);
-        client.getTransactions(address);
-    }
+        });
 
-    @Test(expected = Test.None.class)
-    public void testAccountBalance() throws RpcException {
-        String address = randomWallet.getAddress(0, Chain.EXTERNAL, null);
-        client.getBalance(address);
-    }
-
-    @Test(expected = Test.None.class)
-    public void testTramsferFees() throws RpcException {
-        HdPrivateKey key = randomWallet.getPrivateKey(0, Chain.EXTERNAL, null);
-        assertEquals(5000, client.getTransferFees(key, "A2K2xaXbEUuCCiBU2s6zev8ougGtk3S7t1fCPG3Rgad7", 0));
+//        Thread.sleep(300000);
     }
 
 }

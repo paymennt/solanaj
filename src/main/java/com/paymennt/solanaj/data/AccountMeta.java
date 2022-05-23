@@ -7,22 +7,14 @@ public class AccountMeta {
     private boolean isSigner;
     private boolean isWritable;
 
+    public AccountMeta() {
+
+    }
+
     public AccountMeta(AccountPublicKey publicKey, boolean isSigner, boolean isWritable) {
         this.publicKey = publicKey;
         this.isSigner = isSigner;
         this.isWritable = isWritable;
-    }
-
-    public AccountPublicKey getPublicKey() {
-        return publicKey;
-    }
-
-    public boolean isSigner() {
-        return isSigner;
-    }
-
-    public boolean isWritable() {
-        return isWritable;
     }
 
     public static int findAccountIndex(List<AccountMeta> accountMetaList, AccountPublicKey key) {
@@ -34,4 +26,33 @@ public class AccountMeta {
 
         return -1;
     }
+
+    public AccountPublicKey getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(AccountPublicKey publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public void setPubkey(String key) {
+        this.publicKey = new AccountPublicKey(key);
+    }
+
+    public boolean isSigner() {
+        return isSigner;
+    }
+
+    public void setSigner(boolean isSigner) {
+        this.isSigner = isSigner;
+    }
+
+    public boolean isWritable() {
+        return isWritable;
+    }
+
+    public void setWritable(boolean isWritable) {
+        this.isWritable = isWritable;
+    }
+
 }

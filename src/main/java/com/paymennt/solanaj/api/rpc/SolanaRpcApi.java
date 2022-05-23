@@ -2,7 +2,6 @@ package com.paymennt.solanaj.api.rpc;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -14,37 +13,31 @@ import com.paymennt.solanaj.api.rpc.types.ConfigObjects.ProgramAccountConfig;
 import com.paymennt.solanaj.api.rpc.types.ConfirmedTransaction;
 import com.paymennt.solanaj.api.rpc.types.ProgramAccount;
 import com.paymennt.solanaj.api.rpc.types.RecentBlockhash;
-import com.paymennt.solanaj.api.rpc.types.RpcFeesConfig;
+import com.paymennt.solanaj.api.rpc.types.RpcConfig;
 import com.paymennt.solanaj.api.rpc.types.RpcFeesResult;
 import com.paymennt.solanaj.api.rpc.types.RpcResultTypes.ValueLong;
 import com.paymennt.solanaj.api.rpc.types.RpcSendTransactionConfig;
 import com.paymennt.solanaj.api.rpc.types.RpcSendTransactionConfig.Encoding;
+import com.paymennt.solanaj.api.rpc.types.RpcSignitureStatusResult;
+import com.paymennt.solanaj.api.rpc.types.RpcStatusConfig;
 import com.paymennt.solanaj.api.rpc.types.SignatureInformation;
-import com.paymennt.solanaj.api.ws.SubscriptionWebSocketClient;
-import com.paymennt.solanaj.api.ws.listener.NotificationEventListener;
-import com.paymennt.solanaj.data.Account;
+import com.paymennt.solanaj.api.rpc.types.SolanaCommitment;
 import com.paymennt.solanaj.data.AccountPublicKey;
+import com.paymennt.solanaj.data.SolanaMessage;
 import com.paymennt.solanaj.data.SolanaTransaction;
 
-public class RpcApi {
-    private RpcClient client;
+public class SolanaRpcApi {
+    private SolanaRpcClient client;
 
-    public RpcApi(RpcClient client) {
+    public SolanaRpcApi(SolanaRpcClient client) {
         this.client = client;
     }
 
-    public String getRecentBlockhash() throws RpcException {
+    public String getRecentBlockhash() {
         return client.call("getRecentBlockhash", null, RecentBlockhash.class).getRecentBlockhash();
     }
 
-    public String sendTransaction(SolanaTransaction transaction, Account signer) throws RpcException {
-        return sendTransaction(transaction, Arrays.asList(signer));
-    }
-
-    public String sendTransaction(SolanaTransaction transaction, List<Account> signers) throws RpcException {
-        String recentBlockhash = getRecentBlockhash();
-        transaction.setRecentBlockHash(recentBlockhash);
-        transaction.sign(signers);
+    public String sendTransaction(SolanaTransaction transaction) {
         byte[] serializedTransaction = transaction.serialize();
 
         String base64Trx = Base64.getEncoder().encodeToString(serializedTransaction);
@@ -57,36 +50,37 @@ public class RpcApi {
         return client.call("sendTransaction", params, String.class);
     }
 
-    public void sendAndConfirmTransaction(
-            SolanaTransaction transaction,
-            List<Account> signers,
-            NotificationEventListener listener)
-            throws RpcException {
-        String signature = sendTransaction(transaction, signers);
-
-        SubscriptionWebSocketClient subClient = SubscriptionWebSocketClient.getInstance(client.getEndpoint());
-        subClient.signatureSubscribe(signature, listener);
-    }
-
-    public long getBalance(String address) throws RpcException {
+    public long getBalance(String address) {
         List<Object> params = new ArrayList<>();
         params.add(address);
         return client.call("getBalance", params, ValueLong.class).getValue();
     }
 
-    public ConfirmedTransaction getTransaction(String signature) throws RpcException {
+    public ConfirmedTransaction getTransaction(String signature) {
         List<Object> params = new ArrayList<>();
 
         params.add(signature);
-        // TODO jsonParsed, base58, base64
-        // the default encoding is JSON
-        // params.add("json");
+        params.add(new RpcConfig(SolanaCommitment.confirmed, "jsonParsed"));
 
         return client.call("getTransaction", params, ConfirmedTransaction.class);
     }
 
+    public List<ConfirmedTransaction> getTransactions(List<String> signatures) {
+
+        List<List<Object>> paramsBatch = new ArrayList<>();
+
+        for (String signature : signatures) {
+            List<Object> params = new ArrayList<>();
+            params.add(signature);
+            params.add(new RpcConfig(SolanaCommitment.confirmed, "jsonParsed"));
+            paramsBatch.add(params);
+        }
+
+        return client.callBatch("getTransaction", paramsBatch, ConfirmedTransaction.class);
+    }
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public List<SignatureInformation> getSignaturesForAddress(String key, int limit) throws RpcException {
+    public List<SignatureInformation> getSignaturesForAddress(String key, int limit) {
         List<Object> params = new ArrayList<>();
 
         params.add(key);
@@ -102,7 +96,7 @@ public class RpcApi {
         return result;
     }
 
-    public List<ProgramAccount> getProgramAccounts(AccountPublicKey account, long offset, String bytes) throws RpcException {
+    public List<ProgramAccount> getProgramAccounts(AccountPublicKey account, long offset, String bytes) {
         List<Object> filters = new ArrayList<>();
         filters.add(new Filter(new Memcmp(offset, bytes)));
 
@@ -110,13 +104,14 @@ public class RpcApi {
         return getProgramAccounts(account, programAccountConfig);
     }
 
-    public List<ProgramAccount> getProgramAccounts(AccountPublicKey account) throws RpcException {
+    public List<ProgramAccount> getProgramAccounts(AccountPublicKey account) {
         return getProgramAccounts(account, new ProgramAccountConfig(Encoding.base64));
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public List<ProgramAccount> getProgramAccounts(AccountPublicKey account, ProgramAccountConfig programAccountConfig)
-            throws RpcException {
+    public List<ProgramAccount> getProgramAccounts(
+            AccountPublicKey account,
+            ProgramAccountConfig programAccountConfig) {
         List<Object> params = new ArrayList<>();
 
         params.add(account.toString());
@@ -135,7 +130,7 @@ public class RpcApi {
         return result;
     }
 
-    public AccountInfo getAccountInfo(AccountPublicKey account) throws RpcException {
+    public AccountInfo getAccountInfo(AccountPublicKey account) {
         List<Object> params = new ArrayList<>();
 
         params.add(account.toString());
@@ -144,7 +139,7 @@ public class RpcApi {
         return client.call("getAccountInfo", params, AccountInfo.class);
     }
 
-    public long getMinimumBalanceForRentExemption(long dataLength) throws RpcException {
+    public long getMinimumBalanceForRentExemption(long dataLength) {
         List<Object> params = new ArrayList<>();
 
         params.add(dataLength);
@@ -152,7 +147,7 @@ public class RpcApi {
         return client.call("getMinimumBalanceForRentExemption", params, Long.class);
     }
 
-    public long getBlockTime(long block) throws RpcException {
+    public long getBlockTime(long block) {
         List<Object> params = new ArrayList<>();
 
         params.add(block);
@@ -160,7 +155,7 @@ public class RpcApi {
         return client.call("getBlockTime", params, Long.class);
     }
 
-    public String requestAirdrop(AccountPublicKey address, long lamports) throws RpcException {
+    public String requestAirdrop(AccountPublicKey address, long lamports) {
         List<Object> params = new ArrayList<>();
 
         params.add(address.toString());
@@ -169,24 +164,26 @@ public class RpcApi {
         return client.call("requestAirdrop", params, String.class);
     }
 
-    public RpcFeesResult getFees(SolanaTransaction transaction, Account signer) throws RpcException {
-        return getFees(transaction, Arrays.asList(signer));
-    }
-
-    public RpcFeesResult getFees(SolanaTransaction transaction, List<Account> signers) throws RpcException {
-        String recentBlockhash = getRecentBlockhash();
-        transaction.setRecentBlockHash(recentBlockhash);
-        transaction.sign(signers);
-        byte[] serializedTransaction = transaction.getMessage().serialize();
+    public RpcFeesResult getFees(SolanaMessage message) {
+        message.setRecentBlockhash(getRecentBlockhash());
+        byte[] serializedTransaction = message.serialize();
 
         String base64Message = Base64.getEncoder().encodeToString(serializedTransaction);
 
         List<Object> params = new ArrayList<>();
 
         params.add(base64Message);
-        params.add(new RpcFeesConfig());
+        params.add(new RpcConfig(SolanaCommitment.confirmed, "jsonParsed"));
 
         return client.call("getFeeForMessage", params, RpcFeesResult.class);
+    }
+
+    public RpcSignitureStatusResult getSignatureStatuses(List<String> signatures) {
+        List<Object> params = new ArrayList<>();
+        params.add(signatures.toArray());
+        params.add(new RpcStatusConfig());
+
+        return client.call("getSignatureStatuses", params, RpcSignitureStatusResult.class);
     }
 
 }

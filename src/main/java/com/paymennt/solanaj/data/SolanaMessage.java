@@ -4,34 +4,11 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.paymennt.crypto.lib.Base58;
 import com.paymennt.crypto.lib.ShortvecEncoding;
 
-public class Message {
-    private class MessageHeader {
-        static final int HEADER_LENGTH = 3;
-
-        byte numRequiredSignatures = 0;
-        byte numReadonlySignedAccounts = 0;
-        byte numReadonlyUnsignedAccounts = 0;
-
-        byte[] toByteArray() {
-            return new byte[] { numRequiredSignatures, numReadonlySignedAccounts, numReadonlyUnsignedAccounts };
-        }
-    }
-
-    private class CompiledInstruction {
-        byte programIdIndex;
-        byte[] keyIndicesCount;
-        byte[] keyIndices;
-        byte[] dataLength;
-        byte[] data;
-
-        int getLength() {
-            // 1 = programIdIndex length
-            return 1 + keyIndicesCount.length + keyIndices.length + dataLength.length + data.length;
-        }
-    }
+public class SolanaMessage {
 
     private static final int RECENT_BLOCK_HASH_LENGTH = 32;
 
@@ -42,13 +19,13 @@ public class Message {
     private AccountPublicKey feePayer;
     private List<String> programIds;
 
-    public Message() {
-        this.programIds = new ArrayList<String>();
+    public SolanaMessage() {
+        this.programIds = new ArrayList<>();
         this.accountKeys = new AccountKeysList();
-        this.instructions = new ArrayList<SolanaTransactionInstruction>();
+        this.instructions = new ArrayList<>();
     }
 
-    public Message addInstruction(SolanaTransactionInstruction instruction) {
+    public SolanaMessage addInstruction(SolanaTransactionInstruction instruction) {
         accountKeys.addAll(instruction.getKeys());
         instructions.add(instruction);
 
@@ -57,10 +34,6 @@ public class Message {
         }
 
         return this;
-    }
-
-    public void setRecentBlockHash(String recentBlockhash) {
-        this.recentBlockhash = recentBlockhash;
     }
 
     public byte[] serialize() {
@@ -78,26 +51,26 @@ public class Message {
         for (String programId : programIds) {
             accountKeys.add(new AccountMeta(new AccountPublicKey(programId), false, false));
         }
-        List<AccountMeta> keysList = getAccountKeys();
+        List<AccountMeta> keysList = getAccountKeysWithFeePayer();
         int accountKeysSize = keysList.size();
 
         byte[] accountAddressesLength = ShortvecEncoding.encodeLength(accountKeysSize);
 
         int compiledInstructionsLength = 0;
-        List<CompiledInstruction> compiledInstructions = new ArrayList<CompiledInstruction>();
+        List<CompiledInstruction> compiledInstructions = new ArrayList<>();
 
         for (SolanaTransactionInstruction instruction : instructions) {
             int keysSize = instruction.getKeys().size();
 
             byte[] keyIndices = new byte[keysSize];
             for (int i = 0; i < keysSize; i++) {
-                keyIndices[i] = (byte) AccountMeta.findAccountIndex(keysList,
-                        instruction.getKeys().get(i).getPublicKey());
+                keyIndices[i] =
+                        (byte) AccountMeta.findAccountIndex(keysList, instruction.getKeys().get(i).getPublicKey());
             }
 
             CompiledInstruction compiledInstruction = new CompiledInstruction();
-            compiledInstruction.programIdIndex = (byte) AccountMeta.findAccountIndex(keysList,
-                    instruction.getProgramId());
+            compiledInstruction.programIdIndex =
+                    (byte) AccountMeta.findAccountIndex(keysList, instruction.getProgramId());
             compiledInstruction.keyIndicesCount = ShortvecEncoding.encodeLength(keysSize);
             compiledInstruction.keyIndices = keyIndices;
             compiledInstruction.dataLength = ShortvecEncoding.encodeLength(instruction.getData().length);
@@ -151,15 +124,16 @@ public class Message {
         return out.array();
     }
 
-    protected void setFeePayer(AccountPublicKey feePayer) {
+    public void setFeePayer(AccountPublicKey feePayer) {
         this.feePayer = feePayer;
     }
 
-    private List<AccountMeta> getAccountKeys() {
+    private List<AccountMeta> getAccountKeysWithFeePayer() {
         List<AccountMeta> keysList = accountKeys.getList();
+
         int feePayerIndex = AccountMeta.findAccountIndex(keysList, feePayer);
 
-        List<AccountMeta> newList = new ArrayList<AccountMeta>();
+        List<AccountMeta> newList = new ArrayList<>();
 
         if (feePayerIndex != -1) {
             AccountMeta feePayerMeta = keysList.get(feePayerIndex);
@@ -171,6 +145,118 @@ public class Message {
         newList.addAll(keysList);
 
         return newList;
+    }
+
+    /*******************************************************************************************************************
+     * setters and getters
+     */
+
+    public MessageHeader getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(MessageHeader messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getRecentBlockhash() {
+        return recentBlockhash;
+    }
+
+    public void setRecentBlockhash(String recentBlockhash) {
+        this.recentBlockhash = recentBlockhash;
+    }
+
+    public List<SolanaTransactionInstruction> getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(List<SolanaTransactionInstruction> instructions) {
+        this.instructions = instructions;
+    }
+
+    public List<String> getProgramIds() {
+        return programIds;
+    }
+
+    public void setProgramIds(List<String> programIds) {
+        this.programIds = programIds;
+    }
+
+    public AccountPublicKey getFeePayer() {
+        return feePayer;
+    }
+
+    public void setAccountKeys(AccountKeysList accountKeys) {
+        this.accountKeys = accountKeys;
+    }
+
+    @JsonSetter
+    public void setAccountKeys(List<AccountMeta> accountMetas) {
+        this.accountKeys = new AccountKeysList();
+        this.accountKeys.addAll(accountMetas);
+    }
+
+    public List<AccountMeta> getAccountKeys() {
+        return this.accountKeys.getList();
+    }
+
+    /*******************************************************************************************************************
+     * classes
+     */
+
+    public static class MessageHeader {
+        static final int HEADER_LENGTH = 3;
+
+        byte numRequiredSignatures = 0;
+        byte numReadonlySignedAccounts = 0;
+        byte numReadonlyUnsignedAccounts = 0;
+
+        byte[] toByteArray() {
+            return new byte[] { numRequiredSignatures, numReadonlySignedAccounts, numReadonlyUnsignedAccounts };
+        }
+
+        /*******************************************************************************************************************
+         * setters and getters
+         */
+
+        public byte getNumRequiredSignatures() {
+            return numRequiredSignatures;
+        }
+
+        public void setNumRequiredSignatures(byte numRequiredSignatures) {
+            this.numRequiredSignatures = numRequiredSignatures;
+        }
+
+        public byte getNumReadonlySignedAccounts() {
+            return numReadonlySignedAccounts;
+        }
+
+        public void setNumReadonlySignedAccounts(byte numReadonlySignedAccounts) {
+            this.numReadonlySignedAccounts = numReadonlySignedAccounts;
+        }
+
+        public byte getNumReadonlyUnsignedAccounts() {
+            return numReadonlyUnsignedAccounts;
+        }
+
+        public void setNumReadonlyUnsignedAccounts(byte numReadonlyUnsignedAccounts) {
+            this.numReadonlyUnsignedAccounts = numReadonlyUnsignedAccounts;
+        }
+
+    }
+
+    private class CompiledInstruction {
+        byte programIdIndex;
+        byte[] keyIndicesCount;
+        byte[] keyIndices;
+        byte[] dataLength;
+        byte[] data;
+
+        int getLength() {
+            // 1 = programIdIndex length
+            return 1 + keyIndicesCount.length + keyIndices.length + dataLength.length + data.length;
+        }
     }
 
 }

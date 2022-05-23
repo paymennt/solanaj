@@ -13,10 +13,24 @@ public class SystemProgram {
     public static final int PROGRAM_INDEX_CREATE_ACCOUNT = 0;
     public static final int PROGRAM_INDEX_TRANSFER = 2;
 
-    public static SolanaTransactionInstruction transfer(AccountPublicKey fromPublicKey, AccountPublicKey toPublickKey, long lamports) {
-        ArrayList<AccountMeta> keys = new ArrayList<AccountMeta>();
+    public static SolanaTransactionInstruction transfer(
+            AccountPublicKey fromPublicKey,
+            AccountPublicKey toPublickKey,
+            long lamports) {
+
+        return transfer(fromPublicKey, toPublickKey, null, lamports);
+    }
+
+    public static SolanaTransactionInstruction transfer(
+            AccountPublicKey fromPublicKey,
+            AccountPublicKey toPublickKey,
+            AccountPublicKey reference,
+            long lamports) {
+        ArrayList<AccountMeta> keys = new ArrayList<>();
         keys.add(new AccountMeta(fromPublicKey, true, true));
         keys.add(new AccountMeta(toPublickKey, false, true));
+        if (reference != null)
+            keys.add(new AccountMeta(reference, false, false));
 
         // 4 byte instruction index + 8 bytes lamports
         byte[] data = new byte[4 + 8];
@@ -32,7 +46,7 @@ public class SystemProgram {
             long lamports,
             long space,
             AccountPublicKey programId) {
-        ArrayList<AccountMeta> keys = new ArrayList<AccountMeta>();
+        ArrayList<AccountMeta> keys = new ArrayList<>();
         keys.add(new AccountMeta(fromPublicKey, true, true));
         keys.add(new AccountMeta(newAccountPublikkey, true, true));
 

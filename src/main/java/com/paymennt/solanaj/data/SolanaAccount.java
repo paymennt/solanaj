@@ -3,29 +3,29 @@ package com.paymennt.solanaj.data;
 import com.paymennt.crypto.bip32.wallet.key.HdPrivateKey;
 import com.paymennt.solanaj.utils.TweetNaclFast;
 
-public class Account {
+public class SolanaAccount {
     private TweetNaclFast.Signature.KeyPair keyPair;
 
-    public Account() {
+    public SolanaAccount() {
         this.keyPair = TweetNaclFast.Signature.keyPair();
     }
 
-    public Account(TweetNaclFast.Signature.KeyPair keyPair) {
+    public SolanaAccount(TweetNaclFast.Signature.KeyPair keyPair) {
         this.keyPair = keyPair;
     }
 
-    public Account(HdPrivateKey privateKey) {
-        this.keyPair = TweetNaclFast.Signature.keyPair_fromSecretKey(privateKey.getPrivateKey());
+    public SolanaAccount(HdPrivateKey privateKey) {
+        this.keyPair = TweetNaclFast.Signature.keyPair_fromSeed(privateKey.getPrivateKey());
     }
 
-    public static Account fromSecret(byte[] secretKey) {
+    public static SolanaAccount fromSecret(byte[] secretKey) {
         TweetNaclFast.Signature.KeyPair keyPair = TweetNaclFast.Signature.keyPair_fromSecretKey(secretKey);
-        return new Account(keyPair);
+        return new SolanaAccount(keyPair);
     }
 
-    public static Account fromSeed(byte[] seed) {
+    public static SolanaAccount fromSeed(byte[] seed) {
         TweetNaclFast.Signature.KeyPair keyPair = TweetNaclFast.Signature.keyPair_fromSeed(seed);
-        return new Account(keyPair);
+        return new SolanaAccount(keyPair);
     }
 
     public AccountPublicKey getPublicKey() {

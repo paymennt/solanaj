@@ -11,85 +11,114 @@ import com.paymennt.solanaj.utils.TweetNaclFast;
 
 public class SolanaTransaction {
 
-	public static final int SIGNATURE_LENGTH = 64;
+    public static final int SIGNATURE_LENGTH = 64;
 
-	private Message messgae;
-	private List<String> signatures;
-	private byte[] serializedMessage;
-	private AccountPublicKey feePayer;
+    private SolanaMessage message;
+    private List<String> signatures;
+    private byte[] serializedMessage;
+    private AccountPublicKey feePayer;
 
-	public SolanaTransaction() {
-		this.messgae = new Message();
-		this.signatures = new ArrayList<String>();
-	}
+    public SolanaTransaction() {
+        this.message = new SolanaMessage();
+        this.signatures = new ArrayList<>();
+    }
 
-	public SolanaTransaction addInstruction(SolanaTransactionInstruction instruction) {
-		messgae.addInstruction(instruction);
+    public SolanaTransaction addInstruction(SolanaTransactionInstruction instruction) {
+        message.addInstruction(instruction);
 
-		return this;
-	}
+        return this;
+    }
 
-	public void setRecentBlockHash(String recentBlockhash) {
-		messgae.setRecentBlockHash(recentBlockhash);
-	}
+    public void sign(SolanaAccount signer) {
+        sign(Arrays.asList(signer));
+    }
 
-	public void setFeePayer(AccountPublicKey feePayer) {
-		this.feePayer = feePayer;
-	}
+    public void sign(List<SolanaAccount> signers) {
 
-	public void sign(Account signer) {
-		sign(Arrays.asList(signer));
-	}
+        if (signers.isEmpty()) {
+            throw new IllegalArgumentException("No signers");
+        }
 
-	public void sign(List<Account> signers) {
+        if (feePayer == null) {
+            feePayer = signers.get(0).getPublicKey();
+        }
+        message.setFeePayer(feePayer);
 
-		if (signers.size() == 0) {
-			throw new IllegalArgumentException("No signers");
-		}
+        serializedMessage = message.serialize();
 
-		if (feePayer == null) {
-			feePayer = signers.get(0).getPublicKey();
-		}
-		messgae.setFeePayer(feePayer);
+        for (SolanaAccount signer : signers) {
+            TweetNaclFast.Signature signatureProvider = new TweetNaclFast.Signature(new byte[0], signer.getSecretKey());
+            byte[] signature = signatureProvider.detached(serializedMessage);
 
-		serializedMessage = messgae.serialize();
+            signatures.add(Base58.encode(signature));
+        }
+    }
 
-		for (Account signer : signers) {
-			TweetNaclFast.Signature signatureProvider = new TweetNaclFast.Signature(new byte[0], signer.getSecretKey());
-			byte[] signature = signatureProvider.detached(serializedMessage);
+    public byte[] serialize() {
+        int signaturesSize = signatures.size();
+        byte[] signaturesLength = ShortvecEncoding.encodeLength(signaturesSize);
 
-			signatures.add(Base58.encode(signature));
-		}
-	}
+        ByteBuffer out = ByteBuffer
+                .allocate(signaturesLength.length + signaturesSize * SIGNATURE_LENGTH + serializedMessage.length);
 
-	public Message getMessage() {
-		return this.messgae;
-	}
+        out.put(signaturesLength);
 
-	public byte[] serialize() {
-		int signaturesSize = signatures.size();
-		byte[] signaturesLength = ShortvecEncoding.encodeLength(signaturesSize);
+        for (String signature : signatures) {
+            byte[] rawSignature = Base58.decode(signature);
+            out.put(rawSignature);
+        }
 
-		ByteBuffer out = ByteBuffer
-				.allocate(signaturesLength.length + signaturesSize * SIGNATURE_LENGTH + serializedMessage.length);
+        out.put(serializedMessage);
 
-		out.put(signaturesLength);
+        return out.array();
+    }
 
-		for (String signature : signatures) {
-			byte[] rawSignature = Base58.decode(signature);
-			out.put(rawSignature);
-		}
+    /*******************************************************************************************************************
+     * setters and getters
+     */
 
-		out.put(serializedMessage);
+    public String getSignature() {
+        if (signatures.size() > 0) {
+            return signatures.get(0);
+        }
 
-		return out.array();
-	}
+        return null;
+    }
 
-	public String getSignature() {
-		if (signatures.size() > 0) {
-			return signatures.get(0);
-		}
+    public SolanaMessage getMessage() {
+        return message;
+    }
 
-		return null;
-	}
+    public void setMessage(SolanaMessage message) {
+        this.message = message;
+    }
+
+    public List<String> getSignatures() {
+        return signatures;
+    }
+
+    public void setSignatures(List<String> signatures) {
+        this.signatures = signatures;
+    }
+
+    public byte[] getSerializedMessage() {
+        return serializedMessage;
+    }
+
+    public void setSerializedMessage(byte[] serializedMessage) {
+        this.serializedMessage = serializedMessage;
+    }
+
+    public AccountPublicKey getFeePayer() {
+        return feePayer;
+    }
+
+    public void setFeePayer(AccountPublicKey feePayer) {
+        this.feePayer = feePayer;
+    }
+
+    public void setRecentBlockHash(String recentBlockhash) {
+        message.setRecentBlockhash(recentBlockhash);
+    }
+
 }
