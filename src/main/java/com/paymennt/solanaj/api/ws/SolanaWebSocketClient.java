@@ -31,32 +31,32 @@ import com.paymennt.solanaj.utils.JsonUtils;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class SolanaWebSocketClient.
+ * 
  */
 public class SolanaWebSocketClient extends WebSocketClient {
 
-    /** The instance. */
+    /**  */
     private static SolanaWebSocketClient instance;
     
-    /** The scheduler. */
+    /**  */
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-    /** The subscriptions. */
+    /**  */
     private Map<String, SubscriptionParams> subscriptions = new HashMap<>();
     
-    /** The subscription ids. */
+    /**  */
     private Map<String, Long> subscriptionIds = new HashMap<>();
     
-    /** The subscription address ids. */
+    /**  */
     private Map<String, String> subscriptionAddressIds = new HashMap<>();
     
-    /** The subscription linsteners. */
+    /**  */
     private Map<Long, NotificationEventListener> subscriptionLinsteners = new HashMap<>();
 
     /**
-     * Instantiates a new solana web socket client.
+     * 
      *
-     * @param serverURI the server URI
+     * @param serverURI 
      */
     public SolanaWebSocketClient(URI serverURI) {
         super(serverURI);
@@ -66,10 +66,10 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * Gets the single instance of SolanaWebSocketClient.
+     * 
      *
-     * @param endpoint the endpoint
-     * @return single instance of SolanaWebSocketClient
+     * @param cluster 
+     * @return 
      */
     public static SolanaWebSocketClient getInstance(Cluster cluster) {
         URI endpointURI;
@@ -94,10 +94,10 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * Account subscribe.
+     * 
      *
-     * @param key the key
-     * @param listener the listener
+     * @param key 
+     * @param listener 
      */
     public void accountSubscribe(String key, NotificationEventListener listener) {
         accountSubscribe(key, SolanaCommitment.finalized, listener);
@@ -106,11 +106,11 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * Account subscribe.
+     * 
      *
-     * @param key the key
-     * @param commitment the commitment
-     * @param listener the listener
+     * @param key 
+     * @param commitment 
+     * @param listener 
      */
     public void accountSubscribe(String key, SolanaCommitment commitment, NotificationEventListener listener) {
         if (subscriptionAddressIds.containsKey(key))
@@ -130,9 +130,9 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * Account unsubscribe.
+     * 
      *
-     * @param key the key
+     * @param key 
      */
     public void accountUnsubscribe(String key) {
         accountUnsubscribe(key, SolanaCommitment.finalized);
@@ -141,10 +141,10 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * Account unsubscribe.
+     * 
      *
-     * @param key the key
-     * @param commitment the commitment
+     * @param key 
+     * @param commitment 
      */
     public void accountUnsubscribe(String key, SolanaCommitment commitment) {
 
@@ -171,10 +171,10 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * Signature subscribe.
+     * 
      *
-     * @param signature the signature
-     * @param listener the listener
+     * @param signature 
+     * @param listener 
      */
     public void signatureSubscribe(String signature, NotificationEventListener listener) {
         List<Object> params = new ArrayList<>();
@@ -190,10 +190,10 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * Logs subscribe.
+     * 
      *
-     * @param key the key
-     * @param listener the listener
+     * @param key 
+     * @param listener 
      */
     public void logsSubscribe(String key, TransactionEventListener listener) {
         logsSubscribe(key, SolanaCommitment.finalized, listener);
@@ -201,11 +201,11 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * Logs subscribe.
+     * 
      *
-     * @param key the key
-     * @param commitment the commitment
-     * @param listener the listener
+     * @param key 
+     * @param commitment 
+     * @param listener 
      */
     public void logsSubscribe(String key, SolanaCommitment commitment, TransactionEventListener listener) {
         List<Object> params = new ArrayList<>();
@@ -226,9 +226,9 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * Logs unsubscribe.
+     * 
      *
-     * @param key the key
+     * @param key 
      */
     public void logsUnsubscribe(String key) {
         logsUnsubscribe(key, SolanaCommitment.finalized);
@@ -236,10 +236,10 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * Logs unsubscribe.
+     * 
      *
-     * @param key the key
-     * @param commitment the commitment
+     * @param key 
+     * @param commitment 
      */
     public void logsUnsubscribe(String key, SolanaCommitment commitment) {
 
@@ -270,9 +270,9 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * On open.
+     * 
      *
-     * @param handshakedata the handshakedata
+     * @param handshakedata 
      */
     @Override
     public void onOpen(ServerHandshake handshakedata) {
@@ -280,9 +280,9 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * On message.
+     * 
      *
-     * @param message the message
+     * @param message 
      */
     @SuppressWarnings({ "rawtypes" })
     @Override
@@ -322,11 +322,11 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * On close.
+     * 
      *
-     * @param code the code
-     * @param reason the reason
-     * @param remote the remote
+     * @param code 
+     * @param reason 
+     * @param remote 
      */
     @Override
     public void onClose(int code, String reason, boolean remote) {
@@ -336,9 +336,9 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * On error.
+     * 
      *
-     * @param ex the ex
+     * @param ex 
      */
     @Override
     public void onError(Exception ex) {
@@ -346,7 +346,7 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * Update subscriptions.
+     * 
      */
     private void updateSubscriptions() {
 
@@ -362,21 +362,21 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * The Class SubscriptionParams.
+     * 
      */
     private class SubscriptionParams {
         
-        /** The request. */
+        /**  */
         RpcRequest request;
         
-        /** The listener. */
+        /**  */
         NotificationEventListener listener;
 
         /**
-         * Instantiates a new subscription params.
+         * 
          *
-         * @param request the request
-         * @param listener the listener
+         * @param request 
+         * @param listener 
          */
         SubscriptionParams(RpcRequest request, NotificationEventListener listener) {
             this.request = request;
@@ -384,9 +384,9 @@ public class SolanaWebSocketClient extends WebSocketClient {
         }
 
         /**
-         * Gets the request.
+         * 
          *
-         * @return the request
+         * @return 
          */
         public RpcRequest getRequest() {
             return request;
@@ -395,17 +395,17 @@ public class SolanaWebSocketClient extends WebSocketClient {
     }
 
     /**
-     * The Class BlockSubscribe.
+     * 
      */
     public static class BlockSubscribe {
         
-        /** The mentions. */
+        /**  */
         private String[] mentions;
 
         /**
-         * Instantiates a new block subscribe.
+         * 
          *
-         * @param mentions the mentions
+         * @param mentions 
          */
         public BlockSubscribe(String[] mentions) {
             super();
@@ -413,18 +413,18 @@ public class SolanaWebSocketClient extends WebSocketClient {
         }
 
         /**
-         * Gets the mentions.
+         * 
          *
-         * @return the mentions
+         * @return 
          */
         public String[] getMentions() {
             return mentions;
         }
 
         /**
-         * Sets the mentions.
+         * 
          *
-         * @param mentions the new mentions
+         * @param mentions 
          */
         public void setMentions(String[] mentions) {
             this.mentions = mentions;

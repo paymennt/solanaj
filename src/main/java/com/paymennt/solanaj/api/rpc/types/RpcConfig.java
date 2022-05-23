@@ -6,21 +6,21 @@ package com.paymennt.solanaj.api.rpc.types;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class RpcConfig.
+ * 
  */
 public class RpcConfig {
 
-    /** The commitment. */
+    /**  */
     private SolanaCommitment commitment;
     
-    /** The encoding. */
+    /**  */
     private String encoding;
 
     /**
-     * Instantiates a new rpc config.
+     * 
      *
-     * @param commitment the commitment
-     * @param encoding the encoding
+     * @param commitment 
+     * @param encoding 
      */
     public RpcConfig(SolanaCommitment commitment, String encoding) {
         this.commitment = commitment;
@@ -28,36 +28,36 @@ public class RpcConfig {
     }
 
     /**
-     * Gets the commitment.
+     * 
      *
-     * @return the commitment
+     * @return 
      */
     public SolanaCommitment getCommitment() {
         return commitment;
     }
 
     /**
-     * Sets the commitment.
+     * 
      *
-     * @param commitment the new commitment
+     * @param commitment 
      */
     public void setCommitment(SolanaCommitment commitment) {
         this.commitment = commitment;
     }
 
     /**
-     * Gets the encoding.
+     * 
      *
-     * @return the encoding
+     * @return 
      */
     public String getEncoding() {
         return encoding;
     }
 
     /**
-     * Sets the encoding.
+     * 
      *
-     * @param encoding the new encoding
+     * @param encoding 
      */
     public void setEncoding(String encoding) {
         this.encoding = encoding;

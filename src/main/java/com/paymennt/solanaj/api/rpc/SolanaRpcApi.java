@@ -32,36 +32,36 @@ import com.paymennt.solanaj.data.SolanaTransaction;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class SolanaRpcApi.
+ * 
  */
 public class SolanaRpcApi {
     
-    /** The client. */
+    /**  */
     private SolanaRpcClient client;
 
     /**
-     * Instantiates a new solana rpc api.
+     * 
      *
-     * @param client the client
+     * @param client 
      */
     public SolanaRpcApi(SolanaRpcClient client) {
         this.client = client;
     }
 
     /**
-     * Gets the recent blockhash.
+     * 
      *
-     * @return the recent blockhash
+     * @return 
      */
     public String getRecentBlockhash() {
         return client.call("getRecentBlockhash", null, RecentBlockhash.class).getRecentBlockhash();
     }
 
     /**
-     * Send transaction.
+     * 
      *
-     * @param transaction the transaction
-     * @return the string
+     * @param transaction 
+     * @return 
      */
     public String sendTransaction(SolanaTransaction transaction) {
         byte[] serializedTransaction = transaction.serialize();
@@ -77,10 +77,10 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Gets the balance.
+     * 
      *
-     * @param address the address
-     * @return the balance
+     * @param address 
+     * @return 
      */
     public long getBalance(String address) {
         List<Object> params = new ArrayList<>();
@@ -89,10 +89,10 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Gets the transaction.
+     * 
      *
-     * @param signature the signature
-     * @return the transaction
+     * @param signature 
+     * @return 
      */
     public ConfirmedTransaction getTransaction(String signature) {
         List<Object> params = new ArrayList<>();
@@ -104,10 +104,10 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Gets the transactions.
+     * 
      *
-     * @param signatures the signatures
-     * @return the transactions
+     * @param signatures 
+     * @return 
      */
     public List<ConfirmedTransaction> getTransactions(List<String> signatures) {
 
@@ -124,11 +124,11 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Gets the signatures for address.
+     * 
      *
-     * @param key the key
-     * @param limit the limit
-     * @return the signatures for address
+     * @param key 
+     * @param limit 
+     * @return 
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public List<SignatureInformation> getSignaturesForAddress(String key, int limit) {
@@ -148,12 +148,12 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Gets the program accounts.
+     * 
      *
-     * @param account the account
-     * @param offset the offset
-     * @param bytes the bytes
-     * @return the program accounts
+     * @param account 
+     * @param offset 
+     * @param bytes 
+     * @return 
      */
     public List<ProgramAccount> getProgramAccounts(AccountPublicKey account, long offset, String bytes) {
         List<Object> filters = new ArrayList<>();
@@ -164,21 +164,21 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Gets the program accounts.
+     * 
      *
-     * @param account the account
-     * @return the program accounts
+     * @param account 
+     * @return 
      */
     public List<ProgramAccount> getProgramAccounts(AccountPublicKey account) {
         return getProgramAccounts(account, new ProgramAccountConfig(Encoding.base64));
     }
 
     /**
-     * Gets the program accounts.
+     * 
      *
-     * @param account the account
-     * @param programAccountConfig the program account config
-     * @return the program accounts
+     * @param account 
+     * @param programAccountConfig 
+     * @return 
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public List<ProgramAccount> getProgramAccounts(
@@ -203,10 +203,10 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Gets the account info.
+     * 
      *
-     * @param account the account
-     * @return the account info
+     * @param account 
+     * @return 
      */
     public AccountInfo getAccountInfo(AccountPublicKey account) {
         List<Object> params = new ArrayList<>();
@@ -218,10 +218,10 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Gets the minimum balance for rent exemption.
+     * 
      *
-     * @param dataLength the data length
-     * @return the minimum balance for rent exemption
+     * @param dataLength 
+     * @return 
      */
     public long getMinimumBalanceForRentExemption(long dataLength) {
         List<Object> params = new ArrayList<>();
@@ -232,10 +232,10 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Gets the block time.
+     * 
      *
-     * @param block the block
-     * @return the block time
+     * @param block 
+     * @return 
      */
     public long getBlockTime(long block) {
         List<Object> params = new ArrayList<>();
@@ -246,11 +246,11 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Request airdrop.
+     * 
      *
-     * @param address the address
-     * @param lamports the lamports
-     * @return the string
+     * @param address 
+     * @param lamports 
+     * @return 
      */
     public String requestAirdrop(AccountPublicKey address, long lamports) {
         List<Object> params = new ArrayList<>();
@@ -262,10 +262,10 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Gets the fees.
+     * 
      *
-     * @param message the message
-     * @return the fees
+     * @param message 
+     * @return 
      */
     public RpcFeesResult getFees(SolanaMessage message) {
         message.setRecentBlockhash(getRecentBlockhash());
@@ -282,10 +282,10 @@ public class SolanaRpcApi {
     }
 
     /**
-     * Gets the signature statuses.
+     * 
      *
-     * @param signatures the signatures
-     * @return the signature statuses
+     * @param signatures 
+     * @return 
      */
     public RpcSignitureStatusResult getSignatureStatuses(List<String> signatures) {
         List<Object> params = new ArrayList<>();

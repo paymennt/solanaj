@@ -9,26 +9,26 @@ import java.util.List;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ProgramAccount.
+ * 
  */
 public class ProgramAccount {
 
-    /** The account. */
+    /**  */
     private Account account;
     
-    /** The pubkey. */
+    /**  */
     private String pubkey;
 
     /**
-     * Instantiates a new program account.
+     * 
      */
     public ProgramAccount() {
     }
 
     /**
-     * Instantiates a new program account.
+     * 
      *
-     * @param pa the pa
+     * @param pa 
      */
     @SuppressWarnings({ "rawtypes" })
     public ProgramAccount(AbstractMap pa) {
@@ -37,75 +37,75 @@ public class ProgramAccount {
     }
 
     /**
-     * Gets the account.
+     * 
      *
-     * @return the account
+     * @return 
      */
     public Account getAccount() {
         return account;
     }
 
     /**
-     * Sets the account.
+     * 
      *
-     * @param account the new account
+     * @param account 
      */
     public void setAccount(Account account) {
         this.account = account;
     }
 
     /**
-     * Gets the pubkey.
+     * 
      *
-     * @return the pubkey
+     * @return 
      */
     public String getPubkey() {
         return pubkey;
     }
 
     /**
-     * Sets the pubkey.
+     * 
      *
-     * @param pubkey the new pubkey
+     * @param pubkey 
      */
     public void setPubkey(String pubkey) {
         this.pubkey = pubkey;
     }
 
     /**
-     * The Class Account.
+     * 
      */
     public final class Account {
         
-        /** The data. */
+        /**  */
         private String data;
         
-        /** The executable. */
+        /**  */
         private boolean executable;
         
-        /** The lamports. */
+        /**  */
         private double lamports;
         
-        /** The owner. */
+        /**  */
         private String owner;
         
-        /** The rent epoch. */
+        /**  */
         private double rentEpoch;
         
-        /** The encoding. */
+        /**  */
         private String encoding;
 
         /**
-         * Instantiates a new account.
+         * 
          */
         public Account() {
 
         }
 
         /**
-         * Instantiates a new account.
+         * 
          *
-         * @param acc the acc
+         * @param acc 
          */
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public Account(Object acc) {
@@ -128,108 +128,108 @@ public class ProgramAccount {
         }
 
         /**
-         * Gets the data.
+         * 
          *
-         * @return the data
+         * @return 
          */
         public String getData() {
             return data;
         }
 
         /**
-         * Sets the data.
+         * 
          *
-         * @param data the new data
+         * @param data 
          */
         public void setData(String data) {
             this.data = data;
         }
 
         /**
-         * Checks if is executable.
+         * 
          *
-         * @return true, if is executable
+         * @return 
          */
         public boolean isExecutable() {
             return executable;
         }
 
         /**
-         * Sets the executable.
+         * 
          *
-         * @param executable the new executable
+         * @param executable 
          */
         public void setExecutable(boolean executable) {
             this.executable = executable;
         }
 
         /**
-         * Gets the lamports.
+         * 
          *
-         * @return the lamports
+         * @return 
          */
         public double getLamports() {
             return lamports;
         }
 
         /**
-         * Sets the lamports.
+         * 
          *
-         * @param lamports the new lamports
+         * @param lamports 
          */
         public void setLamports(double lamports) {
             this.lamports = lamports;
         }
 
         /**
-         * Gets the owner.
+         * 
          *
-         * @return the owner
+         * @return 
          */
         public String getOwner() {
             return owner;
         }
 
         /**
-         * Sets the owner.
+         * 
          *
-         * @param owner the new owner
+         * @param owner 
          */
         public void setOwner(String owner) {
             this.owner = owner;
         }
 
         /**
-         * Gets the rent epoch.
+         * 
          *
-         * @return the rent epoch
+         * @return 
          */
         public double getRentEpoch() {
             return rentEpoch;
         }
 
         /**
-         * Sets the rent epoch.
+         * 
          *
-         * @param rentEpoch the new rent epoch
+         * @param rentEpoch 
          */
         public void setRentEpoch(double rentEpoch) {
             this.rentEpoch = rentEpoch;
         }
 
         /**
-         * Gets the encoding.
+         * 
          *
-         * @return the encoding
+         * @return 
          */
         public String getEncoding() {
             return encoding;
         }
 
         /**
-         * Sets the encoding.
+         * 
          *
-         * @param encoding the new encoding
+         * @param encoding 
          */
         public void setEncoding(String encoding) {
             this.encoding = encoding;

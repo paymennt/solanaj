@@ -6,52 +6,52 @@ package com.paymennt.solanaj.api.rpc.types;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class RpcResultObject.
+ * 
  */
 public class RpcResultObject {
 
-    /** The context. */
+    /**  */
     protected Context context;
 
     /**
-     * Gets the context.
+     * 
      *
-     * @return the context
+     * @return 
      */
     public Context getContext() {
         return context;
     }
 
     /**
-     * Sets the context.
+     * 
      *
-     * @param context the new context
+     * @param context 
      */
     public void setContext(Context context) {
         this.context = context;
     }
 
     /**
-     * The Class Context.
+     * 
      */
     public static class Context {
         
-        /** The slot. */
+        /**  */
         private long slot;
 
         /**
-         * Gets the slot.
+         * 
          *
-         * @return the slot
+         * @return 
          */
         public long getSlot() {
             return slot;
         }
 
         /**
-         * Sets the slot.
+         * 
          *
-         * @param slot the new slot
+         * @param slot 
          */
         public void setSlot(long slot) {
             this.slot = slot;

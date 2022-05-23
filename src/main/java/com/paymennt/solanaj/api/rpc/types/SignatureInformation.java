@@ -8,32 +8,32 @@ import java.util.AbstractMap;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class SignatureInformation.
+ * 
  */
 public class SignatureInformation {
     
-    /** The err. */
+    /**  */
     private Object err;
     
-    /** The memo. */
+    /**  */
     private Object memo;
     
-    /** The signature. */
+    /**  */
     private String signature;
     
-    /** The slot. */
+    /**  */
     private long slot;
 
     /**
-     * Instantiates a new signature information.
+     * 
      */
     public SignatureInformation() {
     }
 
     /**
-     * Instantiates a new signature information.
+     * 
      *
-     * @param info the info
+     * @param info 
      */
     @SuppressWarnings({ "rawtypes" })
     public SignatureInformation(AbstractMap info) {
@@ -44,72 +44,72 @@ public class SignatureInformation {
     }
 
     /**
-     * Gets the err.
+     * 
      *
-     * @return the err
+     * @return 
      */
     public Object getErr() {
         return err;
     }
 
     /**
-     * Sets the err.
+     * 
      *
-     * @param err the new err
+     * @param err 
      */
     public void setErr(Object err) {
         this.err = err;
     }
 
     /**
-     * Gets the memo.
+     * 
      *
-     * @return the memo
+     * @return 
      */
     public Object getMemo() {
         return memo;
     }
 
     /**
-     * Sets the memo.
+     * 
      *
-     * @param memo the new memo
+     * @param memo 
      */
     public void setMemo(Object memo) {
         this.memo = memo;
     }
 
     /**
-     * Gets the signature.
+     * 
      *
-     * @return the signature
+     * @return 
      */
     public String getSignature() {
         return signature;
     }
 
     /**
-     * Sets the signature.
+     * 
      *
-     * @param signature the new signature
+     * @param signature 
      */
     public void setSignature(String signature) {
         this.signature = signature;
     }
 
     /**
-     * Gets the slot.
+     * 
      *
-     * @return the slot
+     * @return 
      */
     public long getSlot() {
         return slot;
     }
 
     /**
-     * Sets the slot.
+     * 
      *
-     * @param slot the new slot
+     * @param slot 
      */
     public void setSlot(long slot) {
         this.slot = slot;
