@@ -1,17 +1,23 @@
 package com.paymennt.solanaj;
 
 import java.security.Security;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.paymennt.crypto.bip32.Network;
+import com.paymennt.crypto.bip32.wallet.AbstractWallet.Chain;
+import com.paymennt.crypto.bip32.wallet.key.HdPrivateKey;
 import com.paymennt.solanaj.api.rpc.Cluster;
 import com.paymennt.solanaj.api.rpc.SolanaRpcClient;
 import com.paymennt.solanaj.api.ws.SolanaWebSocketClient;
+import com.paymennt.solanaj.data.AccountPublicKey;
+import com.paymennt.solanaj.data.SolanaAccount;
+import com.paymennt.solanaj.data.SolanaTransaction;
+import com.paymennt.solanaj.program.SystemProgram;
+import com.paymennt.solanaj.wallet.SolanaWallet;
 
 /**
  * @author asendar
@@ -19,58 +25,59 @@ import com.paymennt.solanaj.api.ws.SolanaWebSocketClient;
  */
 public class SolanaRpcTestSuite {
 
-    //    private static final String mnemonic =
-    //            "swing brown giraffe enter common awful rent shock mobile wisdom increase scissors";
+    private static final String mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence";
     private static SolanaRpcClient client;
     private static SolanaWebSocketClient websocket;
-    //    private static SolanaWallet randomWallet;
+    private static SolanaWallet randomWallet;
 
     @BeforeClass
     public static void init() {
         Security.addProvider(new BouncyCastleProvider());
-        websocket = SolanaWebSocketClient.getInstance(Cluster.TESTNET.getEndpoint());
         client = new SolanaRpcClient(Cluster.TESTNET);
-        //        randomWallet = new SolanaWallet(mnemonic, "", Network.TESTNET);
-    }
-    
-    @Test
-    public void testAccountTransactions() {
-        long rent = client.getApi().getMinimumBalanceForRentExemption(0);
-        System.out.println(rent);
-    }
-    
-    @Test
-    @Ignore
-    public void testStatus() {
-        List<String> sigs = new ArrayList<>();
-        sigs.add("xi6aCymB8jbafMpnAmZBeVgRYQn5tH7nZzqmCfNYbJf3UhS1D2W2i6xs5bdm81YgqLRHaBXzq2Npo1o9VczbjFt");
-        sigs.add("2cjqyTySWkfDffPXy9Aid3qtibspbArMbMDweATSUAiaJ8RjPqTrttkjcwugF8XBksFux7q7TS8nNTbRzft7n7z6");
-        client.getApi().getTransactions(sigs);
+        randomWallet = new SolanaWallet(mnemonic, "banana", Network.TESTNET);
+        websocket = SolanaWebSocketClient.getInstance(Cluster.TESTNET);
     }
 
     @Test
     public void testWebsocket() throws InterruptedException {
-        websocket.accountSubscribe("2Ym21uN3GqvFwkrvoWKwcTwqRjk1pFVSS6RFguNgmYdV", data -> {
-//            client.getApi().getSignaturesForAddress("2Ym21uN3GqvFwkrvoWKwcTwqRjk1pFVSS6RFguNgmYdV", 100)
-//                    .forEach(info -> {
-//                        System.out.println(client.getApi().getTransaction(info.getSignature()).getTransaction());
-//                    });
+        int accountIndex = Long.valueOf(0).hashCode();
+        //        int index = Long.valueOf(1733351411786454800L).hashCode();
+        int index = Long.valueOf(0).hashCode();
 
+        System.out.println(randomWallet.getAddress(accountIndex, Chain.EXTERNAL, index));
+
+        websocket.accountSubscribe("HPLmxR17p9UhFYPPJjWVPmEgWQTssU3s27uKEU6c6BkB", data -> {
+            System.out.println("UPDATE");
         });
+        
+        Thread.sleep(1000000);
 
-//        websocket.logsSubscribe("H35HxumQvRb1ood2J7irgiovnLTseH2jjWH6TuVKCvf2", signature -> {
-//            System.out.println(signature);
-//            System.out.println(JsonUtils.encode(client.getApi().getTransaction(signature)));
-//
-//        });
+    }
 
-        websocket.logsSubscribe("2Ym21uN3GqvFwkrvoWKwcTwqRjk1pFVSS6RFguNgmYdV", signature -> {
-            System.out.println(signature);
-//            System.out.println(JsonUtils.encode(client.getApi().getTransaction(signature)));
+    @Test
+    @Ignore
+    public void testCloseAccount() {
 
-        });
+        String destination = "2Ym21uN3GqvFwkrvoWKwcTwqRjk1pFVSS6RFguNgmYdV";
+        int accountIndex = Long.valueOf(1599726290708002602L).hashCode();
+        //        int index = Long.valueOf(1733351411786454800L).hashCode();
+        int index = Long.valueOf(1733351411786454801L).hashCode();
 
-//        Thread.sleep(300000);
+        System.out.println(randomWallet.getAddress(accountIndex, Chain.EXTERNAL, index));
+
+        HdPrivateKey privateKey = randomWallet.getPrivateKey(accountIndex, Chain.EXTERNAL, index);
+
+        SolanaTransaction transaction = new SolanaTransaction();
+
+        SolanaAccount account = new SolanaAccount(privateKey);
+        AccountPublicKey fromPublicKey = account.getPublicKey();
+        AccountPublicKey toPublickKey = new AccountPublicKey(destination);
+
+        transaction.addInstruction(SystemProgram.closeAccount(fromPublicKey, toPublickKey));
+        transaction.setRecentBlockHash(client.getApi().getRecentBlockhash());
+        transaction.sign(account);
+
+        System.out.println(client.getApi().sendTransaction(transaction));
     }
 
 }

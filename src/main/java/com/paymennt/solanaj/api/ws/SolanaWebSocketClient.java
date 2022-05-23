@@ -18,6 +18,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.paymennt.solanaj.api.rpc.Cluster;
 import com.paymennt.solanaj.api.rpc.types.RpcConfig;
 import com.paymennt.solanaj.api.rpc.types.RpcLogsConfig;
 import com.paymennt.solanaj.api.rpc.types.RpcNotificationResult;
@@ -70,12 +71,12 @@ public class SolanaWebSocketClient extends WebSocketClient {
      * @param endpoint the endpoint
      * @return single instance of SolanaWebSocketClient
      */
-    public static SolanaWebSocketClient getInstance(String endpoint) {
+    public static SolanaWebSocketClient getInstance(Cluster cluster) {
         URI endpointURI;
         URI serverURI;
 
         try {
-            endpointURI = new URI(endpoint);
+            endpointURI = new URI(cluster.getEndpoint());
             serverURI = new URI(endpointURI.getScheme() == "https" ? "wss" : "ws" + "://" + endpointURI.getHost());
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
@@ -101,6 +102,7 @@ public class SolanaWebSocketClient extends WebSocketClient {
     public void accountSubscribe(String key, NotificationEventListener listener) {
         accountSubscribe(key, SolanaCommitment.finalized, listener);
         accountSubscribe(key, SolanaCommitment.confirmed, listener);
+        accountSubscribe(key, SolanaCommitment.processed, listener);
     }
 
     /**
@@ -135,6 +137,7 @@ public class SolanaWebSocketClient extends WebSocketClient {
     public void accountUnsubscribe(String key) {
         accountUnsubscribe(key, SolanaCommitment.finalized);
         accountUnsubscribe(key, SolanaCommitment.confirmed);
+        accountUnsubscribe(key, SolanaCommitment.processed);
     }
 
     /**

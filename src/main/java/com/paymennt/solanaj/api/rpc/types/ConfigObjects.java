@@ -17,7 +17,7 @@ public class ConfigObjects {
     /**
      * The Class ConfirmedSignFAddr2.
      */
-    public static class ConfirmedSignFAddr2 {
+    public static class SignaturesForAddress {
 
         /** The limit. */
         private long limit;
@@ -27,11 +27,13 @@ public class ConfigObjects {
         
         /** The until. */
         private String until;
+        
+        private SolanaCommitment commitment;
 
         /**
          * Instantiates a new confirmed sign F addr 2.
          */
-        public ConfirmedSignFAddr2() {
+        public SignaturesForAddress() {
 
         }
 
@@ -40,8 +42,9 @@ public class ConfigObjects {
          *
          * @param limit the limit
          */
-        public ConfirmedSignFAddr2(long limit) {
+        public SignaturesForAddress(long limit, SolanaCommitment commitment) {
             this.limit = limit;
+            this.commitment = commitment;
         }
 
         /**
@@ -51,6 +54,10 @@ public class ConfigObjects {
          */
         public long getLimit() {
             return limit;
+        }
+
+        public SolanaCommitment getCommitment() {
+            return commitment;
         }
 
         /**

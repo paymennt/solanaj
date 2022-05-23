@@ -10,7 +10,7 @@ import java.util.Base64;
 import java.util.List;
 
 import com.paymennt.solanaj.api.rpc.types.AccountInfo;
-import com.paymennt.solanaj.api.rpc.types.ConfigObjects.ConfirmedSignFAddr2;
+import com.paymennt.solanaj.api.rpc.types.ConfigObjects.SignaturesForAddress;
 import com.paymennt.solanaj.api.rpc.types.ConfigObjects.Filter;
 import com.paymennt.solanaj.api.rpc.types.ConfigObjects.Memcmp;
 import com.paymennt.solanaj.api.rpc.types.ConfigObjects.ProgramAccountConfig;
@@ -135,7 +135,7 @@ public class SolanaRpcApi {
         List<Object> params = new ArrayList<>();
 
         params.add(key);
-        params.add(new ConfirmedSignFAddr2(limit));
+        params.add(new SignaturesForAddress(limit, SolanaCommitment.confirmed));
 
         List<AbstractMap> rawResult = client.call("getSignaturesForAddress", params, List.class);
 

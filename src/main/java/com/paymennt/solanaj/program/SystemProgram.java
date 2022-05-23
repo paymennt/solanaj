@@ -4,7 +4,10 @@
  */
 package com.paymennt.solanaj.program;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.paymennt.crypto.lib.ByteUtils;
 import com.paymennt.solanaj.data.AccountMeta;
@@ -16,13 +19,14 @@ import com.paymennt.solanaj.data.SolanaTransactionInstruction;
  * The Class SystemProgram.
  */
 public class SystemProgram {
-    
+
     /** The Constant PROGRAM_ID. */
     public static final AccountPublicKey PROGRAM_ID = new AccountPublicKey("11111111111111111111111111111111");
 
     /** The Constant PROGRAM_INDEX_CREATE_ACCOUNT. */
     public static final int PROGRAM_INDEX_CREATE_ACCOUNT = 0;
-    
+    public static final int PROGRAM_INDEX_CLOSE_ACCOUNT = 9;
+
     /** The Constant PROGRAM_INDEX_TRANSFER. */
     public static final int PROGRAM_INDEX_TRANSFER = 2;
 
@@ -86,7 +90,7 @@ public class SystemProgram {
             long lamports,
             long space,
             AccountPublicKey programId) {
-        ArrayList<AccountMeta> keys = new ArrayList<>();
+        List<AccountMeta> keys = new ArrayList<>();
         keys.add(new AccountMeta(fromPublicKey, true, true));
         keys.add(new AccountMeta(newAccountPublikkey, true, true));
 
@@ -97,5 +101,20 @@ public class SystemProgram {
         System.arraycopy(programId.toByteArray(), 0, data, 20, 32);
 
         return new SolanaTransactionInstruction(PROGRAM_ID, keys, data);
+    }
+
+    public static SolanaTransactionInstruction closeAccount(AccountPublicKey account, AccountPublicKey destination) {
+
+        List<AccountMeta> keys = new ArrayList<>();
+
+        keys.add(new AccountMeta(account, false, true));
+        keys.add(new AccountMeta(destination, false, true));
+        keys.add(new AccountMeta(PROGRAM_ID, true, false));
+
+        ByteBuffer buffer = ByteBuffer.allocate(1);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        buffer.put((byte) PROGRAM_INDEX_CLOSE_ACCOUNT);
+
+        return new SolanaTransactionInstruction(PROGRAM_ID, keys, buffer.array());
     }
 }
