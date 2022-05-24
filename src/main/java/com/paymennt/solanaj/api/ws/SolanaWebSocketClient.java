@@ -56,7 +56,7 @@ public class SolanaWebSocketClient implements WebSocketHandler {
     /**
      * 
      *
-     * @param serverURI 
+     * @param cluster 
      */
     public SolanaWebSocketClient(Cluster cluster) {
         this.client = new WebsocketClient(getServerUrl(cluster), this);
@@ -244,7 +244,7 @@ public class SolanaWebSocketClient implements WebSocketHandler {
     }
 
     /**
-     * @param session 
+     * @param handshakedata 
      */
     @Override
     public void onOpen(ServerHandshake handshakedata) {

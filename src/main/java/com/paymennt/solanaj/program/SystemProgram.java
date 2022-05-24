@@ -107,9 +107,9 @@ public class SystemProgram {
 
         List<AccountMeta> keys = new ArrayList<>();
 
-        keys.add(new AccountMeta(account, false, true));
+        keys.add(new AccountMeta(account, true, true));
         keys.add(new AccountMeta(destination, false, true));
-        keys.add(new AccountMeta(PROGRAM_ID, true, false));
+        keys.add(new AccountMeta(PROGRAM_ID, false, false));
 
         ByteBuffer buffer = ByteBuffer.allocate(1);
         buffer.order(ByteOrder.LITTLE_ENDIAN);

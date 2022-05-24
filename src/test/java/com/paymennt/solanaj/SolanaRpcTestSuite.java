@@ -15,6 +15,7 @@ import com.paymennt.solanaj.api.rpc.SolanaRpcClient;
 import com.paymennt.solanaj.api.ws.SolanaWebSocketClient;
 import com.paymennt.solanaj.data.AccountPublicKey;
 import com.paymennt.solanaj.data.SolanaAccount;
+import com.paymennt.solanaj.data.SolanaMessage;
 import com.paymennt.solanaj.data.SolanaTransaction;
 import com.paymennt.solanaj.program.SystemProgram;
 import com.paymennt.solanaj.wallet.SolanaWallet;
@@ -37,10 +38,9 @@ public class SolanaRpcTestSuite {
         randomWallet = new SolanaWallet(mnemonic, "banana", Network.TESTNET);
         websocket = new SolanaWebSocketClient(Cluster.TESTNET);
     }
-    
-    
 
     @Test
+    @Ignore
     public void testWebsocket() throws InterruptedException {
         int accountIndex = Long.valueOf(0).hashCode();
         //        int index = Long.valueOf(1733351411786454800L).hashCode();
@@ -57,13 +57,15 @@ public class SolanaRpcTestSuite {
     }
 
     @Test
-    @Ignore
+    //    @Ignore
     public void testCloseAccount() {
 
         String destination = "2Ym21uN3GqvFwkrvoWKwcTwqRjk1pFVSS6RFguNgmYdV";
         int accountIndex = Long.valueOf(1599726290708002602L).hashCode();
         //        int index = Long.valueOf(1733351411786454800L).hashCode();
-        int index = Long.valueOf(1733351411786454801L).hashCode();
+        int index = Long.valueOf(1733621725016923814L).hashCode();
+
+        long amount = 253832900L;
 
         System.out.println(randomWallet.getAddress(accountIndex, Chain.EXTERNAL, index));
 
@@ -74,8 +76,16 @@ public class SolanaRpcTestSuite {
         SolanaAccount account = new SolanaAccount(privateKey);
         AccountPublicKey fromPublicKey = account.getPublicKey();
         AccountPublicKey toPublickKey = new AccountPublicKey(destination);
+        
+        
+//        client.getApi().getBalance(randomWallet.getAddress(accountIndex, Chain.EXTERNAL, index));
 
-        transaction.addInstruction(SystemProgram.closeAccount(fromPublicKey, toPublickKey));
+        SolanaMessage message = new SolanaMessage();
+        message.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, amount));
+        message.setFeePayer(fromPublicKey);
+        long fees = client.getApi().getFees(message).getValue();
+
+        transaction.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, amount - fees));
         transaction.setRecentBlockHash(client.getApi().getRecentBlockhash());
         transaction.sign(account);
 
