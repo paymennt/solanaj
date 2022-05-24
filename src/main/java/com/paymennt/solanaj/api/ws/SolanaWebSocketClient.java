@@ -14,7 +14,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -28,28 +27,29 @@ import com.paymennt.solanaj.api.rpc.types.SolanaCommitment;
 import com.paymennt.solanaj.api.ws.listener.NotificationEventListener;
 import com.paymennt.solanaj.api.ws.listener.TransactionEventListener;
 import com.paymennt.solanaj.utils.JsonUtils;
+import com.paymennt.solanaj.utils.WebsocketClient;
+import com.paymennt.solanaj.utils.WebsocketClient.WebSocketHandler;
 
-// TODO: Auto-generated Javadoc
 /**
  * 
  */
-public class SolanaWebSocketClient extends WebSocketClient {
+public class SolanaWebSocketClient implements WebSocketHandler {
 
     /**  */
-    private static SolanaWebSocketClient instance;
-    
+    private final WebsocketClient client;
+
     /**  */
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     /**  */
     private Map<String, SubscriptionParams> subscriptions = new HashMap<>();
-    
+
     /**  */
     private Map<String, Long> subscriptionIds = new HashMap<>();
-    
+
     /**  */
     private Map<String, String> subscriptionAddressIds = new HashMap<>();
-    
+
     /**  */
     private Map<Long, NotificationEventListener> subscriptionLinsteners = new HashMap<>();
 
@@ -58,39 +58,13 @@ public class SolanaWebSocketClient extends WebSocketClient {
      *
      * @param serverURI 
      */
-    public SolanaWebSocketClient(URI serverURI) {
-        super(serverURI);
+    public SolanaWebSocketClient(Cluster cluster) {
+        this.client = new WebsocketClient(getServerUrl(cluster), this);
+        this.client.start();
+
         scheduler.scheduleAtFixedRate(() -> {
-            send("ping");
+            client.sendMessage("ping");
         }, 20, 20, TimeUnit.SECONDS);
-    }
-
-    /**
-     * 
-     *
-     * @param cluster 
-     * @return 
-     */
-    public static SolanaWebSocketClient getInstance(Cluster cluster) {
-        URI endpointURI;
-        URI serverURI;
-
-        try {
-            endpointURI = new URI(cluster.getEndpoint());
-            serverURI = new URI(endpointURI.getScheme() == "https" ? "wss" : "ws" + "://" + endpointURI.getHost());
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException(e);
-        }
-
-        if (instance == null) {
-            instance = new SolanaWebSocketClient(serverURI);
-            if (!instance.isOpen()) {
-                instance.connect();
-            }
-        }
-
-        return instance;
-
     }
 
     /**
@@ -165,7 +139,7 @@ public class SolanaWebSocketClient extends WebSocketClient {
         subscriptionIds.remove(rpcRequestId);
         subscriptionAddressIds.remove(key + commitment.name());
 
-        send(JsonUtils.encode(rpcRequest));
+        client.sendMessage(JsonUtils.encode(rpcRequest));
 
         updateSubscriptions();
     }
@@ -264,15 +238,13 @@ public class SolanaWebSocketClient extends WebSocketClient {
         subscriptionIds.remove(rpcRequestId);
         subscriptionAddressIds.remove(id);
 
-        send(JsonUtils.encode(rpcRequest));
+        client.sendMessage(JsonUtils.encode(rpcRequest));
 
         updateSubscriptions();
     }
 
     /**
-     * 
-     *
-     * @param handshakedata 
+     * @param session 
      */
     @Override
     public void onOpen(ServerHandshake handshakedata) {
@@ -286,7 +258,7 @@ public class SolanaWebSocketClient extends WebSocketClient {
      */
     @SuppressWarnings({ "rawtypes" })
     @Override
-    public void onMessage(String message) {
+    public void handleMessage(String message) {
 
         try {
             RpcResponse<Object> rpcResult = JsonUtils.getObjectMapper()//
@@ -323,41 +295,40 @@ public class SolanaWebSocketClient extends WebSocketClient {
 
     /**
      * 
-     *
-     * @param code 
-     * @param reason 
-     * @param remote 
      */
     @Override
-    public void onClose(int code, String reason, boolean remote) {
-        System.out.println(
-                "Connection closed by " + (remote ? "remote peer" : "us") + " Code: " + code + " Reason: " + reason);
+    public void onError(Throwable e) {
+        e.printStackTrace();
+    }
+
+    /*******************************************************************************************************************
+     * private methods
+     */
+
+    private URI getServerUrl(Cluster cluster) {
+
+        try {
+            URI endpointURI = new URI(cluster.getEndpoint());
+            return new URI((endpointURI.getScheme().equals("https") ? "wss" : "ws") + "://" + endpointURI.getHost());
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
 
     }
 
     /**
      * 
-     *
-     * @param ex 
      */
-    @Override
-    public void onError(Exception ex) {
-        ex.printStackTrace();
-    }
+    private synchronized void updateSubscriptions() {
 
-    /**
-     * 
-     */
-    private void updateSubscriptions() {
-
-        if (!isOpen() || subscriptions.size() <= 0)
+        if (subscriptions.size() <= 0)
             return;
 
         subscriptions.values()//
                 .stream()//
                 .map(SubscriptionParams::getRequest)//
                 .map(JsonUtils::encode)//
-                .forEach(this::send);
+                .forEach(client::sendMessage);
 
     }
 
@@ -365,10 +336,10 @@ public class SolanaWebSocketClient extends WebSocketClient {
      * 
      */
     private class SubscriptionParams {
-        
+
         /**  */
         RpcRequest request;
-        
+
         /**  */
         NotificationEventListener listener;
 
@@ -398,7 +369,7 @@ public class SolanaWebSocketClient extends WebSocketClient {
      * 
      */
     public static class BlockSubscribe {
-        
+
         /**  */
         private String[] mentions;
 

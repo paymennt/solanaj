@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.paymennt</groupId>
 	<artifactId>solanaj</artifactId>
-	<version>0.0.6</version>
+	<version>0.0.7</version>
 	<name>solanaj</name>
 	<description>Solana client for java</description>
 	<url>https://www.paymennt.com/</url>
@@ -84,7 +84,6 @@
 			<artifactId>jackson-datatype-jdk8</artifactId>
 			<version>2.13.2</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.java-websocket</groupId>

@@ -35,8 +35,10 @@ public class SolanaRpcTestSuite {
         Security.addProvider(new BouncyCastleProvider());
         client = new SolanaRpcClient(Cluster.TESTNET);
         randomWallet = new SolanaWallet(mnemonic, "banana", Network.TESTNET);
-        websocket = SolanaWebSocketClient.getInstance(Cluster.TESTNET);
+        websocket = new SolanaWebSocketClient(Cluster.TESTNET);
     }
+    
+    
 
     @Test
     public void testWebsocket() throws InterruptedException {
@@ -49,7 +51,7 @@ public class SolanaRpcTestSuite {
         websocket.accountSubscribe("HPLmxR17p9UhFYPPJjWVPmEgWQTssU3s27uKEU6c6BkB", data -> {
             System.out.println("UPDATE");
         });
-        
+
         Thread.sleep(1000000);
 
     }
