@@ -6,49 +6,48 @@ package com.paymennt.solanaj.data;
 
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class AccountMeta.
+ * 
  */
 public class AccountMeta {
     
-    /** The public key. */
-    private AccountPublicKey publicKey;
+    /**  */
+    private SolanaPublicKey publicKey;
     
-    /** The is signer. */
+    /**  */
     private boolean isSigner;
     
-    /** The is writable. */
+    /**  */
     private boolean isWritable;
 
     /**
-     * Instantiates a new account meta.
+     * 
      */
     public AccountMeta() {
 
     }
 
     /**
-     * Instantiates a new account meta.
+     * 
      *
-     * @param publicKey the public key
-     * @param isSigner the is signer
-     * @param isWritable the is writable
+     * @param publicKey 
+     * @param isSigner 
+     * @param isWritable 
      */
-    public AccountMeta(AccountPublicKey publicKey, boolean isSigner, boolean isWritable) {
+    public AccountMeta(SolanaPublicKey publicKey, boolean isSigner, boolean isWritable) {
         this.publicKey = publicKey;
         this.isSigner = isSigner;
         this.isWritable = isWritable;
     }
 
     /**
-     * Find account index.
+     * 
      *
-     * @param accountMetaList the account meta list
-     * @param key the key
-     * @return the int
+     * @param accountMetaList 
+     * @param key 
+     * @return 
      */
-    public static int findAccountIndex(List<AccountMeta> accountMetaList, AccountPublicKey key) {
+    public static int findAccountIndex(List<AccountMeta> accountMetaList, SolanaPublicKey key) {
         for (int i = 0; i < accountMetaList.size(); i++) {
             if (accountMetaList.get(i).getPublicKey().equals(key)) {
                 return i;
@@ -59,63 +58,63 @@ public class AccountMeta {
     }
 
     /**
-     * Gets the public key.
+     * 
      *
-     * @return the public key
+     * @return 
      */
-    public AccountPublicKey getPublicKey() {
+    public SolanaPublicKey getPublicKey() {
         return publicKey;
     }
 
     /**
-     * Sets the public key.
+     * 
      *
-     * @param publicKey the new public key
+     * @param publicKey 
      */
-    public void setPublicKey(AccountPublicKey publicKey) {
+    public void setPublicKey(SolanaPublicKey publicKey) {
         this.publicKey = publicKey;
     }
 
     /**
-     * Sets the pubkey.
+     * 
      *
-     * @param key the new pubkey
+     * @param key 
      */
     public void setPubkey(String key) {
-        this.publicKey = new AccountPublicKey(key);
+        this.publicKey = new SolanaPublicKey(key);
     }
 
     /**
-     * Checks if is signer.
+     * 
      *
-     * @return true, if is signer
+     * @return 
      */
     public boolean isSigner() {
         return isSigner;
     }
 
     /**
-     * Sets the signer.
+     * 
      *
-     * @param isSigner the new signer
+     * @param isSigner 
      */
     public void setSigner(boolean isSigner) {
         this.isSigner = isSigner;
     }
 
     /**
-     * Checks if is writable.
+     * 
      *
-     * @return true, if is writable
+     * @return 
      */
     public boolean isWritable() {
         return isWritable;
     }
 
     /**
-     * Sets the writable.
+     * 
      *
-     * @param isWritable the new writable
+     * @param isWritable 
      */
     public void setWritable(boolean isWritable) {
         this.isWritable = isWritable;

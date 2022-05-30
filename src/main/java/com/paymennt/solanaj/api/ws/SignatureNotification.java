@@ -4,7 +4,7 @@
  */
 package com.paymennt.solanaj.api.ws;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * 
  */

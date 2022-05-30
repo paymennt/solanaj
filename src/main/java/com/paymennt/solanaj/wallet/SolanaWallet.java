@@ -9,32 +9,31 @@ import com.paymennt.crypto.bip32.Network;
 import com.paymennt.crypto.bip32.wallet.AbstractWallet;
 import com.paymennt.crypto.lib.Base58;
 
-// TODO: Auto-generated Javadoc
+
 /**
- * The Class SolanaWallet.
+ * @author paymennt
  *
- * @author asendar
  */
 public class SolanaWallet extends AbstractWallet {
 
     /**
-     * Instantiates a new solana wallet.
+     * 
      *
-     * @param words the words
-     * @param passphrase the passphrase
-     * @param network the network
+     * @param words 
+     * @param passphrase 
+     * @param network 
      */
     public SolanaWallet(String words, String passphrase, Network network) {
         super(words, passphrase, Purpose.BIP44, network, CoinType.SOLANA);
     }
 
     /**
-     * Gets the address.
+     * 
      *
-     * @param account the account
-     * @param chain the chain
-     * @param index the index
-     * @return the address
+     * @param account 
+     * @param chain 
+     * @param index 
+     * @return 
      */
     @Override
     public String getAddress(int account, Chain chain, Integer index) {

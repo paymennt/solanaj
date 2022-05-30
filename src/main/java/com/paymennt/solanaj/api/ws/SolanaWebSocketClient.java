@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +43,7 @@ public class SolanaWebSocketClient implements WebSocketHandler {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     /**  */
-    private Map<String, SubscriptionParams> subscriptions = new HashMap<>();
+    private Map<String, SubscriptionParams> subscriptions = new ConcurrentHashMap<>();
 
     /**  */
     private Map<String, Long> subscriptionIds = new HashMap<>();
@@ -244,6 +245,8 @@ public class SolanaWebSocketClient implements WebSocketHandler {
     }
 
     /**
+     * 
+     *
      * @param handshakedata 
      */
     @Override
@@ -295,14 +298,19 @@ public class SolanaWebSocketClient implements WebSocketHandler {
 
     /**
      * 
+     *
+     * @param e 
      */
     @Override
     public void onError(Throwable e) {
         e.printStackTrace();
     }
 
-    /*******************************************************************************************************************
-     * private methods
+    /**
+     * 
+     *
+     * @param cluster 
+     * @return 
      */
 
     private URI getServerUrl(Cluster cluster) {

@@ -6,7 +6,7 @@ package com.paymennt.solanaj.api.rpc.types;
 
 import java.util.AbstractMap;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * 
  */

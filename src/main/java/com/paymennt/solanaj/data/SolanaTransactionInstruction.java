@@ -8,49 +8,48 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-// TODO: Auto-generated Javadoc
+
 /**
- * The Class SolanaTransactionInstruction.
+ * 
  */
 public class SolanaTransactionInstruction {
 
-    /** The keys. */
+    /**  */
     private List<AccountMeta> keys;
     
-    /** The program id. */
-    private AccountPublicKey programId;
+    /**  */
+    private SolanaPublicKey programId;
     
-    /** The data. */
+    /**  */
     private byte[] data;
     
-    /** The parsed. */
+    /**  */
     private SolanaTransactionParsedInstruction parsed;
 
     /**
-     * Instantiates a new solana transaction instruction.
+     * 
      */
     public SolanaTransactionInstruction() {
 
     }
 
     /**
-     * Instantiates a new solana transaction instruction.
+     * 
      *
-     * @param programId the program id
-     * @param keys the keys
-     * @param data the data
+     * @param programId 
+     * @param keys 
+     * @param data 
      */
-    public SolanaTransactionInstruction(AccountPublicKey programId, List<AccountMeta> keys, byte[] data) {
+    public SolanaTransactionInstruction(SolanaPublicKey programId, List<AccountMeta> keys, byte[] data) {
         this.programId = programId;
         this.keys = keys;
         this.data = data;
     }
 
     /**
-     * *****************************************************************************************************************
-     * setters and getters.
+     * 
      *
-     * @return the keys
+     * @return 
      */
 
     public List<AccountMeta> getKeys() {
@@ -58,191 +57,190 @@ public class SolanaTransactionInstruction {
     }
 
     /**
-     * Sets the keys.
+     * 
      *
-     * @param keys the new keys
+     * @param keys 
      */
     public void setKeys(List<AccountMeta> keys) {
         this.keys = keys;
     }
 
     /**
-     * Gets the program id.
+     * 
      *
-     * @return the program id
+     * @return 
      */
-    public AccountPublicKey getProgramId() {
+    public SolanaPublicKey getProgramId() {
         return programId;
     }
 
     /**
-     * Sets the program id.
+     * 
      *
-     * @param programId the new program id
+     * @param programId 
      */
-    public void setProgramId(AccountPublicKey programId) {
+    public void setProgramId(SolanaPublicKey programId) {
         this.programId = programId;
     }
 
     /**
-     * Sets the program id.
+     * 
      *
-     * @param programId the new program id
+     * @param programId 
      */
     @JsonSetter
     public void setProgramId(String programId) {
-        this.programId = new AccountPublicKey(programId);
+        this.programId = new SolanaPublicKey(programId);
     }
 
     /**
-     * Gets the data.
+     * 
      *
-     * @return the data
+     * @return 
      */
     public byte[] getData() {
         return data;
     }
 
     /**
-     * Sets the data.
+     * 
      *
-     * @param data the new data
+     * @param data 
      */
     public void setData(byte[] data) {
         this.data = data;
     }
 
     /**
-     * Gets the parsed.
+     * 
      *
-     * @return the parsed
+     * @return 
      */
     public SolanaTransactionParsedInstruction getParsed() {
         return parsed;
     }
 
     /**
-     * Sets the parsed.
+     * 
      *
-     * @param parsed the new parsed
+     * @param parsed 
      */
     public void setParsed(SolanaTransactionParsedInstruction parsed) {
         this.parsed = parsed;
     }
 
     /**
-     * *****************************************************************************************************************
-     * classes.
+     * 
      */
 
     public static class SolanaTransactionParsedInstruction {
 
-        /** The info. */
+        /**  */
         private TransactionInfo info;
         
-        /** The type. */
+        /**  */
         private TransactionType type;
         
 
         /**
-         * Gets the info.
+         * 
          *
-         * @return the info
+         * @return 
          */
         public TransactionInfo getInfo() {
             return info;
         }
 
         /**
-         * Sets the info.
+         * 
          *
-         * @param info the new info
+         * @param info 
          */
         public void setInfo(TransactionInfo info) {
             this.info = info;
         }
 
         /**
-         * Gets the type.
+         * 
          *
-         * @return the type
+         * @return 
          */
         public TransactionType getType() {
             return type;
         }
 
         /**
-         * Sets the type.
+         * 
          *
-         * @param type the new type
+         * @param type 
          */
         public void setType(TransactionType type) {
             this.type = type;
         }
 
         /**
-         * The Class TransactionInfo.
+         * 
          */
         public static class TransactionInfo {
             
-            /** The destination. */
+            /**  */
             private String destination;
             
-            /** The source. */
+            /**  */
             private String source;
             
-            /** The lamports. */
+            /**  */
             private long lamports;
 
             /**
-             * Gets the destination.
+             * 
              *
-             * @return the destination
+             * @return 
              */
             public String getDestination() {
                 return destination;
             }
 
             /**
-             * Sets the destination.
+             * 
              *
-             * @param destination the new destination
+             * @param destination 
              */
             public void setDestination(String destination) {
                 this.destination = destination;
             }
 
             /**
-             * Gets the source.
+             * 
              *
-             * @return the source
+             * @return 
              */
             public String getSource() {
                 return source;
             }
 
             /**
-             * Sets the source.
+             * 
              *
-             * @param source the new source
+             * @param source 
              */
             public void setSource(String source) {
                 this.source = source;
             }
 
             /**
-             * Gets the lamports.
+             * 
              *
-             * @return the lamports
+             * @return 
              */
             public long getLamports() {
                 return lamports;
             }
 
             /**
-             * Sets the lamports.
+             * 
              *
-             * @param lamports the new lamports
+             * @param lamports 
              */
             public void setLamports(long lamports) {
                 this.lamports = lamports;
@@ -251,11 +249,11 @@ public class SolanaTransactionInstruction {
         }
 
         /**
-         * The Enum TransactionType.
+         * 
          */
         public enum TransactionType {
             
-            /** The transfer. */
+            /**  */
             transfer
         }
     }

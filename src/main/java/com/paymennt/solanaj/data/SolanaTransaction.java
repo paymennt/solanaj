@@ -13,29 +13,29 @@ import com.paymennt.crypto.lib.Base58;
 import com.paymennt.crypto.lib.ShortvecEncoding;
 import com.paymennt.solanaj.utils.TweetNaclFast;
 
-// TODO: Auto-generated Javadoc
+
 /**
- * The Class SolanaTransaction.
+ * 
  */
 public class SolanaTransaction {
 
-    /** The Constant SIGNATURE_LENGTH. */
+    /**  */
     public static final int SIGNATURE_LENGTH = 64;
 
-    /** The message. */
+    /**  */
     private SolanaMessage message;
     
-    /** The signatures. */
+    /**  */
     private List<String> signatures;
     
-    /** The serialized message. */
+    /**  */
     private byte[] serializedMessage;
     
-    /** The fee payer. */
-    private AccountPublicKey feePayer;
+    /**  */
+    private SolanaPublicKey feePayer;
 
     /**
-     * Instantiates a new solana transaction.
+     * 
      */
     public SolanaTransaction() {
         this.message = new SolanaMessage();
@@ -43,10 +43,10 @@ public class SolanaTransaction {
     }
 
     /**
-     * Adds the instruction.
+     * 
      *
-     * @param instruction the instruction
-     * @return the solana transaction
+     * @param instruction 
+     * @return 
      */
     public SolanaTransaction addInstruction(SolanaTransactionInstruction instruction) {
         message.addInstruction(instruction);
@@ -55,18 +55,18 @@ public class SolanaTransaction {
     }
 
     /**
-     * Sign.
+     * 
      *
-     * @param signer the signer
+     * @param signer 
      */
     public void sign(SolanaAccount signer) {
         sign(Arrays.asList(signer));
     }
 
     /**
-     * Sign.
+     * 
      *
-     * @param signers the signers
+     * @param signers 
      */
     public void sign(List<SolanaAccount> signers) {
 
@@ -90,9 +90,9 @@ public class SolanaTransaction {
     }
 
     /**
-     * Serialize.
+     * 
      *
-     * @return the byte[]
+     * @return 
      */
     public byte[] serialize() {
         int signaturesSize = signatures.size();
@@ -114,10 +114,9 @@ public class SolanaTransaction {
     }
 
     /**
-     * *****************************************************************************************************************
-     * setters and getters.
+     * 
      *
-     * @return the signature
+     * @return 
      */
 
     public String getSignature() {
@@ -129,81 +128,81 @@ public class SolanaTransaction {
     }
 
     /**
-     * Gets the message.
+     * 
      *
-     * @return the message
+     * @return 
      */
     public SolanaMessage getMessage() {
         return message;
     }
 
     /**
-     * Sets the message.
+     * 
      *
-     * @param message the new message
+     * @param message 
      */
     public void setMessage(SolanaMessage message) {
         this.message = message;
     }
 
     /**
-     * Gets the signatures.
+     * 
      *
-     * @return the signatures
+     * @return 
      */
     public List<String> getSignatures() {
         return signatures;
     }
 
     /**
-     * Sets the signatures.
+     * 
      *
-     * @param signatures the new signatures
+     * @param signatures 
      */
     public void setSignatures(List<String> signatures) {
         this.signatures = signatures;
     }
 
     /**
-     * Gets the serialized message.
+     * 
      *
-     * @return the serialized message
+     * @return 
      */
     public byte[] getSerializedMessage() {
         return serializedMessage;
     }
 
     /**
-     * Sets the serialized message.
+     * 
      *
-     * @param serializedMessage the new serialized message
+     * @param serializedMessage 
      */
     public void setSerializedMessage(byte[] serializedMessage) {
         this.serializedMessage = serializedMessage;
     }
 
     /**
-     * Gets the fee payer.
+     * 
      *
-     * @return the fee payer
+     * @return 
      */
-    public AccountPublicKey getFeePayer() {
+    public SolanaPublicKey getFeePayer() {
         return feePayer;
     }
 
     /**
-     * Sets the fee payer.
+     * 
      *
-     * @param feePayer the new fee payer
+     * @param feePayer 
      */
-    public void setFeePayer(AccountPublicKey feePayer) {
+    public void setFeePayer(SolanaPublicKey feePayer) {
         this.feePayer = feePayer;
     }
 
     /**
-     * Sets the recent block hash.
+     * 
      *
-     * @param recentBlockhash the new recent block hash
+     * @param recentBlockhash 
      */
     public void setRecentBlockHash(String recentBlockhash) {
         message.setRecentBlockhash(recentBlockhash);

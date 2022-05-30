@@ -1,22 +1,16 @@
 /************************************************************************ 
- * Copyright PointCheckout, Ltd.
+ * Copyright (c) 2014 Tom Zhou<appnet.link@gmail.com>
+ * 
+ *  https://github.com/InstantWebP2P/tweetnacl-java/blob/master/src/main/java/com/iwebpp/crypto/TweetNaclFast.java
  * 
  */
 package com.paymennt.solanaj.utils;
-
-// https://github.com/InstantWebP2P/tweetnacl-java/blob/master/src/main/java/com/iwebpp/crypto/TweetNaclFast.java
-
-// Copyright (c) 2014 Tom Zhou<appnet.link@gmail.com>
 
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.lang.System;
 import java.util.concurrent.atomic.AtomicLong;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class TweetNaclFast.
- */
 /*
  * @description 
  *   TweetNacl.c Java porting
@@ -24,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class TweetNaclFast {
 
     /**
-     * The Class Box.
+     * 
      */
     /*
      * @description 
@@ -32,34 +26,34 @@ public final class TweetNaclFast {
      * */
     public static final class Box {
 
-        /** The nonce. */
+        /**  */
         private AtomicLong nonce;
 
-        /** The their public key. */
+        /**  */
         private byte[] theirPublicKey;
-        
-        /** The my secret key. */
+
+        /**  */
         private byte[] mySecretKey;
-        
-        /** The shared key. */
+
+        /**  */
         private byte[] sharedKey;
 
         /**
-         * Instantiates a new box.
+         * 
          *
-         * @param theirPublicKey the their public key
-         * @param mySecretKey the my secret key
+         * @param theirPublicKey 
+         * @param mySecretKey 
          */
         public Box(byte[] theirPublicKey, byte[] mySecretKey) {
             this(theirPublicKey, mySecretKey, 68);
         }
 
         /**
-         * Instantiates a new box.
+         * 
          *
-         * @param theirPublicKey the their public key
-         * @param mySecretKey the my secret key
-         * @param nonce the nonce
+         * @param theirPublicKey 
+         * @param mySecretKey 
+         * @param nonce 
          */
         public Box(byte[] theirPublicKey, byte[] mySecretKey, long nonce) {
             this.theirPublicKey = theirPublicKey;
@@ -72,36 +66,36 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Sets the nonce.
+         * 
          *
-         * @param nonce the new nonce
+         * @param nonce 
          */
         public void setNonce(long nonce) {
             this.nonce.set(nonce);
         }
 
         /**
-         * Gets the nonce.
+         * 
          *
-         * @return the nonce
+         * @return 
          */
         public long getNonce() {
             return this.nonce.get();
         }
 
         /**
-         * Incr nonce.
+         * 
          *
-         * @return the long
+         * @return 
          */
         public long incrNonce() {
             return this.nonce.incrementAndGet();
         }
 
         /**
-         * Generate nonce.
+         * 
          *
-         * @return the byte[]
+         * @return 
          */
         private byte[] generateNonce() {
             // generate nonce 
@@ -123,10 +117,10 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @return the byte[]
+         * @param message 
+         * @return 
          */
         /*
          * @description 
@@ -144,11 +138,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @return 
          */
         public byte[] box(byte[] message, final int moff) {
             if (!(message != null && message.length > moff))
@@ -157,12 +151,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @param mlen the mlen
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @param mlen 
+         * @return 
          */
         public byte[] box(byte[] message, final int moff, final int mlen) {
             if (!(message != null && message.length >= (moff + mlen)))
@@ -176,11 +170,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param message 
+         * @param theNonce 
+         * @return 
          */
         /*
          * @description 
@@ -200,12 +194,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @param theNonce 
+         * @return 
          */
         public byte[] box(byte[] message, final int moff, byte[] theNonce) {
             if (!(message != null && message.length > moff))
@@ -214,13 +208,13 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @param mlen the mlen
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @param mlen 
+         * @param theNonce 
+         * @return 
          */
         public byte[] box(byte[] message, final int moff, final int mlen, byte[] theNonce) {
             if (!(message != null && message.length >= (moff + mlen) && theNonce != null
@@ -235,10 +229,10 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @return the byte[]
+         * @param box 
+         * @return 
          */
         /*
          * @description 
@@ -259,11 +253,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @param boxoff the boxoff
-         * @return the byte[]
+         * @param box 
+         * @param boxoff 
+         * @return 
          */
         public byte[] open(byte[] box, final int boxoff) {
             if (!(box != null && box.length > boxoff))
@@ -277,12 +271,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @param boxoff the boxoff
-         * @param boxlen the boxlen
-         * @return the byte[]
+         * @param box 
+         * @param boxoff 
+         * @param boxlen 
+         * @return 
          */
         public byte[] open(byte[] box, final int boxoff, final int boxlen) {
             if (!(box != null && box.length >= (boxoff + boxlen)))
@@ -296,11 +290,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param box 
+         * @param theNonce 
+         * @return 
          */
         /*
          * @description 
@@ -321,12 +315,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @param boxoff the boxoff
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param box 
+         * @param boxoff 
+         * @param theNonce 
+         * @return 
          */
         public byte[] open(byte[] box, final int boxoff, byte[] theNonce) {
             if (!(box != null && box.length > boxoff && theNonce != null && theNonce.length == nonceLength))
@@ -340,13 +334,13 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @param boxoff the boxoff
-         * @param boxlen the boxlen
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param box 
+         * @param boxoff 
+         * @param boxlen 
+         * @param theNonce 
+         * @return 
          */
         public byte[] open(byte[] box, final int boxoff, final int boxlen, byte[] theNonce) {
             if (!(box != null && box.length >= (boxoff + boxlen) && theNonce != null && theNonce.length == nonceLength))
@@ -360,9 +354,9 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Before.
+         * 
          *
-         * @return the byte[]
+         * @return 
          */
         /*
          * @description 
@@ -379,12 +373,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * After.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @param mlen the mlen
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @param mlen 
+         * @return 
          */
         /*
          * @description 
@@ -395,13 +389,13 @@ public final class TweetNaclFast {
         }
 
         /**
-         * After.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @param mlen the mlen
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @param mlen 
+         * @param theNonce 
+         * @return 
          */
         /*
          * @description 
@@ -437,12 +431,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open after.
+         * 
          *
-         * @param box the box
-         * @param boxoff the boxoff
-         * @param boxlen the boxlen
-         * @return the byte[]
+         * @param box 
+         * @param boxoff 
+         * @param boxlen 
+         * @return 
          */
         /*
          * @description 
@@ -454,13 +448,13 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open after.
+         * 
          *
-         * @param box the box
-         * @param boxoff the boxoff
-         * @param boxlen the boxlen
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param box 
+         * @param boxoff 
+         * @param boxlen 
+         * @param theNonce 
+         * @return 
          */
         public byte[] open_after(byte[] box, final int boxoff, final int boxlen, byte[] theNonce) {
             // check message
@@ -489,49 +483,49 @@ public final class TweetNaclFast {
             return ret;
         }
 
-        /** The Constant publicKeyLength. */
+        /**  */
         /*
          * @description 
          *   Length of public key in bytes.
          * */
         public static final int publicKeyLength = 32;
 
-        /** The Constant secretKeyLength. */
+        /**  */
         /*
          * @description 
          *   Length of secret key in bytes.
          * */
         public static final int secretKeyLength = 32;
 
-        /** The Constant sharedKeyLength. */
+        /**  */
         /*
          * @description 
          *   Length of precomputed shared key in bytes.
          * */
         public static final int sharedKeyLength = 32;
 
-        /** The Constant nonceLength. */
+        /**  */
         /*
          * @description 
          *   Length of nonce in bytes.
          * */
         public static final int nonceLength = 24;
 
-        /** The Constant zerobytesLength. */
+        /**  */
         /*
          * @description
          *   zero bytes in case box
          * */
         public static final int zerobytesLength = 32;
-        
-        /** The Constant boxzerobytesLength. */
+
+        /**  */
         /*
          * @description
          *   zero bytes in case open box
          * */
         public static final int boxzerobytesLength = 16;
 
-        /** The Constant overheadLength. */
+        /**  */
         /*
          * @description 
          *   Length of overhead added to box compared to original message.
@@ -539,18 +533,18 @@ public final class TweetNaclFast {
         public static final int overheadLength = 16;
 
         /**
-         * The Class KeyPair.
+         * 
          */
         public static class KeyPair {
-            
-            /** The public key. */
+
+            /**  */
             private byte[] publicKey;
-            
-            /** The secret key. */
+
+            /**  */
             private byte[] secretKey;
 
             /**
-             * Instantiates a new key pair.
+             * 
              */
             public KeyPair() {
                 publicKey = new byte[publicKeyLength];
@@ -558,18 +552,18 @@ public final class TweetNaclFast {
             }
 
             /**
-             * Gets the public key.
+             * 
              *
-             * @return the public key
+             * @return 
              */
             public byte[] getPublicKey() {
                 return publicKey;
             }
 
             /**
-             * Gets the secret key.
+             * 
              *
-             * @return the secret key
+             * @return 
              */
             public byte[] getSecretKey() {
                 return secretKey;
@@ -577,9 +571,9 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Key pair.
+         * 
          *
-         * @return the key pair
+         * @return 
          */
         /*
          * @description
@@ -594,10 +588,10 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Key pair from secret key.
+         * 
          *
-         * @param secretKey the secret key
-         * @return the key pair
+         * @param secretKey 
+         * @return 
          */
         public static KeyPair keyPair_fromSecretKey(byte[] secretKey) {
             KeyPair kp = new KeyPair();
@@ -615,7 +609,7 @@ public final class TweetNaclFast {
     }
 
     /**
-     * The Class SecretBox.
+     * 
      */
     /*
      * @description 
@@ -623,26 +617,26 @@ public final class TweetNaclFast {
      * */
     public static final class SecretBox {
 
-        /** The nonce. */
+        /**  */
         private AtomicLong nonce;
 
-        /** The key. */
+        /**  */
         private byte[] key;
 
         /**
-         * Instantiates a new secret box.
+         * 
          *
-         * @param key the key
+         * @param key 
          */
         public SecretBox(byte[] key) {
             this(key, 68);
         }
 
         /**
-         * Instantiates a new secret box.
+         * 
          *
-         * @param key the key
-         * @param nonce the nonce
+         * @param key 
+         * @param nonce 
          */
         public SecretBox(byte[] key, long nonce) {
             this.key = key;
@@ -651,36 +645,36 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Sets the nonce.
+         * 
          *
-         * @param nonce the new nonce
+         * @param nonce 
          */
         public void setNonce(long nonce) {
             this.nonce.set(nonce);
         }
 
         /**
-         * Gets the nonce.
+         * 
          *
-         * @return the nonce
+         * @return 
          */
         public long getNonce() {
             return this.nonce.get();
         }
 
         /**
-         * Incr nonce.
+         * 
          *
-         * @return the long
+         * @return 
          */
         public long incrNonce() {
             return this.nonce.incrementAndGet();
         }
 
         /**
-         * Generate nonce.
+         * 
          *
-         * @return the byte[]
+         * @return 
          */
         private byte[] generateNonce() {
             // generate nonce 
@@ -702,10 +696,10 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @return the byte[]
+         * @param message 
+         * @return 
          */
         /*
          * @description 
@@ -722,11 +716,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @return 
          */
         public byte[] box(byte[] message, final int moff) {
             if (!(message != null && message.length > moff))
@@ -735,12 +729,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @param mlen the mlen
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @param mlen 
+         * @return 
          */
         public byte[] box(byte[] message, final int moff, final int mlen) {
             // check message
@@ -750,11 +744,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param message 
+         * @param theNonce 
+         * @return 
          */
         public byte[] box(byte[] message, byte[] theNonce) {
             if (message == null)
@@ -763,12 +757,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @param theNonce 
+         * @return 
          */
         public byte[] box(byte[] message, final int moff, byte[] theNonce) {
             if (!(message != null && message.length > moff))
@@ -777,13 +771,13 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Box.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @param mlen the mlen
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @param mlen 
+         * @param theNonce 
+         * @return 
          */
         public byte[] box(byte[] message, final int moff, final int mlen, byte[] theNonce) {
             // check message
@@ -815,10 +809,10 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @return the byte[]
+         * @param box 
+         * @return 
          */
         /*
          * @description 
@@ -834,11 +828,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @param boxoff the boxoff
-         * @return the byte[]
+         * @param box 
+         * @param boxoff 
+         * @return 
          */
         public byte[] open(byte[] box, final int boxoff) {
             if (!(box != null && box.length > boxoff))
@@ -847,12 +841,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @param boxoff the boxoff
-         * @param boxlen the boxlen
-         * @return the byte[]
+         * @param box 
+         * @param boxoff 
+         * @param boxlen 
+         * @return 
          */
         public byte[] open(byte[] box, final int boxoff, final int boxlen) {
             // check message
@@ -862,11 +856,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param box 
+         * @param theNonce 
+         * @return 
          */
         public byte[] open(byte[] box, byte[] theNonce) {
             if (box == null)
@@ -875,12 +869,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @param boxoff the boxoff
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param box 
+         * @param boxoff 
+         * @param theNonce 
+         * @return 
          */
         public byte[] open(byte[] box, final int boxoff, byte[] theNonce) {
             if (!(box != null && box.length > boxoff))
@@ -889,13 +883,13 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param box the box
-         * @param boxoff the boxoff
-         * @param boxlen the boxlen
-         * @param theNonce the the nonce
-         * @return the byte[]
+         * @param box 
+         * @param boxoff 
+         * @param boxlen 
+         * @param theNonce 
+         * @return 
          */
         public byte[] open(byte[] box, final int boxoff, final int boxlen, byte[] theNonce) {
             // check message
@@ -925,35 +919,35 @@ public final class TweetNaclFast {
             return ret;
         }
 
-        /** The Constant keyLength. */
+        /**  */
         /*
          * @description 
          *   Length of key in bytes.
          * */
         public static final int keyLength = 32;
 
-        /** The Constant nonceLength. */
+        /**  */
         /*
          * @description 
          *   Length of nonce in bytes.
          * */
         public static final int nonceLength = 24;
 
-        /** The Constant overheadLength. */
+        /**  */
         /*
          * @description 
          *   Length of overhead added to secret box compared to original message.
          * */
         public static final int overheadLength = 16;
 
-        /** The Constant zerobytesLength. */
+        /**  */
         /*
          * @description
          *   zero bytes in case box
          * */
         public static final int zerobytesLength = 32;
-        
-        /** The Constant boxzerobytesLength. */
+
+        /**  */
         /*
          * @description
          *   zero bytes in case open box
@@ -963,7 +957,7 @@ public final class TweetNaclFast {
     }
 
     /**
-     * The Class ScalarMult.
+     * 
      */
     /*
      * @description
@@ -972,11 +966,11 @@ public final class TweetNaclFast {
     public static final class ScalarMult {
 
         /**
-         * Scalse mult.
+         * 
          *
-         * @param n the n
-         * @param p the p
-         * @return the byte[]
+         * @param n 
+         * @param p 
+         * @return 
          */
         /*
          * @description
@@ -995,10 +989,10 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Scalse mult base.
+         * 
          *
-         * @param n the n
-         * @return the byte[]
+         * @param n 
+         * @return 
          */
         /*
          * @description
@@ -1016,14 +1010,14 @@ public final class TweetNaclFast {
             return q;
         }
 
-        /** The Constant scalarLength. */
+        /**  */
         /*
          * @description
          *   Length of scalar in bytes.
          * */
         public static final int scalarLength = 32;
 
-        /** The Constant groupElementLength. */
+        /**  */
         /*
          * @description
          *   Length of group element in bytes.
@@ -1033,7 +1027,7 @@ public final class TweetNaclFast {
     }
 
     /**
-     * The Class Hash.
+     * 
      */
     /*
      * @description 
@@ -1042,10 +1036,10 @@ public final class TweetNaclFast {
     public static final class Hash {
 
         /**
-         * Sha 512.
+         * 
          *
-         * @param message the message
-         * @return the byte[]
+         * @param message 
+         * @return 
          */
         /*
          * @description
@@ -1063,17 +1057,17 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Sha 512.
+         * 
          *
-         * @param message the message
-         * @return the byte[]
-         * @throws UnsupportedEncodingException the unsupported encoding exception
+         * @param message 
+         * @return 
+         * @throws UnsupportedEncodingException 
          */
         public static byte[] sha512(String message) throws UnsupportedEncodingException {
             return sha512(message.getBytes("utf-8"));
         }
 
-        /** The Constant hashLength. */
+        /**  */
         /*
          * @description
          *   Length of hash in bytes.
@@ -1083,7 +1077,7 @@ public final class TweetNaclFast {
     }
 
     /**
-     * The Class Signature.
+     * 
      */
     /*
      * @description 
@@ -1091,17 +1085,17 @@ public final class TweetNaclFast {
      * */
     public static final class Signature {
 
-        /** The their public key. */
+        /**  */
         private byte[] theirPublicKey;
-        
-        /** The my secret key. */
+
+        /**  */
         private byte[] mySecretKey;
 
         /**
-         * Instantiates a new signature.
+         * 
          *
-         * @param theirPublicKey the their public key
-         * @param mySecretKey the my secret key
+         * @param theirPublicKey 
+         * @param mySecretKey 
          */
         public Signature(byte[] theirPublicKey, byte[] mySecretKey) {
             this.theirPublicKey = theirPublicKey;
@@ -1109,10 +1103,10 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Sign.
+         * 
          *
-         * @param message the message
-         * @return the byte[]
+         * @param message 
+         * @return 
          */
         /*
          * @description
@@ -1126,11 +1120,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Sign.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @return 
          */
         public byte[] sign(byte[] message, final int moff) {
             if (!(message != null && message.length > moff))
@@ -1140,12 +1134,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Sign.
+         * 
          *
-         * @param message the message
-         * @param moff the moff
-         * @param mlen the mlen
-         * @return the byte[]
+         * @param message 
+         * @param moff 
+         * @param mlen 
+         * @return 
          */
         public byte[] sign(byte[] message, final int moff, final int mlen) {
             // check message
@@ -1161,10 +1155,10 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param signedMessage the signed message
-         * @return the byte[]
+         * @param signedMessage 
+         * @return 
          */
         /*
          * @description
@@ -1179,11 +1173,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param signedMessage the signed message
-         * @param smoff the smoff
-         * @return the byte[]
+         * @param signedMessage 
+         * @param smoff 
+         * @return 
          */
         public byte[] open(byte[] signedMessage, final int smoff) {
             if (!(signedMessage != null && signedMessage.length > smoff))
@@ -1193,12 +1187,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Open.
+         * 
          *
-         * @param signedMessage the signed message
-         * @param smoff the smoff
-         * @param smlen the smlen
-         * @return the byte[]
+         * @param signedMessage 
+         * @param smoff 
+         * @param smlen 
+         * @return 
          */
         public byte[] open(byte[] signedMessage, final int smoff, final int smlen) {
             // check sm length
@@ -1220,10 +1214,10 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Detached.
+         * 
          *
-         * @param message the message
-         * @return the byte[]
+         * @param message 
+         * @return 
          */
         /*
          * @description
@@ -1238,11 +1232,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Detached verify.
+         * 
          *
-         * @param message the message
-         * @param signature the signature
-         * @return true, if successful
+         * @param message 
+         * @param signature 
+         * @return 
          */
         /*
          * @description
@@ -1264,7 +1258,7 @@ public final class TweetNaclFast {
         }
 
         /**
-         * The Class KeyPair.
+         * 
          */
         /*
          * @description
@@ -1272,15 +1266,15 @@ public final class TweetNaclFast {
          *   returns it as an object with publicKey and secretKey members
          * */
         public static class KeyPair {
-            
-            /** The public key. */
+
+            /**  */
             private byte[] publicKey;
-            
-            /** The secret key. */
+
+            /**  */
             private byte[] secretKey;
 
             /**
-             * Instantiates a new key pair.
+             * 
              */
             public KeyPair() {
                 publicKey = new byte[publicKeyLength];
@@ -1288,18 +1282,18 @@ public final class TweetNaclFast {
             }
 
             /**
-             * Gets the public key.
+             * 
              *
-             * @return the public key
+             * @return 
              */
             public byte[] getPublicKey() {
                 return publicKey;
             }
 
             /**
-             * Gets the secret key.
+             * 
              *
-             * @return the secret key
+             * @return 
              */
             public byte[] getSecretKey() {
                 return secretKey;
@@ -1307,9 +1301,9 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Key pair.
+         * 
          *
-         * @return the key pair
+         * @return 
          */
         /*
          * @description
@@ -1323,10 +1317,10 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Key pair from secret key.
+         * 
          *
-         * @param secretKey the secret key
-         * @return the key pair
+         * @param secretKey 
+         * @return 
          */
         public static KeyPair keyPair_fromSecretKey(byte[] secretKey) {
             KeyPair kp = new KeyPair();
@@ -1345,10 +1339,10 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Key pair from seed.
+         * 
          *
-         * @param seed the seed
-         * @return the key pair
+         * @param seed 
+         * @return 
          */
         public static KeyPair keyPair_fromSeed(byte[] seed) {
             KeyPair kp = new KeyPair();
@@ -1365,28 +1359,28 @@ public final class TweetNaclFast {
             return kp;
         }
 
-        /** The Constant publicKeyLength. */
+        /**  */
         /*
          * @description
          *   Length of signing public key in bytes.
          * */
         public static final int publicKeyLength = 32;
 
-        /** The Constant secretKeyLength. */
+        /**  */
         /*
          * @description
          *   Length of signing secret key in bytes.
          * */
         public static final int secretKeyLength = 64;
 
-        /** The Constant seedLength. */
+        /**  */
         /*
          * @description
          *   Length of seed for nacl.sign.keyPair.fromSeed in bytes.
          * */
         public static final int seedLength = 32;
 
-        /** The Constant signatureLength. */
+        /**  */
         /*
          * @description
          *   Length of signature in bytes.
@@ -1400,10 +1394,10 @@ public final class TweetNaclFast {
      *   Codes below are ported tweetnacl-fast.js from TweetNacl.c/TweetNacl.h
      * */
 
-    /** The Constant _0. */
+    /**  */
     private static final byte[] _0 = new byte[16];
-    
-    /** The Constant _9. */
+
+    /**  */
     private static final byte[] _9 = new byte[32];
     static {
         ///for (int i = 0; i < _0.length; i ++) _0[i] = 0;
@@ -1412,13 +1406,13 @@ public final class TweetNaclFast {
         _9[0] = 9;
     }
 
-    /** The Constant gf0. */
+    /**  */
     private static final long[] gf0 = new long[16];
-    
-    /** The Constant gf1. */
+
+    /**  */
     private static final long[] gf1 = new long[16];
-    
-    /** The Constant _121665. */
+
+    /**  */
     private static final long[] _121665 = new long[16];
     static {
         ///for (int i = 0; i < gf0.length; i ++) gf0[i] = 0;
@@ -1431,32 +1425,32 @@ public final class TweetNaclFast {
         _121665[1] = 1;
     }
 
-    /** The Constant D. */
+    /**  */
     private static final long[] D = new long[] { 0x78a3, 0x1359, 0x4dca, 0x75eb, 0xd8ab, 0x4141, 0x0a4d, 0x0070, 0xe898,
             0x7779, 0x4079, 0x8cc7, 0xfe73, 0x2b6f, 0x6cee, 0x5203 };
-    
-    /** The Constant D2. */
+
+    /**  */
     private static final long[] D2 = new long[] { 0xf159, 0x26b2, 0x9b94, 0xebd6, 0xb156, 0x8283, 0x149a, 0x00e0,
             0xd130, 0xeef3, 0x80f2, 0x198e, 0xfce7, 0x56df, 0xd9dc, 0x2406 };
-    
-    /** The Constant X. */
+
+    /**  */
     private static final long[] X = new long[] { 0xd51a, 0x8f25, 0x2d60, 0xc956, 0xa7b2, 0x9525, 0xc760, 0x692c, 0xdc5c,
             0xfdd6, 0xe231, 0xc0a4, 0x53fe, 0xcd6e, 0x36d3, 0x2169 };
-    
-    /** The Constant Y. */
+
+    /**  */
     private static final long[] Y = new long[] { 0x6658, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666,
             0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666, 0x6666 };
-    
-    /** The Constant I. */
+
+    /**  */
     private static final long[] I = new long[] { 0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478, 0xad2f, 0x1806, 0x2f43, 0xd7a7,
             0x3dfb, 0x0099, 0x2b4d, 0xdf0b, 0x4fc1, 0x2480, 0x2b83 };
 
     /**
-     * Ts 64.
+     * 
      *
-     * @param x the x
-     * @param xoff the xoff
-     * @param u the u
+     * @param x 
+     * @param xoff 
+     * @param u 
      */
     private static void ts64(byte[] x, final int xoff, long u) {
         ///int i;
@@ -1480,14 +1474,14 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Vn.
+     * 
      *
-     * @param x the x
-     * @param xoff the xoff
-     * @param y the y
-     * @param yoff the yoff
-     * @param n the n
-     * @return the int
+     * @param x 
+     * @param xoff 
+     * @param y 
+     * @param yoff 
+     * @param n 
+     * @return 
      */
     private static int vn(byte[] x, final int xoff, byte[] y, final int yoff, int n) {
         int i, d = 0;
@@ -1497,60 +1491,60 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto verify 16.
+     * 
      *
-     * @param x the x
-     * @param xoff the xoff
-     * @param y the y
-     * @param yoff the yoff
-     * @return the int
+     * @param x 
+     * @param xoff 
+     * @param y 
+     * @param yoff 
+     * @return 
      */
     private static int crypto_verify_16(byte[] x, final int xoff, byte[] y, final int yoff) {
         return vn(x, xoff, y, yoff, 16);
     }
 
     /**
-     * Crypto verify 16.
+     * 
      *
-     * @param x the x
-     * @param y the y
-     * @return the int
+     * @param x 
+     * @param y 
+     * @return 
      */
     public static int crypto_verify_16(byte[] x, byte[] y) {
         return crypto_verify_16(x, 0, y, 0);
     }
 
     /**
-     * Crypto verify 32.
+     * 
      *
-     * @param x the x
-     * @param xoff the xoff
-     * @param y the y
-     * @param yoff the yoff
-     * @return the int
+     * @param x 
+     * @param xoff 
+     * @param y 
+     * @param yoff 
+     * @return 
      */
     private static int crypto_verify_32(byte[] x, final int xoff, byte[] y, final int yoff) {
         return vn(x, xoff, y, yoff, 32);
     }
 
     /**
-     * Crypto verify 32.
+     * 
      *
-     * @param x the x
-     * @param y the y
-     * @return the int
+     * @param x 
+     * @param y 
+     * @return 
      */
     public static int crypto_verify_32(byte[] x, byte[] y) {
         return crypto_verify_32(x, 0, y, 0);
     }
 
     /**
-     * Core salsa 20.
+     * 
      *
-     * @param o the o
-     * @param p the p
-     * @param k the k
-     * @param c the c
+     * @param o 
+     * @param p 
+     * @param k 
+     * @param c 
      */
     private static void core_salsa20(byte[] o, byte[] p, byte[] k, byte[] c) {
         int j0 = c[0] & 0xff | (c[1] & 0xff) << 8 | (c[2] & 0xff) << 16 | (c[3] & 0xff) << 24,
@@ -1750,12 +1744,12 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Core hsalsa 20.
+     * 
      *
-     * @param o the o
-     * @param p the p
-     * @param k the k
-     * @param c the c
+     * @param o 
+     * @param p 
+     * @param k 
+     * @param c 
      */
     private static void core_hsalsa20(byte[] o, byte[] p, byte[] k, byte[] c) {
         int j0 = c[0] & 0xff | (c[1] & 0xff) << 8 | (c[2] & 0xff) << 16 | (c[3] & 0xff) << 24,
@@ -1899,13 +1893,13 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto core salsa 20.
+     * 
      *
-     * @param out the out
-     * @param in the in
-     * @param k the k
-     * @param c the c
-     * @return the int
+     * @param out 
+     * @param in 
+     * @param k 
+     * @param c 
+     * @return 
      */
     public static int crypto_core_salsa20(byte[] out, byte[] in, byte[] k, byte[] c) {
         ///core(out,in,k,c,0);
@@ -1919,13 +1913,13 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto core hsalsa 20.
+     * 
      *
-     * @param out the out
-     * @param in the in
-     * @param k the k
-     * @param c the c
-     * @return the int
+     * @param out 
+     * @param in 
+     * @param k 
+     * @param c 
+     * @return 
      */
     public static int crypto_core_hsalsa20(byte[] out, byte[] in, byte[] k, byte[] c) {
         ///core(out,in,k,c,1);
@@ -1938,7 +1932,7 @@ public final class TweetNaclFast {
         return 0;
     }
 
-    /** The Constant sigma. */
+    /**  */
     // "expand 32-byte k"
     private static final byte[] sigma = { 101, 120, 112, 97, 110, 100, 32, 51, 50, 45, 98, 121, 116, 101, 32, 107 };
 
@@ -1951,16 +1945,16 @@ public final class TweetNaclFast {
     }*/
 
     /**
-     * Crypto stream salsa 20 xor.
+     * 
      *
-     * @param c the c
-     * @param cpos the cpos
-     * @param m the m
-     * @param mpos the mpos
-     * @param b the b
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param c 
+     * @param cpos 
+     * @param m 
+     * @param mpos 
+     * @param b 
+     * @param n 
+     * @param k 
+     * @return 
      */
     private static int crypto_stream_salsa20_xor(byte[] c, int cpos, byte[] m, int mpos, long b, byte[] n, byte[] k) {
         byte[] z = new byte[16], x = new byte[64];
@@ -1997,14 +1991,14 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto stream salsa 20.
+     * 
      *
-     * @param c the c
-     * @param cpos the cpos
-     * @param b the b
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param c 
+     * @param cpos 
+     * @param b 
+     * @param n 
+     * @param k 
+     * @return 
      */
     public static int crypto_stream_salsa20(byte[] c, int cpos, long b, byte[] n, byte[] k) {
         byte[] z = new byte[16], x = new byte[64];
@@ -2040,14 +2034,14 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto stream.
+     * 
      *
-     * @param c the c
-     * @param cpos the cpos
-     * @param d the d
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param c 
+     * @param cpos 
+     * @param d 
+     * @param n 
+     * @param k 
+     * @return 
      */
     public static int crypto_stream(byte[] c, int cpos, long d, byte[] n, byte[] k) {
         byte[] s = new byte[32];
@@ -2059,16 +2053,16 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto stream xor.
+     * 
      *
-     * @param c the c
-     * @param cpos the cpos
-     * @param m the m
-     * @param mpos the mpos
-     * @param d the d
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param c 
+     * @param cpos 
+     * @param m 
+     * @param mpos 
+     * @param d 
+     * @param n 
+     * @param k 
+     * @return 
      */
     public static int crypto_stream_xor(byte[] c, int cpos, byte[] m, int mpos, long d, byte[] n, byte[] k) {
         byte[] s = new byte[32];
@@ -2090,7 +2084,7 @@ public final class TweetNaclFast {
     }
 
     /**
-     * The Class poly1305.
+     * 
      */
     /*
     * Port of Andrew Moon's Poly1305-donna-16. Public domain.
@@ -2098,28 +2092,28 @@ public final class TweetNaclFast {
     */
     public static final class poly1305 {
 
-        /** The buffer. */
+        /**  */
         private byte[] buffer;
-        
-        /** The r. */
+
+        /**  */
         private int[] r;
-        
-        /** The h. */
+
+        /**  */
         private int[] h;
-        
-        /** The pad. */
+
+        /**  */
         private int[] pad;
-        
-        /** The leftover. */
+
+        /**  */
         private int leftover;
-        
-        /** The fin. */
+
+        /**  */
         private int fin;
 
         /**
-         * Instantiates a new poly 1305.
+         * 
          *
-         * @param key the key
+         * @param key 
          */
         public poly1305(byte[] key) {
             this.buffer = new byte[16];
@@ -2161,12 +2155,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Blocks.
+         * 
          *
-         * @param m the m
-         * @param mpos the mpos
-         * @param bytes the bytes
-         * @return the poly 1305
+         * @param m 
+         * @param mpos 
+         * @param bytes 
+         * @return 
          */
         public poly1305 blocks(byte[] m, int mpos, int bytes) {
             int hibit = this.fin != 0 ? 0 : (1 << 11);
@@ -2396,11 +2390,11 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Finish.
+         * 
          *
-         * @param mac the mac
-         * @param macpos the macpos
-         * @return the poly 1305
+         * @param mac 
+         * @param macpos 
+         * @return 
          */
         public poly1305 finish(byte[] mac, int macpos) {
             int[] g = new int[10];
@@ -2498,12 +2492,12 @@ public final class TweetNaclFast {
         }
 
         /**
-         * Update.
+         * 
          *
-         * @param m the m
-         * @param mpos the mpos
-         * @param bytes the bytes
-         * @return the poly 1305
+         * @param m 
+         * @param mpos 
+         * @param bytes 
+         * @return 
          */
         public poly1305 update(byte[] m, int mpos, int bytes) {
             int i, want;
@@ -2542,15 +2536,15 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto onetimeauth.
+     * 
      *
-     * @param out the out
-     * @param outpos the outpos
-     * @param m the m
-     * @param mpos the mpos
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param out 
+     * @param outpos 
+     * @param m 
+     * @param mpos 
+     * @param n 
+     * @param k 
+     * @return 
      */
     private static int crypto_onetimeauth(byte[] out, final int outpos, byte[] m, final int mpos, int n, byte[] k) {
         poly1305 s = new poly1305(k);
@@ -2566,28 +2560,28 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto onetimeauth.
+     * 
      *
-     * @param out the out
-     * @param m the m
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param out 
+     * @param m 
+     * @param n 
+     * @param k 
+     * @return 
      */
     public static int crypto_onetimeauth(byte[] out, byte[] m, int /*long*/ n, byte[] k) {
         return crypto_onetimeauth(out, 0, m, 0, n, k);
     }
 
     /**
-     * Crypto onetimeauth verify.
+     * 
      *
-     * @param h the h
-     * @param hoff the hoff
-     * @param m the m
-     * @param moff the moff
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param h 
+     * @param hoff 
+     * @param m 
+     * @param moff 
+     * @param n 
+     * @param k 
+     * @return 
      */
     private static int crypto_onetimeauth_verify(
             byte[] h,
@@ -2602,39 +2596,39 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto onetimeauth verify.
+     * 
      *
-     * @param h the h
-     * @param m the m
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param h 
+     * @param m 
+     * @param n 
+     * @param k 
+     * @return 
      */
     public static int crypto_onetimeauth_verify(byte[] h, byte[] m, int /*long*/ n, byte[] k) {
         return crypto_onetimeauth_verify(h, 0, m, 0, n, k);
     }
 
     /**
-     * Crypto onetimeauth verify.
+     * 
      *
-     * @param h the h
-     * @param m the m
-     * @param k the k
-     * @return the int
+     * @param h 
+     * @param m 
+     * @param k 
+     * @return 
      */
     public static int crypto_onetimeauth_verify(byte[] h, byte[] m, byte[] k) {
         return crypto_onetimeauth_verify(h, m, m != null ? m.length : 0, k);
     }
 
     /**
-     * Crypto secretbox.
+     * 
      *
-     * @param c the c
-     * @param m the m
-     * @param d the d
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param c 
+     * @param m 
+     * @param d 
+     * @param n 
+     * @param k 
+     * @return 
      */
     public static int crypto_secretbox(byte[] c, byte[] m, int /*long*/ d, byte[] n, byte[] k) {
         if (d < 32)
@@ -2646,14 +2640,14 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto secretbox open.
+     * 
      *
-     * @param m the m
-     * @param c the c
-     * @param d the d
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param m 
+     * @param c 
+     * @param d 
+     * @param n 
+     * @param k 
+     * @return 
      */
     public static int crypto_secretbox_open(byte[] m, byte[] c, int /*long*/ d, byte[] n, byte[] k) {
         byte[] x = new byte[32];
@@ -2668,10 +2662,10 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Sets the 25519.
+     * 
      *
-     * @param r the r
-     * @param a the a
+     * @param r 
+     * @param a 
      */
     private static void set25519(long[] r, long[] a) {
         int i;
@@ -2680,9 +2674,9 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Car 25519.
+     * 
      *
-     * @param o the o
+     * @param o 
      */
     private static void car25519(long[] o) {
         int i;
@@ -2696,24 +2690,24 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Sel 25519.
+     * 
      *
-     * @param p the p
-     * @param q the q
-     * @param b the b
+     * @param p 
+     * @param q 
+     * @param b 
      */
     private static void sel25519(long[] p, long[] q, int b) {
         sel25519(p, 0, q, 0, b);
     }
 
     /**
-     * Sel 25519.
+     * 
      *
-     * @param p the p
-     * @param poff the poff
-     * @param q the q
-     * @param qoff the qoff
-     * @param b the b
+     * @param p 
+     * @param poff 
+     * @param q 
+     * @param qoff 
+     * @param b 
      */
     private static void sel25519(long[] p, final int poff, long[] q, final int qoff, int b) {
         long t, c = ~(b - 1);
@@ -2725,11 +2719,11 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Pack 25519.
+     * 
      *
-     * @param o the o
-     * @param n the n
-     * @param noff the noff
+     * @param o 
+     * @param n 
+     * @param noff 
      */
     private static void pack25519(byte[] o, long[] n, final int noff) {
         int i, j, b;
@@ -2757,24 +2751,24 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Neq 25519.
+     * 
      *
-     * @param a the a
-     * @param b the b
-     * @return the int
+     * @param a 
+     * @param b 
+     * @return 
      */
     private static int neq25519(long[] a, long[] b) {
         return neq25519(a, 0, b, 0);
     }
 
     /**
-     * Neq 25519.
+     * 
      *
-     * @param a the a
-     * @param aoff the aoff
-     * @param b the b
-     * @param boff the boff
-     * @return the int
+     * @param a 
+     * @param aoff 
+     * @param b 
+     * @param boff 
+     * @return 
      */
     private static int neq25519(long[] a, final int aoff, long[] b, final int boff) {
         byte[] c = new byte[32], d = new byte[32];
@@ -2784,21 +2778,21 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Par 25519.
+     * 
      *
-     * @param a the a
-     * @return the byte
+     * @param a 
+     * @return 
      */
     private static byte par25519(long[] a) {
         return par25519(a, 0);
     }
 
     /**
-     * Par 25519.
+     * 
      *
-     * @param a the a
-     * @param aoff the aoff
-     * @return the byte
+     * @param a 
+     * @param aoff 
+     * @return 
      */
     private static byte par25519(long[] a, final int aoff) {
         byte[] d = new byte[32];
@@ -2807,10 +2801,10 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Unpack 25519.
+     * 
      *
-     * @param o the o
-     * @param n the n
+     * @param o 
+     * @param n 
      */
     private static void unpack25519(long[] o, byte[] n) {
         int i;
@@ -2820,25 +2814,25 @@ public final class TweetNaclFast {
     }
 
     /**
-     * A.
+     * 
      *
-     * @param o the o
-     * @param a the a
-     * @param b the b
+     * @param o 
+     * @param a 
+     * @param b 
      */
     private static void A(long[] o, long[] a, long[] b) {
         A(o, 0, a, 0, b, 0);
     }
 
     /**
-     * A.
+     * 
      *
-     * @param o the o
-     * @param ooff the ooff
-     * @param a the a
-     * @param aoff the aoff
-     * @param b the b
-     * @param boff the boff
+     * @param o 
+     * @param ooff 
+     * @param a 
+     * @param aoff 
+     * @param b 
+     * @param boff 
      */
     private static void A(long[] o, final int ooff, long[] a, final int aoff, long[] b, final int boff) {
         int i;
@@ -2847,25 +2841,25 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Z.
+     * 
      *
-     * @param o the o
-     * @param a the a
-     * @param b the b
+     * @param o 
+     * @param a 
+     * @param b 
      */
     private static void Z(long[] o, long[] a, long[] b) {
         Z(o, 0, a, 0, b, 0);
     }
 
     /**
-     * Z.
+     * 
      *
-     * @param o the o
-     * @param ooff the ooff
-     * @param a the a
-     * @param aoff the aoff
-     * @param b the b
-     * @param boff the boff
+     * @param o 
+     * @param ooff 
+     * @param a 
+     * @param aoff 
+     * @param b 
+     * @param boff 
      */
     private static void Z(long[] o, final int ooff, long[] a, final int aoff, long[] b, final int boff) {
         int i;
@@ -2874,25 +2868,25 @@ public final class TweetNaclFast {
     }
 
     /**
-     * M.
+     * 
      *
-     * @param o the o
-     * @param a the a
-     * @param b the b
+     * @param o 
+     * @param a 
+     * @param b 
      */
     private static void M(long[] o, long[] a, long[] b) {
         M(o, 0, a, 0, b, 0);
     }
 
     /**
-     * M.
+     * 
      *
-     * @param o the o
-     * @param ooff the ooff
-     * @param a the a
-     * @param aoff the aoff
-     * @param b the b
-     * @param boff the boff
+     * @param o 
+     * @param ooff 
+     * @param a 
+     * @param aoff 
+     * @param b 
+     * @param boff 
      */
     private static void M(long[] o, final int ooff, long[] a, final int aoff, long[] b, final int boff) {
         long v, c, t0 = 0, t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0, t9 = 0, t10 = 0, t11 = 0,
@@ -3315,34 +3309,34 @@ public final class TweetNaclFast {
     }
 
     /**
-     * S.
+     * 
      *
-     * @param o the o
-     * @param a the a
+     * @param o 
+     * @param a 
      */
     private static void S(long[] o, long[] a) {
         S(o, 0, a, 0);
     }
 
     /**
-     * S.
+     * 
      *
-     * @param o the o
-     * @param ooff the ooff
-     * @param a the a
-     * @param aoff the aoff
+     * @param o 
+     * @param ooff 
+     * @param a 
+     * @param aoff 
      */
     private static void S(long[] o, final int ooff, long[] a, final int aoff) {
         M(o, ooff, a, aoff, a, aoff);
     }
 
     /**
-     * Inv 25519.
+     * 
      *
-     * @param o the o
-     * @param ooff the ooff
-     * @param i the i
-     * @param ioff the ioff
+     * @param o 
+     * @param ooff 
+     * @param i 
+     * @param ioff 
      */
     private static void inv25519(long[] o, final int ooff, long[] i, final int ioff) {
         long[] c = new long[16];
@@ -3359,10 +3353,10 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Pow 2523.
+     * 
      *
-     * @param o the o
-     * @param i the i
+     * @param o 
+     * @param i 
      */
     private static void pow2523(long[] o, long[] i) {
         long[] c = new long[16];
@@ -3382,12 +3376,12 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto scalarmult.
+     * 
      *
-     * @param q the q
-     * @param n the n
-     * @param p the p
-     * @return the int
+     * @param q 
+     * @param n 
+     * @param p 
+     * @return 
      */
     public static int crypto_scalarmult(byte[] q, byte[] n, byte[] p) {
         byte[] z = new byte[32];
@@ -3444,22 +3438,22 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto scalarmult base.
+     * 
      *
-     * @param q the q
-     * @param n the n
-     * @return the int
+     * @param q 
+     * @param n 
+     * @return 
      */
     public static int crypto_scalarmult_base(byte[] q, byte[] n) {
         return crypto_scalarmult(q, n, _9);
     }
 
     /**
-     * Crypto box keypair.
+     * 
      *
-     * @param y the y
-     * @param x the x
-     * @return the int
+     * @param y 
+     * @param x 
+     * @return 
      */
     public static int crypto_box_keypair(byte[] y, byte[] x) {
         randombytes(x, 32);
@@ -3467,12 +3461,12 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto box beforenm.
+     * 
      *
-     * @param k the k
-     * @param y the y
-     * @param x the x
-     * @return the int
+     * @param k 
+     * @param y 
+     * @param x 
+     * @return 
      */
     public static int crypto_box_beforenm(byte[] k, byte[] y, byte[] x) {
         byte[] s = new byte[32];
@@ -3494,43 +3488,43 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto box afternm.
+     * 
      *
-     * @param c the c
-     * @param m the m
-     * @param d the d
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param c 
+     * @param m 
+     * @param d 
+     * @param n 
+     * @param k 
+     * @return 
      */
     public static int crypto_box_afternm(byte[] c, byte[] m, int /*long*/ d, byte[] n, byte[] k) {
         return crypto_secretbox(c, m, d, n, k);
     }
 
     /**
-     * Crypto box open afternm.
+     * 
      *
-     * @param m the m
-     * @param c the c
-     * @param d the d
-     * @param n the n
-     * @param k the k
-     * @return the int
+     * @param m 
+     * @param c 
+     * @param d 
+     * @param n 
+     * @param k 
+     * @return 
      */
     public static int crypto_box_open_afternm(byte[] m, byte[] c, int /*long*/ d, byte[] n, byte[] k) {
         return crypto_secretbox_open(m, c, d, n, k);
     }
 
     /**
-     * Crypto box.
+     * 
      *
-     * @param c the c
-     * @param m the m
-     * @param d the d
-     * @param n the n
-     * @param y the y
-     * @param x the x
-     * @return the int
+     * @param c 
+     * @param m 
+     * @param d 
+     * @param n 
+     * @param y 
+     * @param x 
+     * @return 
      */
     public static int crypto_box(byte[] c, byte[] m, int /*long*/ d, byte[] n, byte[] y, byte[] x) {
         byte[] k = new byte[32];
@@ -3542,15 +3536,15 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto box open.
+     * 
      *
-     * @param m the m
-     * @param c the c
-     * @param d the d
-     * @param n the n
-     * @param y the y
-     * @param x the x
-     * @return the int
+     * @param m 
+     * @param c 
+     * @param d 
+     * @param n 
+     * @param y 
+     * @param x 
+     * @return 
      */
     public static int crypto_box_open(byte[] m, byte[] c, int /*long*/ d, byte[] n, byte[] y, byte[] x) {
         byte[] k = new byte[32];
@@ -3558,7 +3552,7 @@ public final class TweetNaclFast {
         return crypto_box_open_afternm(m, c, d, n, k);
     }
 
-    /** The Constant K. */
+    /**  */
     private static final long K[] = { 0x428a2f98d728ae22L, 0x7137449123ef65cdL, 0xb5c0fbcfec4d3b2fL,
             0xe9b5dba58189dbbcL, 0x3956c25bf348b538L, 0x59f111f1b605d019L, 0x923f82a4af194f9bL, 0xab1c5ed5da6d8118L,
             0xd807aa98a3030242L, 0x12835b0145706fbeL, 0x243185be4ee4b28cL, 0x550c7dc3d5ffb4e2L, 0x72be5d74f27b896fL,
@@ -3578,14 +3572,14 @@ public final class TweetNaclFast {
             0x5fcb6fab3ad6faecL, 0x6c44198c4a475817L };
 
     /**
-     * Crypto hashblocks hl.
+     * 
      *
-     * @param hh the hh
-     * @param hl the hl
-     * @param m the m
-     * @param moff the moff
-     * @param n the n
-     * @return the int
+     * @param hh 
+     * @param hl 
+     * @param m 
+     * @param moff 
+     * @param n 
+     * @return 
      */
     private static int crypto_hashblocks_hl(int[] hh, int[] hl, byte[] m, final int moff, int n) {
 
@@ -4021,13 +4015,13 @@ public final class TweetNaclFast {
 
     // TBD 64bits of n
     /**
-     * Crypto hash.
+     * 
      *
-     * @param out the out
-     * @param m the m
-     * @param moff the moff
-     * @param n the n
-     * @return the int
+     * @param out 
+     * @param m 
+     * @param moff 
+     * @param n 
+     * @return 
      */
     ///int crypto_hash(byte [] out, byte [] m, long n)
     public static int crypto_hash(byte[] out, byte[] m, final int moff, int n) {
@@ -4081,11 +4075,11 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto hash.
+     * 
      *
-     * @param out the out
-     * @param m the m
-     * @return the int
+     * @param out 
+     * @param m 
+     * @return 
      */
     public static int crypto_hash(byte[] out, byte[] m) {
         return crypto_hash(out, m, 0, m != null ? m.length : 0);
@@ -4093,10 +4087,10 @@ public final class TweetNaclFast {
 
     // gf: long[16]
     /**
-     * Adds the.
+     * 
      *
-     * @param p the p
-     * @param q the q
+     * @param p 
+     * @param q 
      */
     ///private static void add(gf p[4],gf q[4])
     private static void add(long[] p[], long[] q[]) {
@@ -4143,11 +4137,11 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Cswap.
+     * 
      *
-     * @param p the p
-     * @param q the q
-     * @param b the b
+     * @param p 
+     * @param q 
+     * @param b 
      */
     private static void cswap(long[] p[], long[] q[], byte b) {
         int i;
@@ -4157,10 +4151,10 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Pack.
+     * 
      *
-     * @param r the r
-     * @param p the p
+     * @param r 
+     * @param p 
      */
     private static void pack(byte[] r, long[] p[]) {
         long[] tx = new long[16];
@@ -4178,12 +4172,12 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Scalarmult.
+     * 
      *
-     * @param p the p
-     * @param q the q
-     * @param s the s
-     * @param soff the soff
+     * @param p 
+     * @param q 
+     * @param s 
+     * @param soff 
      */
     private static void scalarmult(long[] p[], long[] q[], byte[] s, final int soff) {
         int i;
@@ -4208,11 +4202,11 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Scalarbase.
+     * 
      *
-     * @param p the p
-     * @param s the s
-     * @param soff the soff
+     * @param p 
+     * @param s 
+     * @param soff 
      */
     private static void scalarbase(long[] p[], byte[] s, final int soff) {
         long[][] q = new long[4][];
@@ -4230,12 +4224,12 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Crypto sign keypair.
+     * 
      *
-     * @param pk the pk
-     * @param sk the sk
-     * @param seeded the seeded
-     * @return the int
+     * @param pk 
+     * @param sk 
+     * @param seeded 
+     * @return 
      */
     public static int crypto_sign_keypair(byte[] pk, byte[] sk, boolean seeded) {
         byte[] d = new byte[64];
@@ -4263,16 +4257,16 @@ public final class TweetNaclFast {
         return 0;
     }
 
-    /** The Constant L. */
+    /**  */
     private static final long L[] = { 0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58, 0xd6, 0x9c, 0xf7, 0xa2, 0xde,
             0xf9, 0xde, 0x14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10 };
 
     /**
-     * Mod L.
+     * 
      *
-     * @param r the r
-     * @param roff the roff
-     * @param x the x
+     * @param r 
+     * @param roff 
+     * @param x 
      */
     private static void modL(byte[] r, final int roff, long x[]) {
         long carry;
@@ -4306,9 +4300,9 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Reduce.
+     * 
      *
-     * @param r the r
+     * @param r 
      */
     private static void reduce(byte[] r) {
         long[] x = new long[64];
@@ -4325,15 +4319,15 @@ public final class TweetNaclFast {
 
     // TBD... 64bits of n
     /**
-     * Crypto sign.
+     * 
      *
-     * @param sm the sm
-     * @param dummy the dummy
-     * @param m the m
-     * @param moff the moff
-     * @param n the n
-     * @param sk the sk
-     * @return the int
+     * @param sm 
+     * @param dummy 
+     * @param m 
+     * @param moff 
+     * @param n 
+     * @param sk 
+     * @return 
      */
     ///int crypto_sign(byte [] sm, long * smlen, byte [] m, long n, byte [] sk)
     public static int crypto_sign(
@@ -4393,11 +4387,11 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Unpackneg.
+     * 
      *
-     * @param r the r
-     * @param p the p
-     * @return the int
+     * @param r 
+     * @param p 
+     * @return 
      */
     private static int unpackneg(long[] r[], byte p[]) {
         long[] t = new long[16];
@@ -4447,15 +4441,15 @@ public final class TweetNaclFast {
 
     /// TBD 64bits of mlen
     /**
-     * Crypto sign open.
+     * 
      *
-     * @param m the m
-     * @param dummy the dummy
-     * @param sm the sm
-     * @param smoff the smoff
-     * @param n the n
-     * @param pk the pk
-     * @return the int
+     * @param m 
+     * @param dummy 
+     * @param sm 
+     * @param smoff 
+     * @param n 
+     * @param pk 
+     * @return 
      */
     ///int crypto_sign_open(byte []m,long *mlen,byte []sm,long n,byte []pk)
     public static int crypto_sign_open(
@@ -4517,7 +4511,7 @@ public final class TweetNaclFast {
         return 0;
     }
 
-    /** The Constant jrandom. */
+    /**  */
     /*
      * @description
      *   Java SecureRandom generator
@@ -4525,10 +4519,10 @@ public final class TweetNaclFast {
     private static final SecureRandom jrandom = new SecureRandom();
 
     /**
-     * Randombytes.
+     * 
      *
-     * @param x the x
-     * @return the byte[]
+     * @param x 
+     * @return 
      */
     public static byte[] randombytes(byte[] x) {
         jrandom.nextBytes(x);
@@ -4536,21 +4530,21 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Randombytes.
+     * 
      *
-     * @param len the len
-     * @return the byte[]
+     * @param len 
+     * @return 
      */
     public static byte[] randombytes(int len) {
         return randombytes(new byte[len]);
     }
 
     /**
-     * Randombytes.
+     * 
      *
-     * @param x the x
-     * @param len the len
-     * @return the byte[]
+     * @param x 
+     * @param len 
+     * @return 
      */
     public static byte[] randombytes(byte[] x, int len) {
         byte[] b = randombytes(len);
@@ -4583,28 +4577,28 @@ public final class TweetNaclFast {
     */
 
     /**
-     * Make box nonce.
+     * 
      *
-     * @return the byte[]
+     * @return 
      */
     public static byte[] makeBoxNonce() {
         return randombytes(Box.nonceLength);
     }
 
     /**
-     * Make secret box nonce.
+     * 
      *
-     * @return the byte[]
+     * @return 
      */
     public static byte[] makeSecretBoxNonce() {
         return randombytes(SecretBox.nonceLength);
     }
 
     /**
-     * Hex encode to string.
+     * 
      *
-     * @param raw the raw
-     * @return the string
+     * @param raw 
+     * @return 
      */
     public static String hexEncodeToString(byte[] raw) {
         String HEXES = "0123456789ABCDEF";
@@ -4616,10 +4610,10 @@ public final class TweetNaclFast {
     }
 
     /**
-     * Hex decode.
+     * 
      *
-     * @param s the s
-     * @return the byte[]
+     * @param s 
+     * @return 
      */
     public static byte[] hexDecode(String s) {
         byte[] b = new byte[s.length() / 2];
@@ -4632,10 +4626,10 @@ public final class TweetNaclFast {
     // public static boolean java.util.Arrays.equals(array1, array2);
 
     /**
-     * Checks if is on curve.
+     * 
      *
-     * @param p the p
-     * @return the int
+     * @param p 
+     * @return 
      */
     // Check that a pubkey is on the curve.
     public static int is_on_curve(byte p[]) {

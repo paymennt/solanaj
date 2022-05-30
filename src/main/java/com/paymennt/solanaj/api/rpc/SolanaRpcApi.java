@@ -26,11 +26,11 @@ import com.paymennt.solanaj.api.rpc.types.RpcSignitureStatusResult;
 import com.paymennt.solanaj.api.rpc.types.RpcStatusConfig;
 import com.paymennt.solanaj.api.rpc.types.SignatureInformation;
 import com.paymennt.solanaj.api.rpc.types.SolanaCommitment;
-import com.paymennt.solanaj.data.AccountPublicKey;
+import com.paymennt.solanaj.data.SolanaPublicKey;
 import com.paymennt.solanaj.data.SolanaMessage;
 import com.paymennt.solanaj.data.SolanaTransaction;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * 
  */
@@ -155,7 +155,7 @@ public class SolanaRpcApi {
      * @param bytes 
      * @return 
      */
-    public List<ProgramAccount> getProgramAccounts(AccountPublicKey account, long offset, String bytes) {
+    public List<ProgramAccount> getProgramAccounts(SolanaPublicKey account, long offset, String bytes) {
         List<Object> filters = new ArrayList<>();
         filters.add(new Filter(new Memcmp(offset, bytes)));
 
@@ -169,7 +169,7 @@ public class SolanaRpcApi {
      * @param account 
      * @return 
      */
-    public List<ProgramAccount> getProgramAccounts(AccountPublicKey account) {
+    public List<ProgramAccount> getProgramAccounts(SolanaPublicKey account) {
         return getProgramAccounts(account, new ProgramAccountConfig(Encoding.base64));
     }
 
@@ -182,7 +182,7 @@ public class SolanaRpcApi {
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public List<ProgramAccount> getProgramAccounts(
-            AccountPublicKey account,
+            SolanaPublicKey account,
             ProgramAccountConfig programAccountConfig) {
         List<Object> params = new ArrayList<>();
 
@@ -208,7 +208,7 @@ public class SolanaRpcApi {
      * @param account 
      * @return 
      */
-    public AccountInfo getAccountInfo(AccountPublicKey account) {
+    public AccountInfo getAccountInfo(SolanaPublicKey account) {
         List<Object> params = new ArrayList<>();
 
         params.add(account.toString());
@@ -252,7 +252,7 @@ public class SolanaRpcApi {
      * @param lamports 
      * @return 
      */
-    public String requestAirdrop(AccountPublicKey address, long lamports) {
+    public String requestAirdrop(SolanaPublicKey address, long lamports) {
         List<Object> params = new ArrayList<>();
 
         params.add(address.toString());

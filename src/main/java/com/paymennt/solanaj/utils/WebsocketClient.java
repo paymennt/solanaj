@@ -14,7 +14,7 @@ import org.java_websocket.handshake.ServerHandshake;
  * 
  * a websocket client wrapper that reconnects on failure
  * 
- * @author asendar
+ * @author paymennt
  *
  */
 

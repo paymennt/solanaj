@@ -11,54 +11,56 @@ import java.util.List;
 
 import com.paymennt.crypto.lib.ByteUtils;
 import com.paymennt.solanaj.data.AccountMeta;
-import com.paymennt.solanaj.data.AccountPublicKey;
+import com.paymennt.solanaj.data.SolanaPublicKey;
 import com.paymennt.solanaj.data.SolanaTransactionInstruction;
 
-// TODO: Auto-generated Javadoc
+
 /**
- * The Class SystemProgram.
+ * 
  */
 public class SystemProgram {
 
-    /** The Constant PROGRAM_ID. */
-    public static final AccountPublicKey PROGRAM_ID = new AccountPublicKey("11111111111111111111111111111111");
+    /**  */
+    public static final SolanaPublicKey PROGRAM_ID = new SolanaPublicKey("11111111111111111111111111111111");
 
-    /** The Constant PROGRAM_INDEX_CREATE_ACCOUNT. */
+    /**  */
     public static final int PROGRAM_INDEX_CREATE_ACCOUNT = 0;
+    
+    /**  */
     public static final int PROGRAM_INDEX_CLOSE_ACCOUNT = 9;
 
-    /** The Constant PROGRAM_INDEX_TRANSFER. */
+    /**  */
     public static final int PROGRAM_INDEX_TRANSFER = 2;
 
     /**
-     * Transfer.
+     * 
      *
-     * @param fromPublicKey the from public key
-     * @param toPublickKey the to publick key
-     * @param lamports the lamports
-     * @return the solana transaction instruction
+     * @param fromPublicKey 
+     * @param toPublickKey 
+     * @param lamports 
+     * @return 
      */
     public static SolanaTransactionInstruction transfer(
-            AccountPublicKey fromPublicKey,
-            AccountPublicKey toPublickKey,
+            SolanaPublicKey fromPublicKey,
+            SolanaPublicKey toPublickKey,
             long lamports) {
 
         return transfer(fromPublicKey, toPublickKey, null, lamports);
     }
 
     /**
-     * Transfer.
+     * 
      *
-     * @param fromPublicKey the from public key
-     * @param toPublickKey the to publick key
-     * @param reference the reference
-     * @param lamports the lamports
-     * @return the solana transaction instruction
+     * @param fromPublicKey 
+     * @param toPublickKey 
+     * @param reference 
+     * @param lamports 
+     * @return 
      */
     public static SolanaTransactionInstruction transfer(
-            AccountPublicKey fromPublicKey,
-            AccountPublicKey toPublickKey,
-            AccountPublicKey reference,
+            SolanaPublicKey fromPublicKey,
+            SolanaPublicKey toPublickKey,
+            SolanaPublicKey reference,
             long lamports) {
         ArrayList<AccountMeta> keys = new ArrayList<>();
         keys.add(new AccountMeta(fromPublicKey, true, true));
@@ -75,21 +77,21 @@ public class SystemProgram {
     }
 
     /**
-     * Creates the account.
+     * 
      *
-     * @param fromPublicKey the from public key
-     * @param newAccountPublikkey the new account publikkey
-     * @param lamports the lamports
-     * @param space the space
-     * @param programId the program id
-     * @return the solana transaction instruction
+     * @param fromPublicKey 
+     * @param newAccountPublikkey 
+     * @param lamports 
+     * @param space 
+     * @param programId 
+     * @return 
      */
     public static SolanaTransactionInstruction createAccount(
-            AccountPublicKey fromPublicKey,
-            AccountPublicKey newAccountPublikkey,
+            SolanaPublicKey fromPublicKey,
+            SolanaPublicKey newAccountPublikkey,
             long lamports,
             long space,
-            AccountPublicKey programId) {
+            SolanaPublicKey programId) {
         List<AccountMeta> keys = new ArrayList<>();
         keys.add(new AccountMeta(fromPublicKey, true, true));
         keys.add(new AccountMeta(newAccountPublikkey, true, true));
@@ -103,7 +105,14 @@ public class SystemProgram {
         return new SolanaTransactionInstruction(PROGRAM_ID, keys, data);
     }
 
-    public static SolanaTransactionInstruction closeAccount(AccountPublicKey account, AccountPublicKey destination) {
+    /**
+     * 
+     *
+     * @param account 
+     * @param destination 
+     * @return 
+     */
+    public static SolanaTransactionInstruction closeAccount(SolanaPublicKey account, SolanaPublicKey destination) {
 
         List<AccountMeta> keys = new ArrayList<>();
 

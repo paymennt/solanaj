@@ -7,7 +7,7 @@ package com.paymennt.solanaj.api.rpc.types;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * 
  */

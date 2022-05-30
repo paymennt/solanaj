@@ -9,50 +9,50 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class AccountKeysList.
+ *
+ *
  */
 public class AccountKeysList {
     
-    /** The accounts list. */
+    /**  */
     private List<AccountMeta> accountsList;
 
     /**
-     * Instantiates a new account keys list.
+     * 
      */
     public AccountKeysList() {
         accountsList = new ArrayList<AccountMeta>();
     }
 
     /**
-     * Adds the.
+     * 
      *
-     * @param accountMeta the account meta
+     * @param accountMeta 
      */
     public void add(AccountMeta accountMeta) {
         accountsList.add(accountMeta);
     }
 
     /**
-     * Adds the all.
+     * 
      *
-     * @param metas the metas
+     * @param metas 
      */
     public void addAll(Collection<AccountMeta> metas) {
         accountsList.addAll(metas);
     }
 
     /**
-     * Gets the list.
+     * 
      *
-     * @return the list
+     * @return 
      */
     public List<AccountMeta> getList() {
         ArrayList<AccountMeta> uniqueMetas = new ArrayList<AccountMeta>();
 
         for (AccountMeta accountMeta : accountsList) {
-            AccountPublicKey pubKey = accountMeta.getPublicKey();
+            SolanaPublicKey pubKey = accountMeta.getPublicKey();
 
             int index = AccountMeta.findAccountIndex(uniqueMetas, pubKey);
             if (index > -1) {
@@ -69,7 +69,7 @@ public class AccountKeysList {
         return uniqueMetas;
     }
 
-    /** The Constant metaComparator. */
+    /**  */
     private static final Comparator<AccountMeta> metaComparator = new Comparator<AccountMeta>() {
 
         @Override

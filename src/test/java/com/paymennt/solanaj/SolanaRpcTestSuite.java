@@ -13,7 +13,7 @@ import com.paymennt.crypto.bip32.wallet.key.HdPrivateKey;
 import com.paymennt.solanaj.api.rpc.Cluster;
 import com.paymennt.solanaj.api.rpc.SolanaRpcClient;
 import com.paymennt.solanaj.api.ws.SolanaWebSocketClient;
-import com.paymennt.solanaj.data.AccountPublicKey;
+import com.paymennt.solanaj.data.SolanaPublicKey;
 import com.paymennt.solanaj.data.SolanaAccount;
 import com.paymennt.solanaj.data.SolanaMessage;
 import com.paymennt.solanaj.data.SolanaTransaction;
@@ -74,8 +74,8 @@ public class SolanaRpcTestSuite {
         SolanaTransaction transaction = new SolanaTransaction();
 
         SolanaAccount account = new SolanaAccount(privateKey);
-        AccountPublicKey fromPublicKey = account.getPublicKey();
-        AccountPublicKey toPublickKey = new AccountPublicKey(destination);
+        SolanaPublicKey fromPublicKey = account.getPublicKey();
+        SolanaPublicKey toPublickKey = new SolanaPublicKey(destination);
         
         
 //        client.getApi().getBalance(randomWallet.getAddress(accountIndex, Chain.EXTERNAL, index));

@@ -12,35 +12,35 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.paymennt.crypto.lib.Base58;
 import com.paymennt.crypto.lib.ShortvecEncoding;
 
-// TODO: Auto-generated Javadoc
+
 /**
- * The Class SolanaMessage.
+ * 
  */
 public class SolanaMessage {
 
-    /** The Constant RECENT_BLOCK_HASH_LENGTH. */
+    /**  */
     private static final int RECENT_BLOCK_HASH_LENGTH = 32;
 
-    /** The message header. */
+    /**  */
     private MessageHeader messageHeader;
     
-    /** The recent blockhash. */
+    /**  */
     private String recentBlockhash;
     
-    /** The account keys. */
+    /**  */
     private AccountKeysList accountKeys;
     
-    /** The instructions. */
+    /**  */
     private List<SolanaTransactionInstruction> instructions;
     
-    /** The fee payer. */
-    private AccountPublicKey feePayer;
+    /**  */
+    private SolanaPublicKey feePayer;
     
-    /** The program ids. */
+    /**  */
     private List<String> programIds;
 
     /**
-     * Instantiates a new solana message.
+     * 
      */
     public SolanaMessage() {
         this.programIds = new ArrayList<>();
@@ -49,10 +49,10 @@ public class SolanaMessage {
     }
 
     /**
-     * Adds the instruction.
+     * 
      *
-     * @param instruction the instruction
-     * @return the solana message
+     * @param instruction 
+     * @return 
      */
     public SolanaMessage addInstruction(SolanaTransactionInstruction instruction) {
         accountKeys.addAll(instruction.getKeys());
@@ -66,9 +66,9 @@ public class SolanaMessage {
     }
 
     /**
-     * Serialize.
+     * 
      *
-     * @return the byte[]
+     * @return 
      */
     public byte[] serialize() {
 
@@ -83,7 +83,7 @@ public class SolanaMessage {
         messageHeader = new MessageHeader();
 
         for (String programId : programIds) {
-            accountKeys.add(new AccountMeta(new AccountPublicKey(programId), false, false));
+            accountKeys.add(new AccountMeta(new SolanaPublicKey(programId), false, false));
         }
         List<AccountMeta> keysList = getAccountKeysWithFeePayer();
         int accountKeysSize = keysList.size();
@@ -118,12 +118,12 @@ public class SolanaMessage {
         byte[] instructionsLength = ShortvecEncoding.encodeLength(compiledInstructions.size());
 
         int bufferSize = MessageHeader.HEADER_LENGTH + RECENT_BLOCK_HASH_LENGTH + accountAddressesLength.length
-                + (accountKeysSize * AccountPublicKey.PUBLIC_KEY_LENGTH) + instructionsLength.length
+                + (accountKeysSize * SolanaPublicKey.PUBLIC_KEY_LENGTH) + instructionsLength.length
                 + compiledInstructionsLength;
 
         ByteBuffer out = ByteBuffer.allocate(bufferSize);
 
-        ByteBuffer accountKeysBuff = ByteBuffer.allocate(accountKeysSize * AccountPublicKey.PUBLIC_KEY_LENGTH);
+        ByteBuffer accountKeysBuff = ByteBuffer.allocate(accountKeysSize * SolanaPublicKey.PUBLIC_KEY_LENGTH);
         for (AccountMeta accountMeta : keysList) {
             accountKeysBuff.put(accountMeta.getPublicKey().toByteArray());
 
@@ -159,18 +159,18 @@ public class SolanaMessage {
     }
 
     /**
-     * Sets the fee payer.
+     * 
      *
-     * @param feePayer the new fee payer
+     * @param feePayer 
      */
-    public void setFeePayer(AccountPublicKey feePayer) {
+    public void setFeePayer(SolanaPublicKey feePayer) {
         this.feePayer = feePayer;
     }
 
     /**
-     * Gets the account keys with fee payer.
+     * 
      *
-     * @return the account keys with fee payer
+     * @return 
      */
     private List<AccountMeta> getAccountKeysWithFeePayer() {
         List<AccountMeta> keysList = accountKeys.getList();
@@ -192,10 +192,9 @@ public class SolanaMessage {
     }
 
     /**
-     * *****************************************************************************************************************
-     * setters and getters.
+     * 
      *
-     * @return the message header
+     * @return 
      */
 
     public MessageHeader getMessageHeader() {
@@ -203,90 +202,90 @@ public class SolanaMessage {
     }
 
     /**
-     * Sets the message header.
+     * 
      *
-     * @param messageHeader the new message header
+     * @param messageHeader 
      */
     public void setMessageHeader(MessageHeader messageHeader) {
         this.messageHeader = messageHeader;
     }
 
     /**
-     * Gets the recent blockhash.
+     * 
      *
-     * @return the recent blockhash
+     * @return 
      */
     public String getRecentBlockhash() {
         return recentBlockhash;
     }
 
     /**
-     * Sets the recent blockhash.
+     * 
      *
-     * @param recentBlockhash the new recent blockhash
+     * @param recentBlockhash 
      */
     public void setRecentBlockhash(String recentBlockhash) {
         this.recentBlockhash = recentBlockhash;
     }
 
     /**
-     * Gets the instructions.
+     * 
      *
-     * @return the instructions
+     * @return 
      */
     public List<SolanaTransactionInstruction> getInstructions() {
         return instructions;
     }
 
     /**
-     * Sets the instructions.
+     * 
      *
-     * @param instructions the new instructions
+     * @param instructions 
      */
     public void setInstructions(List<SolanaTransactionInstruction> instructions) {
         this.instructions = instructions;
     }
 
     /**
-     * Gets the program ids.
+     * 
      *
-     * @return the program ids
+     * @return 
      */
     public List<String> getProgramIds() {
         return programIds;
     }
 
     /**
-     * Sets the program ids.
+     * 
      *
-     * @param programIds the new program ids
+     * @param programIds 
      */
     public void setProgramIds(List<String> programIds) {
         this.programIds = programIds;
     }
 
     /**
-     * Gets the fee payer.
+     * 
      *
-     * @return the fee payer
+     * @return 
      */
-    public AccountPublicKey getFeePayer() {
+    public SolanaPublicKey getFeePayer() {
         return feePayer;
     }
 
     /**
-     * Sets the account keys.
+     * 
      *
-     * @param accountKeys the new account keys
+     * @param accountKeys 
      */
     public void setAccountKeys(AccountKeysList accountKeys) {
         this.accountKeys = accountKeys;
     }
 
     /**
-     * Sets the account keys.
+     * 
      *
-     * @param accountMetas the new account keys
+     * @param accountMetas 
      */
     @JsonSetter
     public void setAccountKeys(List<AccountMeta> accountMetas) {
@@ -295,47 +294,45 @@ public class SolanaMessage {
     }
 
     /**
-     * Gets the account keys.
+     * 
      *
-     * @return the account keys
+     * @return 
      */
     public List<AccountMeta> getAccountKeys() {
         return this.accountKeys.getList();
     }
 
     /**
-     * *****************************************************************************************************************
-     * classes.
+     * 
      */
 
     public static class MessageHeader {
         
-        /** The Constant HEADER_LENGTH. */
+        /**  */
         static final int HEADER_LENGTH = 3;
 
-        /** The num required signatures. */
+        /**  */
         byte numRequiredSignatures = 0;
         
-        /** The num readonly signed accounts. */
+        /**  */
         byte numReadonlySignedAccounts = 0;
         
-        /** The num readonly unsigned accounts. */
+        /**  */
         byte numReadonlyUnsignedAccounts = 0;
 
         /**
-         * To byte array.
+         * 
          *
-         * @return the byte[]
+         * @return 
          */
         byte[] toByteArray() {
             return new byte[] { numRequiredSignatures, numReadonlySignedAccounts, numReadonlyUnsignedAccounts };
         }
 
         /**
-         * *****************************************************************************************************************
-         * setters and getters.
+         * 
          *
-         * @return the num required signatures
+         * @return 
          */
 
         public byte getNumRequiredSignatures() {
@@ -343,45 +340,45 @@ public class SolanaMessage {
         }
 
         /**
-         * Sets the num required signatures.
+         * 
          *
-         * @param numRequiredSignatures the new num required signatures
+         * @param numRequiredSignatures 
          */
         public void setNumRequiredSignatures(byte numRequiredSignatures) {
             this.numRequiredSignatures = numRequiredSignatures;
         }
 
         /**
-         * Gets the num readonly signed accounts.
+         * 
          *
-         * @return the num readonly signed accounts
+         * @return 
          */
         public byte getNumReadonlySignedAccounts() {
             return numReadonlySignedAccounts;
         }
 
         /**
-         * Sets the num readonly signed accounts.
+         * 
          *
-         * @param numReadonlySignedAccounts the new num readonly signed accounts
+         * @param numReadonlySignedAccounts 
          */
         public void setNumReadonlySignedAccounts(byte numReadonlySignedAccounts) {
             this.numReadonlySignedAccounts = numReadonlySignedAccounts;
         }
 
         /**
-         * Gets the num readonly unsigned accounts.
+         * 
          *
-         * @return the num readonly unsigned accounts
+         * @return 
          */
         public byte getNumReadonlyUnsignedAccounts() {
             return numReadonlyUnsignedAccounts;
         }
 
         /**
-         * Sets the num readonly unsigned accounts.
+         * 
          *
-         * @param numReadonlyUnsignedAccounts the new num readonly unsigned accounts
+         * @param numReadonlyUnsignedAccounts 
          */
         public void setNumReadonlyUnsignedAccounts(byte numReadonlyUnsignedAccounts) {
             this.numReadonlyUnsignedAccounts = numReadonlyUnsignedAccounts;
@@ -390,29 +387,29 @@ public class SolanaMessage {
     }
 
     /**
-     * The Class CompiledInstruction.
+     * 
      */
     private class CompiledInstruction {
         
-        /** The program id index. */
+        /**  */
         byte programIdIndex;
         
-        /** The key indices count. */
+        /**  */
         byte[] keyIndicesCount;
         
-        /** The key indices. */
+        /**  */
         byte[] keyIndices;
         
-        /** The data length. */
+        /**  */
         byte[] dataLength;
         
-        /** The data. */
+        /**  */
         byte[] data;
 
         /**
-         * Gets the length.
+         * 
          *
-         * @return the length
+         * @return 
          */
         int getLength() {
             // 1 = programIdIndex length
