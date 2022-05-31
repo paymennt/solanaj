@@ -13,8 +13,8 @@ import com.paymennt.crypto.bip32.wallet.key.HdPublicKey;
 import com.paymennt.crypto.lib.Base58;
 import com.paymennt.crypto.lib.ByteUtils;
 import com.paymennt.crypto.lib.Sha256;
+import com.paymennt.solanaj.exception.SolanajException;
 import com.paymennt.solanaj.utils.TweetNaclFast;
-
 
 /**
  * 
@@ -111,7 +111,8 @@ public class SolanaPublicKey extends HdPublicKey {
      * @return 
      * @throws Exception 
      */
-    public static SolanaPublicKey createProgramAddress(List<byte[]> seeds, SolanaPublicKey programId) throws Exception {
+    public static SolanaPublicKey createProgramAddress(List<byte[]> seeds, SolanaPublicKey programId)
+            throws SolanajException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         for (byte[] seed : seeds) {
@@ -128,7 +129,7 @@ public class SolanaPublicKey extends HdPublicKey {
         byte[] hash = Sha256.hash(buffer.toByteArray());
 
         if (TweetNaclFast.is_on_curve(hash) != 0) {
-            throw new Exception("Invalid seeds, address must fall off the curve");
+            throw new SolanajException("Invalid seeds, address must fall off the curve");
         }
 
         return new SolanaPublicKey(hash);
@@ -138,10 +139,10 @@ public class SolanaPublicKey extends HdPublicKey {
      * 
      */
     public static class ProgramDerivedAddress {
-        
+
         /**  */
         private SolanaPublicKey address;
-        
+
         /**  */
         private int nonce;
 
@@ -184,11 +185,12 @@ public class SolanaPublicKey extends HdPublicKey {
      * @return 
      * @throws Exception 
      */
-    public static ProgramDerivedAddress findProgramAddress(List<byte[]> seeds, SolanaPublicKey programId) throws Exception {
+    public static ProgramDerivedAddress findProgramAddress(List<byte[]> seeds, SolanaPublicKey programId)
+            throws SolanajException {
         int nonce = 255;
         SolanaPublicKey address;
 
-        List<byte[]> seedsWithNonce = new ArrayList<byte[]>();
+        List<byte[]> seedsWithNonce = new ArrayList<>();
         seedsWithNonce.addAll(seeds);
 
         while (nonce != 0) {
@@ -204,7 +206,7 @@ public class SolanaPublicKey extends HdPublicKey {
             return new ProgramDerivedAddress(address, nonce);
         }
 
-        throw new Exception("Unable to find a viable program address nonce");
+        throw new SolanajException("Unable to find a viable program address nonce");
     }
 
 }

@@ -19,22 +19,28 @@ import com.paymennt.solanaj.data.SolanaTransactionInstruction;
 public class TokenProgram {
 
     /**  */
-    public static final SolanaPublicKey PROGRAM_ID =
-            new SolanaPublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
-    
+    public static final SolanaPublicKey PROGRAM_ID = new SolanaPublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
+
+    /** Address of the SPL Associated Token Account program */
+    public static final SolanaPublicKey ASSOCIATED_TOKEN_PROGRAM_ID =
+            new SolanaPublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL");
+
     /**  */
     private static final SolanaPublicKey SYSVAR_RENT_PUBKEY =
             new SolanaPublicKey("SysvarRent111111111111111111111111111111111");
 
     /**  */
+    private static final int CREATE_METHOD_ID = 0;
+
+    /**  */
     private static final int INITIALIZE_METHOD_ID = 1;
-    
+
     /**  */
     private static final int TRANSFER_METHOD_ID = 3;
-    
+
     /**  */
     private static final int CLOSE_ACCOUNT_METHOD_ID = 9;
-    
+
     /**  */
     private static final int TRANSFER_CHECKED_METHOD_ID = 12;
 
@@ -102,13 +108,50 @@ public class TokenProgram {
      * @param owner 
      * @return 
      */
+    public static SolanaTransactionInstruction createAccount(
+            final SolanaPublicKey payer,
+            final SolanaPublicKey mint,
+            final SolanaPublicKey owner) {
+
+        List<byte[]> seeds = new ArrayList<>();
+        seeds.add(owner.toByteArray());
+        seeds.add(TokenProgram.PROGRAM_ID.toByteArray());
+        seeds.add(mint.toByteArray());
+
+        SolanaPublicKey associatedToken =
+                SolanaPublicKey.findProgramAddress(seeds, TokenProgram.ASSOCIATED_TOKEN_PROGRAM_ID).getAddress();
+
+        final List<AccountMeta> keys = new ArrayList<>();
+
+        keys.add(new AccountMeta(payer, true, true));
+        keys.add(new AccountMeta(associatedToken, false, true));
+        keys.add(new AccountMeta(owner, false, false));
+        keys.add(new AccountMeta(mint, false, false));
+        keys.add(new AccountMeta(SystemProgram.PROGRAM_ID, false, false));
+        keys.add(new AccountMeta(TokenProgram.PROGRAM_ID, false, false));
+        keys.add(new AccountMeta(SYSVAR_RENT_PUBKEY, false, false));
+
+        ByteBuffer buffer = ByteBuffer.allocate(1);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        buffer.put((byte) CREATE_METHOD_ID);
+
+        return new SolanaTransactionInstruction(ASSOCIATED_TOKEN_PROGRAM_ID, keys, buffer.array());
+    }
+
+    /**
+     * 
+     * @param account
+     * @param mint
+     * @param owner
+     * @return
+     */
     public static SolanaTransactionInstruction initializeAccount(
-            final SolanaPublicKey account,
+            final SolanaPublicKey associatedToken,
             final SolanaPublicKey mint,
             final SolanaPublicKey owner) {
         final List<AccountMeta> keys = new ArrayList<>();
 
-        keys.add(new AccountMeta(account, false, true));
+        keys.add(new AccountMeta(associatedToken, false, true));
         keys.add(new AccountMeta(mint, false, false));
         keys.add(new AccountMeta(owner, false, true));
         keys.add(new AccountMeta(SYSVAR_RENT_PUBKEY, false, false));

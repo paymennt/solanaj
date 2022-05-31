@@ -4,7 +4,6 @@
  */
 package com.paymennt.solanaj.api.rpc.types;
 
-
 /**
  * 
  */
@@ -14,7 +13,7 @@ public class RpcResultTypes {
      * 
      */
     public static class ValueLong extends RpcResultObject {
-        
+
         /**  */
         private long value;
 

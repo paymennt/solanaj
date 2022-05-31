@@ -13,11 +13,11 @@ import com.paymennt.crypto.bip32.wallet.key.HdPrivateKey;
 import com.paymennt.solanaj.api.rpc.Cluster;
 import com.paymennt.solanaj.api.rpc.SolanaRpcClient;
 import com.paymennt.solanaj.api.ws.SolanaWebSocketClient;
-import com.paymennt.solanaj.data.SolanaPublicKey;
 import com.paymennt.solanaj.data.SolanaAccount;
-import com.paymennt.solanaj.data.SolanaMessage;
+import com.paymennt.solanaj.data.SolanaPublicKey;
+import com.paymennt.solanaj.data.SolanaToken;
 import com.paymennt.solanaj.data.SolanaTransaction;
-import com.paymennt.solanaj.program.SystemProgram;
+import com.paymennt.solanaj.program.TokenProgram;
 import com.paymennt.solanaj.wallet.SolanaWallet;
 
 /**
@@ -26,7 +26,11 @@ import com.paymennt.solanaj.wallet.SolanaWallet;
  */
 public class SolanaRpcTestSuite {
 
-    private static final String mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence";
+    private static Cluster cluster = Cluster.DEVNET;
+    private static Network network = Network.TESTNET;
+
+    private static final String mnemonic =
+            "swing brown giraffe enter common awful rent shock mobile wisdom increase scissors";
     private static SolanaRpcClient client;
     private static SolanaWebSocketClient websocket;
     private static SolanaWallet randomWallet;
@@ -34,9 +38,9 @@ public class SolanaRpcTestSuite {
     @BeforeClass
     public static void init() {
         Security.addProvider(new BouncyCastleProvider());
-        client = new SolanaRpcClient(Cluster.TESTNET);
-        randomWallet = new SolanaWallet(mnemonic, "banana", Network.TESTNET);
-        websocket = new SolanaWebSocketClient(Cluster.TESTNET);
+        client = new SolanaRpcClient(cluster);
+        randomWallet = new SolanaWallet(mnemonic, null, network);
+        websocket = new SolanaWebSocketClient(cluster);
     }
 
     @Test
@@ -58,35 +62,24 @@ public class SolanaRpcTestSuite {
 
     @Test
     //    @Ignore
-    public void testCloseAccount() {
+    public void testTokenProgram() {
 
-        String destination = "2Ym21uN3GqvFwkrvoWKwcTwqRjk1pFVSS6RFguNgmYdV";
-        int accountIndex = Long.valueOf(1599726290708002602L).hashCode();
-        //        int index = Long.valueOf(1733351411786454800L).hashCode();
-        int index = Long.valueOf(1733621725016923814L).hashCode();
-
-        long amount = 253832900L;
-
-        System.out.println(randomWallet.getAddress(accountIndex, Chain.EXTERNAL, index));
-
-        HdPrivateKey privateKey = randomWallet.getPrivateKey(accountIndex, Chain.EXTERNAL, index);
+        HdPrivateKey privateKey = randomWallet.getPrivateKey(0, Chain.EXTERNAL, null);
+        SolanaAccount account = new SolanaAccount(privateKey);
 
         SolanaTransaction transaction = new SolanaTransaction();
 
-        SolanaAccount account = new SolanaAccount(privateKey);
-        SolanaPublicKey fromPublicKey = account.getPublicKey();
-        SolanaPublicKey toPublickKey = new SolanaPublicKey(destination);
-        
-        
-//        client.getApi().getBalance(randomWallet.getAddress(accountIndex, Chain.EXTERNAL, index));
+        transaction.addInstruction(//
+                TokenProgram.createAccount(//
+                        account.getPublicKey(), //
+                        new SolanaPublicKey(SolanaToken.USDC.getMint(cluster)), //
+                        new SolanaPublicKey(randomWallet.getAddress(101, Chain.EXTERNAL, null)) //
 
-        SolanaMessage message = new SolanaMessage();
-        message.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, amount));
-        message.setFeePayer(fromPublicKey);
-        long fees = client.getApi().getFees(message).getValue();
+                )//
+        );
 
-        transaction.addInstruction(SystemProgram.transfer(fromPublicKey, toPublickKey, amount - fees));
         transaction.setRecentBlockHash(client.getApi().getRecentBlockhash());
+        transaction.setFeePayer(account.getPublicKey());
         transaction.sign(account);
 
         System.out.println(client.getApi().sendTransaction(transaction));

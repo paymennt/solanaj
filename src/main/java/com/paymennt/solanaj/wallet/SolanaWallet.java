@@ -9,7 +9,6 @@ import com.paymennt.crypto.bip32.Network;
 import com.paymennt.crypto.bip32.wallet.AbstractWallet;
 import com.paymennt.crypto.lib.Base58;
 
-
 /**
  * @author paymennt
  *
