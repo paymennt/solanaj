@@ -22,18 +22,16 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
 /**
  * 
  */
 public class SolanaRpcClient {
-    
+
     /**  */
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    /**  */
-    private String endpoint;
-    
+    private Cluster cluster;
+
     /**  */
     private OkHttpClient httpClient = new OkHttpClient.Builder()//
             .connectTimeout(60, TimeUnit.SECONDS)//
@@ -49,17 +47,8 @@ public class SolanaRpcClient {
      *
      * @param endpoint 
      */
-    public SolanaRpcClient(Cluster endpoint) {
-        this(endpoint.getEndpoint());
-    }
-
-    /**
-     * 
-     *
-     * @param endpoint 
-     */
-    public SolanaRpcClient(String endpoint) {
-        this.endpoint = endpoint;
+    public SolanaRpcClient(Cluster cluster) {
+        this.cluster = cluster;
         rpcApi = new SolanaRpcApi(this);
     }
 
@@ -76,7 +65,7 @@ public class SolanaRpcClient {
     public <T> T call(String method, List<Object> params, Class<T> clazz) {
         RpcRequest rpcRequest = new RpcRequest(method, params);
         Request request = new Request.Builder()//
-                .url(endpoint)//
+                .url(getEndpoint())//
                 .post(RequestBody.create(JSON, JsonUtils.encode(rpcRequest)))//
                 .build();
 
@@ -115,7 +104,7 @@ public class SolanaRpcClient {
                 paramList.stream().map(params -> new RpcRequest(method, params)).collect(Collectors.toList());
 
         Request request = new Request.Builder()//
-                .url(endpoint)//
+                .url(getEndpoint())//
                 .post(RequestBody.create(JSON, JsonUtils.encode(rpcRequests)))//
                 .build();
 
@@ -163,7 +152,16 @@ public class SolanaRpcClient {
      * @return 
      */
     public String getEndpoint() {
-        return endpoint;
+        return cluster.getEndpoint();
+    }
+
+    /**
+     * 
+     *
+     * @return 
+     */
+    public Cluster getCluster() {
+        return cluster;
     }
 
 }

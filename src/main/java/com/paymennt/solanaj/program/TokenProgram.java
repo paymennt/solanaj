@@ -58,11 +58,22 @@ public class TokenProgram {
             SolanaPublicKey destination,
             long amount,
             SolanaPublicKey owner) {
+
+        return transfer(source, destination, amount, owner, null);
+    }
+    public static SolanaTransactionInstruction transfer(
+            SolanaPublicKey source,
+            SolanaPublicKey destination,
+            long amount,
+            SolanaPublicKey owner,
+            SolanaPublicKey reference) {
         final List<AccountMeta> keys = new ArrayList<>();
 
         keys.add(new AccountMeta(source, false, true));
         keys.add(new AccountMeta(destination, false, true));
         keys.add(new AccountMeta(owner, true, false));
+        if (reference != null)
+            keys.add(new AccountMeta(reference, false, false));
 
         byte[] transactionData = encodeTransferTokenInstructionData(amount);
 
@@ -86,7 +97,8 @@ public class TokenProgram {
             long amount,
             byte decimals,
             SolanaPublicKey owner,
-            SolanaPublicKey tokenMint) {
+            SolanaPublicKey tokenMint,
+            SolanaPublicKey reference) {
         final List<AccountMeta> keys = new ArrayList<>();
 
         keys.add(new AccountMeta(source, false, true));
@@ -95,9 +107,22 @@ public class TokenProgram {
         keys.add(new AccountMeta(destination, false, true));
         keys.add(new AccountMeta(owner, true, false));
 
+        if (reference != null)
+            keys.add(new AccountMeta(reference, false, false));
+
         byte[] transactionData = encodeTransferCheckedTokenInstructionData(amount, decimals);
 
         return new SolanaTransactionInstruction(PROGRAM_ID, keys, transactionData);
+    }
+
+    public static SolanaPublicKey findProgramAddress(final SolanaPublicKey owner, final SolanaPublicKey mint) {
+
+        List<byte[]> seeds = new ArrayList<>();
+        seeds.add(owner.toByteArray());
+        seeds.add(TokenProgram.PROGRAM_ID.toByteArray());
+        seeds.add(mint.toByteArray());
+
+        return SolanaPublicKey.findProgramAddress(seeds, TokenProgram.ASSOCIATED_TOKEN_PROGRAM_ID).getAddress();
     }
 
     /**
@@ -120,6 +145,15 @@ public class TokenProgram {
 
         SolanaPublicKey associatedToken =
                 SolanaPublicKey.findProgramAddress(seeds, TokenProgram.ASSOCIATED_TOKEN_PROGRAM_ID).getAddress();
+
+        return createAccount(associatedToken, payer, mint, owner);
+    }
+
+    public static SolanaTransactionInstruction createAccount(
+            final SolanaPublicKey associatedToken,
+            final SolanaPublicKey payer,
+            final SolanaPublicKey mint,
+            final SolanaPublicKey owner) {
 
         final List<AccountMeta> keys = new ArrayList<>();
 

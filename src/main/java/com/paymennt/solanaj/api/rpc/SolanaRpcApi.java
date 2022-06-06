@@ -24,20 +24,23 @@ import com.paymennt.solanaj.api.rpc.types.RpcSendTransactionConfig;
 import com.paymennt.solanaj.api.rpc.types.RpcSendTransactionConfig.Encoding;
 import com.paymennt.solanaj.api.rpc.types.RpcSignitureStatusResult;
 import com.paymennt.solanaj.api.rpc.types.RpcStatusConfig;
+import com.paymennt.solanaj.api.rpc.types.RpcTokenAccount;
 import com.paymennt.solanaj.api.rpc.types.RpcTokenAccountConfig;
 import com.paymennt.solanaj.api.rpc.types.RpcTokenBalance;
 import com.paymennt.solanaj.api.rpc.types.SignatureInformation;
 import com.paymennt.solanaj.api.rpc.types.SolanaCommitment;
+import com.paymennt.solanaj.data.SolanaAccount;
 import com.paymennt.solanaj.data.SolanaMessage;
 import com.paymennt.solanaj.data.SolanaPublicKey;
 import com.paymennt.solanaj.data.SolanaTransaction;
-
+import com.paymennt.solanaj.exception.SolanajException;
+import com.paymennt.solanaj.program.TokenProgram;
 
 /**
  * 
  */
 public class SolanaRpcApi {
-    
+
     /**  */
     private SolanaRpcClient client;
 
@@ -76,6 +79,67 @@ public class SolanaRpcApi {
         params.add(new RpcSendTransactionConfig());
 
         return client.call("sendTransaction", params, String.class);
+    }
+
+    public String signAndSendTokenTransaction(
+            String mint,
+            SolanaAccount feepayer, // SOL
+            SolanaAccount sender, // SOL
+            String recipient, // SOL address
+            long amount) {
+
+        // the token sender
+        String source = client.getApi().getTokenAccount(sender.getPublicKey().toBase58(), mint).getAddress();
+
+        // the token recipient 
+        String destination = client.getApi().getTokenAccount(recipient, mint).getAddress();
+
+        if (source == null)
+            throw new SolanajException("sender does not have a %s token address", mint);
+
+        SolanaTransaction transaction = new SolanaTransaction();
+
+        // recipient does not have a token address? create one
+        if (destination == null) {
+            List<byte[]> seeds = new ArrayList<>();
+            seeds.add(new SolanaPublicKey(recipient).toByteArray());
+            seeds.add(TokenProgram.PROGRAM_ID.toByteArray());
+            seeds.add(new SolanaPublicKey(mint).toByteArray());
+
+            destination = SolanaPublicKey.findProgramAddress(seeds, TokenProgram.ASSOCIATED_TOKEN_PROGRAM_ID)//
+                    .getAddress()//
+                    .toBase58();
+
+            transaction.addInstruction(//
+                    TokenProgram.createAccount(//
+                            new SolanaPublicKey(destination), //
+                            feepayer.getPublicKey(), //
+                            new SolanaPublicKey(mint), //
+                            new SolanaPublicKey(recipient) //
+
+                    )//
+            );
+        }
+
+        transaction.addInstruction(//
+                TokenProgram.transfer(//
+                        new SolanaPublicKey(source), //
+                        new SolanaPublicKey(destination), //
+                        amount, //
+                        sender.getPublicKey() //
+
+                )//
+        );
+
+        List<SolanaAccount> signers = new ArrayList<>();
+        signers.add(feepayer);
+        signers.add(sender);
+
+        transaction.setRecentBlockHash(client.getApi().getRecentBlockhash());
+        transaction.setFeePayer(feepayer.getPublicKey());
+        transaction.sign(signers);
+
+        return this.sendTransaction(transaction);
     }
 
     /**
@@ -189,9 +253,7 @@ public class SolanaRpcApi {
      * @return 
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public List<ProgramAccount> getProgramAccounts(
-            SolanaPublicKey account,
-            ProgramAccountConfig programAccountConfig) {
+    public List<ProgramAccount> getProgramAccounts(SolanaPublicKey account, ProgramAccountConfig programAccountConfig) {
         List<Object> params = new ArrayList<>();
 
         params.add(account.toString());
@@ -269,17 +331,15 @@ public class SolanaRpcApi {
         return client.call("requestAirdrop", params, String.class);
     }
 
-    public String getTokenAccount(String owner, String mint) {
+    public RpcTokenAccount getTokenAccount(String owner, String mint) {
         List<Object> params = new ArrayList<>();
 
         params.add(owner);
         params.add(new RpcTokenAccountConfig(mint));
         params.add(new RpcConfig(null, "jsonParsed"));
 
-        return client.call("getTokenAccountsByOwner", params, String.class);
+        return client.call("getTokenAccountsByOwner", params, RpcTokenAccount.class);
     }
-    
-    
 
     /**
      * 

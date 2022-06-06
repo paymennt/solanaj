@@ -15,7 +15,6 @@ import com.paymennt.solanaj.api.rpc.SolanaRpcClient;
 import com.paymennt.solanaj.api.ws.SolanaWebSocketClient;
 import com.paymennt.solanaj.data.SolanaAccount;
 import com.paymennt.solanaj.data.SolanaPublicKey;
-import com.paymennt.solanaj.data.SolanaToken;
 import com.paymennt.solanaj.data.SolanaTransaction;
 import com.paymennt.solanaj.program.TokenProgram;
 import com.paymennt.solanaj.wallet.SolanaWallet;
@@ -30,7 +29,7 @@ public class SolanaRpcTestSuite {
     private static Network network = Network.TESTNET;
 
     private static final String mnemonic =
-            "swing brown giraffe enter common awful rent shock mobile wisdom increase scissors";
+            "swing brown giraffe enter common awful rent shock mobile wisdom increase banana";
     private static SolanaRpcClient client;
     private static SolanaWebSocketClient websocket;
     private static SolanaWallet randomWallet;
@@ -46,14 +45,20 @@ public class SolanaRpcTestSuite {
     @Test
     @Ignore
     public void testWebsocket() throws InterruptedException {
-        int accountIndex = Long.valueOf(0).hashCode();
-        //        int index = Long.valueOf(1733351411786454800L).hashCode();
-        int index = Long.valueOf(0).hashCode();
 
-        System.out.println(randomWallet.getAddress(accountIndex, Chain.EXTERNAL, index));
+        // ACCOUNT
+        websocket.accountSubscribe("E6R9rpMLi87bk7obULukemPhoCjVDG5hebWyJZj6DUhF", data -> {
+            System.out.println("UPDATE: ACCOUNT");
+        });
 
-        websocket.accountSubscribe("HPLmxR17p9UhFYPPJjWVPmEgWQTssU3s27uKEU6c6BkB", data -> {
-            System.out.println("UPDATE");
+        // REFERENCE
+        websocket.accountSubscribe("2Uvt5gFJXoQDP97LNeeJono4Tapc56KPe5b4rvHPpCTW", data -> {
+            System.out.println("UPDATE: REFERENCE");
+        });
+
+        // TOKEN
+        websocket.accountSubscribe("7v5bP63pRShDAJEF5VqVDMMePVkZ1JpANubiQ6jFmZgY", data -> {
+            System.out.println("UPDATE: TOKEN");
         });
 
         Thread.sleep(1000000);
@@ -61,8 +66,8 @@ public class SolanaRpcTestSuite {
     }
 
     @Test
-    //    @Ignore
-    public void testTokenProgram() {
+    @Ignore
+    public void testCreateTokenProgram() {
 
         HdPrivateKey privateKey = randomWallet.getPrivateKey(0, Chain.EXTERNAL, null);
         SolanaAccount account = new SolanaAccount(privateKey);
@@ -72,7 +77,7 @@ public class SolanaRpcTestSuite {
         transaction.addInstruction(//
                 TokenProgram.createAccount(//
                         account.getPublicKey(), //
-                        new SolanaPublicKey(SolanaToken.USDC.getMint(cluster)), //
+                        new SolanaPublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"), //
                         new SolanaPublicKey(randomWallet.getAddress(101, Chain.EXTERNAL, null)) //
 
                 )//
@@ -83,6 +88,34 @@ public class SolanaRpcTestSuite {
         transaction.sign(account);
 
         System.out.println(client.getApi().sendTransaction(transaction));
+    }
+
+    @Test
+    @Ignore
+    public void testTransferTokenProgram() {
+
+        //        randomWallet.getAddress(1000, Chain.EXTERNAL, null);
+
+        // fee payer, will be used to sign the transaction as well
+        HdPrivateKey feepayerPrivateKey = randomWallet.getPrivateKey(100, Chain.EXTERNAL, null);
+        SolanaAccount feepayerAccount = new SolanaAccount(feepayerPrivateKey);
+
+        // source of USDC to transfer from
+        HdPrivateKey sourcePrivateKey = randomWallet.getPrivateKey(0, Chain.EXTERNAL, null);
+        SolanaAccount sourceAccount = new SolanaAccount(sourcePrivateKey);
+
+        //3xETGDP48i2Ev6ka8vz8PSaKCJz9yURvcb3ooyVa7jHh
+        String recipient = randomWallet.getAddress(0, Chain.EXTERNAL, 89);
+
+        System.out.println("tx: " + client.getApi().signAndSendTokenTransaction(
+                "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU", feepayerAccount, sourceAccount, recipient, 10000000));
+    }
+    
+    @Test
+//    @Ignore
+    public void testGetTransaction() {
+
+        client.getApi().getTransaction("4huSdrw9NwKyvKxWk4VS39ujerVWhRGj8FufQyxEGjXW3bJXwv3qeiK1tWtnEwoA6T4Nh2xcMZALbC3vAu39Jez2");
     }
 
 }

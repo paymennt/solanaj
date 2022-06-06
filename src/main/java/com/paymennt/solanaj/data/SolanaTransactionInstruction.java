@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-
 /**
  * 
  */
@@ -16,13 +15,13 @@ public class SolanaTransactionInstruction {
 
     /**  */
     private List<AccountMeta> keys;
-    
+
     /**  */
     private SolanaPublicKey programId;
-    
+
     /**  */
     private byte[] data;
-    
+
     /**  */
     private SolanaTransactionParsedInstruction parsed;
 
@@ -137,10 +136,9 @@ public class SolanaTransactionInstruction {
 
         /**  */
         private TransactionInfo info;
-        
+
         /**  */
         private TransactionType type;
-        
 
         /**
          * 
@@ -182,68 +180,85 @@ public class SolanaTransactionInstruction {
          * 
          */
         public static class TransactionInfo {
-            
+
             /**  */
             private String destination;
-            
+
+            /**  */
+            private String mint;
+
             /**  */
             private String source;
-            
-            /**  */
-            private long lamports;
 
-            /**
-             * 
-             *
-             * @return 
-             */
+            /**  */
+            private Long lamports;
+
+            private TransactionTokenAmount tokenAmount;
+
             public String getDestination() {
                 return destination;
             }
 
-            /**
-             * 
-             *
-             * @param destination 
-             */
             public void setDestination(String destination) {
                 this.destination = destination;
             }
 
-            /**
-             * 
-             *
-             * @return 
-             */
+            public String getMint() {
+                return mint;
+            }
+
+            public void setMint(String mint) {
+                this.mint = mint;
+            }
+
             public String getSource() {
                 return source;
             }
 
-            /**
-             * 
-             *
-             * @param source 
-             */
             public void setSource(String source) {
                 this.source = source;
             }
 
-            /**
-             * 
-             *
-             * @return 
-             */
-            public long getLamports() {
+            public Long getLamports() {
                 return lamports;
             }
 
-            /**
-             * 
-             *
-             * @param lamports 
-             */
-            public void setLamports(long lamports) {
+            public void setLamports(Long lamports) {
                 this.lamports = lamports;
+            }
+
+            public TransactionTokenAmount getTokenAmount() {
+                return tokenAmount;
+            }
+
+            public void setTokenAmount(TransactionTokenAmount tokenAmount) {
+                this.tokenAmount = tokenAmount;
+            }
+
+        }
+
+        public static class TransactionTokenAmount {
+
+            /**  */
+            private long amount;
+
+            /**  */
+            private long decimals;
+
+            public long getAmount() {
+                return amount;
+            }
+
+            public void setAmount(long amount) {
+                this.amount = amount;
+            }
+
+            public long getDecimals() {
+                return decimals;
+            }
+
+            public void setDecimals(long decimals) {
+                this.decimals = decimals;
             }
 
         }
@@ -252,9 +267,11 @@ public class SolanaTransactionInstruction {
          * 
          */
         public enum TransactionType {
-            
+
             /**  */
-            transfer
+            transfer,
+            /**  */
+            transferChecked
         }
     }
 }
