@@ -13,16 +13,32 @@ import java.util.Optional;
  */
 public class RpcTokenAccount extends RpcResultObject {
 
+    /**  */
     private List<Value> value;
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public List<Value> getValue() {
         return value;
     }
 
+    /**
+     * 
+     *
+     * @param value 
+     */
     public void setValue(List<Value> value) {
         this.value = value;
     }
     
+    /**
+     * 
+     *
+     * @return 
+     */
     public String getAddress() {
         return Optional.ofNullable(getValue())//
                 .orElse(new ArrayList<>())//
@@ -32,13 +48,28 @@ public class RpcTokenAccount extends RpcResultObject {
                 .orElse(null);
     }
 
+    /**
+     * 
+     */
     public static class Value {
+        
+        /**  */
         private String pubkey;
 
+        /**
+         * 
+         *
+         * @return 
+         */
         public String getPubkey() {
             return pubkey;
         }
 
+        /**
+         * 
+         *
+         * @param pubkey 
+         */
         public void setPubkey(String pubkey) {
             this.pubkey = pubkey;
         }

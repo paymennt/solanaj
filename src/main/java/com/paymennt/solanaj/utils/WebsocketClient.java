@@ -1,4 +1,5 @@
-/**
+/************************************************************************ 
+ * Copyright PointCheckout, Ltd.
  * 
  */
 package com.paymennt.solanaj.utils;
@@ -11,28 +12,39 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 /**
- * 
- * a websocket client wrapper that reconnects on failure
- * 
- * @author paymennt
+ * a websocket client wrapper that reconnects on failure.
  *
+ * @author paymennt
  */
 
 public class WebsocketClient {
 
+    /**  */
     private URI websocketUrl;
 
+    /**  */
     private WebSocketHandler handler;
 
+    /**  */
     private WebSocketClient webSocketClient;
 
+    /**  */
     private Queue<String> messageQueue = new LinkedList<>();
 
+    /**
+     * 
+     *
+     * @param websocketUrl 
+     * @param handler 
+     */
     public WebsocketClient(URI websocketUrl, WebSocketHandler handler) {
         this.websocketUrl = websocketUrl;
         this.handler = handler;
     }
 
+    /**
+     * 
+     */
     public void start() {
         webSocketClient = new WebSocketClient(websocketUrl) {
 
@@ -63,10 +75,20 @@ public class WebsocketClient {
         webSocketClient.connect();
     }
 
+    /**
+     * 
+     *
+     * @param message 
+     */
     public void sendMessage(Object message) {
         sendMessage(JsonUtils.encode(message));
     }
 
+    /**
+     * 
+     *
+     * @param message 
+     */
     public void sendMessage(String message) {
         if (webSocketClient == null || !webSocketClient.isOpen()) {
             messageQueue.add(message);
@@ -80,11 +102,30 @@ public class WebsocketClient {
         }
     }
 
+    /**
+     * 
+     */
     public static interface WebSocketHandler {
+        
+        /**
+         * 
+         *
+         * @param payload 
+         */
         void handleMessage(String payload);
 
+        /**
+         * 
+         *
+         * @param e 
+         */
         void onError(Throwable e);
 
+        /**
+         * 
+         *
+         * @param handshakedata 
+         */
         default void onOpen(ServerHandshake handshakedata) {
         }
     }

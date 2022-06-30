@@ -81,6 +81,16 @@ public class SolanaRpcApi {
         return client.call("sendTransaction", params, String.class);
     }
 
+    /**
+     * 
+     *
+     * @param mint 
+     * @param feepayer 
+     * @param sender 
+     * @param recipient 
+     * @param amount 
+     * @return 
+     */
     public String signAndSendTokenTransaction(
             String mint,
             SolanaAccount feepayer, // SOL
@@ -154,6 +164,12 @@ public class SolanaRpcApi {
         return client.call("getBalance", params, ValueLong.class).getValue();
     }
 
+    /**
+     * 
+     *
+     * @param address 
+     * @return 
+     */
     public long getTokenAccountBalance(String address) {
         List<Object> params = new ArrayList<>();
         params.add(address);
@@ -275,7 +291,7 @@ public class SolanaRpcApi {
     /**
      * 
      *
-     * @param account 
+     * @param address 
      * @return 
      */
     public AccountInfo getAccountInfo(String address) {
@@ -331,6 +347,13 @@ public class SolanaRpcApi {
         return client.call("requestAirdrop", params, String.class);
     }
 
+    /**
+     * 
+     *
+     * @param owner 
+     * @param mint 
+     * @return 
+     */
     public RpcTokenAccount getTokenAccount(String owner, String mint) {
         List<Object> params = new ArrayList<>();
 

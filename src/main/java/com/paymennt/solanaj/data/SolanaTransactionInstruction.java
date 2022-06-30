@@ -193,50 +193,104 @@ public class SolanaTransactionInstruction {
             /**  */
             private Long lamports;
 
+            /**  */
             private TransactionTokenAmount tokenAmount;
 
+            /**
+             * 
+             *
+             * @return 
+             */
             public String getDestination() {
                 return destination;
             }
 
+            /**
+             * 
+             *
+             * @param destination 
+             */
             public void setDestination(String destination) {
                 this.destination = destination;
             }
 
+            /**
+             * 
+             *
+             * @return 
+             */
             public String getMint() {
                 return mint;
             }
 
+            /**
+             * 
+             *
+             * @param mint 
+             */
             public void setMint(String mint) {
                 this.mint = mint;
             }
 
+            /**
+             * 
+             *
+             * @return 
+             */
             public String getSource() {
                 return source;
             }
 
+            /**
+             * 
+             *
+             * @param source 
+             */
             public void setSource(String source) {
                 this.source = source;
             }
 
+            /**
+             * 
+             *
+             * @return 
+             */
             public Long getLamports() {
                 return lamports;
             }
 
+            /**
+             * 
+             *
+             * @param lamports 
+             */
             public void setLamports(Long lamports) {
                 this.lamports = lamports;
             }
 
+            /**
+             * 
+             *
+             * @return 
+             */
             public TransactionTokenAmount getTokenAmount() {
                 return tokenAmount;
             }
 
+            /**
+             * 
+             *
+             * @param tokenAmount 
+             */
             public void setTokenAmount(TransactionTokenAmount tokenAmount) {
                 this.tokenAmount = tokenAmount;
             }
 
         }
 
+        /**
+         * 
+         */
         public static class TransactionTokenAmount {
 
             /**  */
@@ -245,18 +299,38 @@ public class SolanaTransactionInstruction {
             /**  */
             private long decimals;
 
+            /**
+             * 
+             *
+             * @return 
+             */
             public long getAmount() {
                 return amount;
             }
 
+            /**
+             * 
+             *
+             * @param amount 
+             */
             public void setAmount(long amount) {
                 this.amount = amount;
             }
 
+            /**
+             * 
+             *
+             * @return 
+             */
             public long getDecimals() {
                 return decimals;
             }
 
+            /**
+             * 
+             *
+             * @param decimals 
+             */
             public void setDecimals(long decimals) {
                 this.decimals = decimals;
             }

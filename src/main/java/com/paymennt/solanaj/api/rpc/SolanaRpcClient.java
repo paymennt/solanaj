@@ -30,6 +30,7 @@ public class SolanaRpcClient {
     /**  */
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    /**  */
     private Cluster cluster;
 
     /**  */
@@ -45,7 +46,7 @@ public class SolanaRpcClient {
     /**
      * 
      *
-     * @param endpoint 
+     * @param cluster 
      */
     public SolanaRpcClient(Cluster cluster) {
         this.cluster = cluster;

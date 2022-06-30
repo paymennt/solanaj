@@ -21,7 +21,7 @@ public class TokenProgram {
     /**  */
     public static final SolanaPublicKey PROGRAM_ID = new SolanaPublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
 
-    /** Address of the SPL Associated Token Account program */
+    /**  Address of the SPL Associated Token Account program. */
     public static final SolanaPublicKey ASSOCIATED_TOKEN_PROGRAM_ID =
             new SolanaPublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL");
 
@@ -61,6 +61,17 @@ public class TokenProgram {
 
         return transfer(source, destination, amount, owner, null);
     }
+    
+    /**
+     * 
+     *
+     * @param source 
+     * @param destination 
+     * @param amount 
+     * @param owner 
+     * @param reference 
+     * @return 
+     */
     public static SolanaTransactionInstruction transfer(
             SolanaPublicKey source,
             SolanaPublicKey destination,
@@ -89,6 +100,7 @@ public class TokenProgram {
      * @param decimals 
      * @param owner 
      * @param tokenMint 
+     * @param reference 
      * @return 
      */
     public static SolanaTransactionInstruction transferChecked(
@@ -115,6 +127,13 @@ public class TokenProgram {
         return new SolanaTransactionInstruction(PROGRAM_ID, keys, transactionData);
     }
 
+    /**
+     * 
+     *
+     * @param owner 
+     * @param mint 
+     * @return 
+     */
     public static SolanaPublicKey findProgramAddress(final SolanaPublicKey owner, final SolanaPublicKey mint) {
 
         List<byte[]> seeds = new ArrayList<>();
@@ -128,7 +147,7 @@ public class TokenProgram {
     /**
      * 
      *
-     * @param account 
+     * @param payer 
      * @param mint 
      * @param owner 
      * @return 
@@ -149,6 +168,15 @@ public class TokenProgram {
         return createAccount(associatedToken, payer, mint, owner);
     }
 
+    /**
+     * 
+     *
+     * @param associatedToken 
+     * @param payer 
+     * @param mint 
+     * @param owner 
+     * @return 
+     */
     public static SolanaTransactionInstruction createAccount(
             final SolanaPublicKey associatedToken,
             final SolanaPublicKey payer,
@@ -174,10 +202,11 @@ public class TokenProgram {
 
     /**
      * 
-     * @param account
-     * @param mint
-     * @param owner
-     * @return
+     *
+     * @param associatedToken 
+     * @param mint 
+     * @param owner 
+     * @return 
      */
     public static SolanaTransactionInstruction initializeAccount(
             final SolanaPublicKey associatedToken,

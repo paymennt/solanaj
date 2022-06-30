@@ -1,7 +1,5 @@
 /************************************************************************ 
- * Copyright (c) 2014 Tom Zhou<appnet.link@gmail.com>
- * 
- *  https://github.com/InstantWebP2P/tweetnacl-java/blob/master/src/main/java/com/iwebpp/crypto/TweetNaclFast.java
+ * Copyright PointCheckout, Ltd.
  * 
  */
 package com.paymennt.solanaj.utils;
@@ -11,6 +9,9 @@ import java.security.SecureRandom;
 import java.lang.System;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * 
+ */
 /*
  * @description 
  *   TweetNacl.c Java porting

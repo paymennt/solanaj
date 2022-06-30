@@ -109,7 +109,7 @@ public class SolanaPublicKey extends HdPublicKey {
      * @param seeds 
      * @param programId 
      * @return 
-     * @throws Exception 
+     * @throws SolanajException 
      */
     public static SolanaPublicKey createProgramAddress(List<byte[]> seeds, SolanaPublicKey programId)
             throws SolanajException {
@@ -183,7 +183,7 @@ public class SolanaPublicKey extends HdPublicKey {
      * @param seeds 
      * @param programId 
      * @return 
-     * @throws Exception 
+     * @throws SolanajException 
      */
     public static ProgramDerivedAddress findProgramAddress(List<byte[]> seeds, SolanaPublicKey programId)
             throws SolanajException {
